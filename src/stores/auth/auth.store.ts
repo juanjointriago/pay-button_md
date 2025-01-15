@@ -34,7 +34,7 @@ export const storeAPI: StateCreator<
   signInUser: async ({ username, password }) => {
     set({ errorMsg: "" });
     try {
-      const { data, token, msg, error } = await AuthService.login({
+      const { data, token } = await AuthService.login({
         username,
         password,
       });

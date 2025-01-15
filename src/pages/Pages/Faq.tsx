@@ -1,11 +1,9 @@
 import React from 'react';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
-import FaqOne from '../../components/Faq/FaqOne';
 
 const Faq: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Faq's" />
 
       <div className="flex flex-col gap-7.5">
@@ -14,12 +12,9 @@ const Faq: React.FC = () => {
             <h3 className="font-medium text-black dark:text-white">Style 1</h3>
           </div>
 
-          <div className="p-4 sm:p-6 xl:p-9">
-            <FaqOne />
-          </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

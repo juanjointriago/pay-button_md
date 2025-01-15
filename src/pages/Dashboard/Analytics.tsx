@@ -1,14 +1,12 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import React, { useEffect } from 'react';
-import ChartFour from '../../components/Charts/ChartFour';
+import { useEffect } from 'react';
 import ChartThree from '../../components/Charts/ChartThree';
 import DataStats from '../../components/DataStats/DataStats';
 import MapTwo from '../../components/Maps/MapTwo';
 import TableTwo from '../../components/Tables/TableTwo';
 import TopChannels from '../../components/TopChannels';
 import TopContent from '../../components/TopContent';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const Analytics: React.FC = () => {
   useEffect(() => {
@@ -41,7 +39,7 @@ const Analytics: React.FC = () => {
   }, []);
 
   return (
-    <DefaultLayout>
+    <>
       <div className="2xl:gap-7.5 grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 flex flex-wrap items-center justify-between gap-3">
           {/* <!-- Datepicker built with flatpickr --> */}
@@ -117,7 +115,6 @@ const Analytics: React.FC = () => {
             </span>
           </div>
         </div>
-        <ChartFour />
         <DataStats />
         <MapTwo />
         <div className="col-span-12 xl:col-span-6">
@@ -137,7 +134,7 @@ const Analytics: React.FC = () => {
         </div>
         {/* <!-- ====== Table Two End --> */}
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

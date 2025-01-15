@@ -3,11 +3,10 @@ import SelectGroupThree from '../../components/Forms/SelectGroup/SelectGroupThre
 import SelectOptionOne from '../../components/Forms/SelectOption/SelectOptionOne';
 import SelectOptionThree from '../../components/Forms/SelectOption/SelectOptionThree';
 import SelectOptionTwo from '../../components/Forms/SelectOption/SelectOptionTwo';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const ProFormLayout = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Pro Form Layout" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
@@ -158,7 +157,7 @@ const ProFormLayout = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

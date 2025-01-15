@@ -3,7 +3,7 @@ import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { useUserStore } from "../../stores/users/users.store";
 import { TableColumn } from "react-data-table-component";
 import { UserInterface } from "../../interfaces/user.interface";
-import { useRoleStore } from "../../stores/roles/roles.store";
+// import { useRoleStore } from "../../stores/roles/roles.store";
 import { AddUserForm } from "../../components/Forms/AddUserForm";
 import { EditUserForm } from "../../components/Forms/EditUserForm";
 
@@ -11,7 +11,7 @@ export const DataUsers: FC = () => {
   const getAllUsers = useUserStore((state) => state.getUsers);
   const users = useUserStore((state) => state.users);
   const setSelectedUserById = useUserStore((state) => state.setSelectedUserById);
-  const getRoleById = useRoleStore((state) => state.getRoleById);
+  // const getRoleById = useRoleStore((state) => state.getRoleById);
   const deleteUser = useUserStore((state) => state.deleteUser);
 
   useEffect(() => {

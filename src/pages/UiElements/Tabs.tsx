@@ -3,11 +3,10 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import TabOne from '../../components/Tabs/TabOne';
 import TabThree from '../../components/Tabs/TabThree';
 import TabTwo from '../../components/Tabs/TabTwo';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const Tabs: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Tabs" />
 
       <div className="flex flex-col gap-9">
@@ -15,7 +14,7 @@ const Tabs: React.FC = () => {
         <TabTwo />
         <TabThree />
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

@@ -30,7 +30,7 @@ ProfileStore,
         set({ profiles: [...get().profiles, newProfile as ProfileInterface] });
     },
     editProfile: async (id, profile) => {
-        const { error, data } = await ProfileService.putProfile(id, profile);
+        const { error } = await ProfileService.putProfile(id, profile);
         set({ profiles: get().profiles.map((p) => p.id === id ? profile : p) as ProfileInterface[] });
         error && console.log('Error putting profile data',error)
     },

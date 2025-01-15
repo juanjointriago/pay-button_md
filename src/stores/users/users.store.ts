@@ -1,7 +1,6 @@
 import { create, StateCreator } from "zustand";
 import {
   AddUserInterface,
-  UpdatedUser,
   UserInterface,
 } from "../../interfaces/user.interface";
 import { UserService } from "../../services/User.service";

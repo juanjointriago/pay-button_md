@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import './css/style.css';
 import './css/satoshi.css';
 import './css/simple-datatables.css';
-import 'jsvectormap/dist/css/jsvectormap.css';
+import 'jsvectormap/dist/jsvectormap.css';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'nouislider/dist/nouislider.css';
 import 'dropzone/dist/dropzone.css';

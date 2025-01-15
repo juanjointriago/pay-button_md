@@ -1,12 +1,10 @@
-import React from 'react';
 import AvatarOne from '../../components/Avatars/AvatarOne';
 import AvatarTwo from '../../components/Avatars/AvatarTwo';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const Avatars: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Avatars" />
 
       <div className="flex flex-col gap-7.5">
@@ -30,7 +28,7 @@ const Avatars: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

@@ -2,11 +2,10 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import FileDropZone from '../../components/Forms/FileDropZone';
 import RangeSliderOne from '../../components/Forms/RangeSlider/RangeSliderOne';
 import RangeSliderTwo from '../../components/Forms/RangeSlider/RangeSliderTwo';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const ProFormElements = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Pro Form Elements" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
@@ -30,7 +29,7 @@ const ProFormElements = () => {
           <FileDropZone />
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

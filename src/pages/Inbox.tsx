@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import DropdownDefault from '../components/Dropdowns/DropdownDefault';
-import InboxList from '../components/Inbox/InboxList';
-import InboxMenuList from '../components/Inbox/InboxMenuList';
 // import { DefaultLayout } from '../layout/DefaultLayout';
 
 const Inbox: React.FC = () => {
@@ -42,7 +40,6 @@ const Inbox: React.FC = () => {
             </div>
 
             <div className="no-scrollbar max-h-full overflow-auto py-6">
-              <InboxMenuList />
             </div>
           </div>
           <div className="lg:w-4/5 flex h-full flex-col border-l border-stroke dark:border-strokedark">
@@ -230,10 +227,6 @@ const Inbox: React.FC = () => {
                   </svg>
                 </button>
               </div>
-            </div>
-
-            <div className="h-full">
-              <InboxList />
             </div>
 
             <div className="flex items-center justify-between border-t border-stroke p-4 dark:border-strokedark sm:px-6">

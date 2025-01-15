@@ -13,7 +13,7 @@ export interface EntitiesStore {
 const entitiesAPI: StateCreator<
   EntitiesStore,
   [["zustand/devtools", never], ["zustand/immer", never]]
-> = (set, get) => ({
+> = (set) => ({
   entities: [],
   getAndSetEntities: async () => {
     const { data } = await EntitiesService.getEntities();

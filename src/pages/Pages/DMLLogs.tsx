@@ -5,7 +5,7 @@ import { useLogsStore } from "../../stores/logs/log.store";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { DMLViewForm } from "../../components/Forms/DMLViewForm";
 import { useEntitiesStore } from "../../stores/entities/entities.store";
-import DatePickerOne from "../../components/Forms/DatePicker/DatePickerOne";
+// import DatePickerOne from "../../components/Forms/DatePicker/DatePickerOne";
 
 export const DMLLogs: FC = () => {
   const getAllLogs = useLogsStore((state) => state.getAndSetLogs);

@@ -1,5 +1,5 @@
 {
-  "name": "tailadmin-react-pro",
+  "name": "autditory-db",
   "private": true,
   "version": "1.3.0",
   "type": "module",
@@ -9,26 +9,32 @@
     "preview": "vite preview"
   },
   "author": {
-    "name": "TailAdmin",
-    "email": "hello@tailadmin.com",
-    "url": "https://tailadmin.com"
+    "name": "Juan Intriago",
+    "email": "juanintriagovillarreal@hotmail.com",
+    "url": "https://purple-widget.com"
   },
   "dependencies": {
     "apexcharts": "^3.37.0",
+    "axios": "^1.7.9",
     "dropzone": "^6.0.0-beta.2",
+    "firebase": "^11.1.0",
     "flatpickr": "^4.6.13",
+    "immer": "^10.1.1",
     "jsvectormap": "^1.5.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "nouislider": "^15.7.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
+    "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
     "react-flatpickr": "^3.10.13",
     "react-router-dom": "^6.8.1",
     "react-table": "^7.8.0",
     "sort-by": "^0.0.2",
-    "swiper": "^9.4.1"
+    "sweetalert2": "^11.15.3",
+    "swiper": "^9.4.1",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

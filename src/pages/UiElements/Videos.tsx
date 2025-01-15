@@ -1,11 +1,9 @@
-import React from 'react';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import VideosItem from '../../components/VideosItem';
-import DefaultLayout from '../../layout/DefaultLayout';
 
 const Videos: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Videos" />
 
       <div className="flex flex-col gap-7.5">
@@ -14,7 +12,7 @@ const Videos: React.FC = () => {
         <VideosItem title="Responsive Aspect ratios 21:9" aspectTwentyOne />
         <VideosItem title="Responsive Aspect ratios 1:1" aspectOne />
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

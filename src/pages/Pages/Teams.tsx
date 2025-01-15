@@ -1,12 +1,10 @@
-import React from 'react';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
 import TeamOne from '../../components/Teams/TeamOne';
 import TeamTwo from '../../components/Teams/TeamTwo';
 
 const Teams: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Teams" />
 
       <div className="flex flex-col gap-7.5">
@@ -30,7 +28,7 @@ const Teams: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

@@ -1,12 +1,10 @@
-import React from 'react'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
 import SpinnerOne from '../../components/Spinners/SpinnerOne';
 import SpinnerTwo from '../../components/Spinners/SpinnerTwo';
 
 const Spinners: React.FC = () => {
   return (
-    <DefaultLayout>
+    <>
       <Breadcrumb pageName="Spinners" />
 
       <div className="flex flex-col gap-7.5">
@@ -30,7 +28,7 @@ const Spinners: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 
