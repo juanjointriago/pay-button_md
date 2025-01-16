@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import UserOne from "../../images/user/user-01.png";
 import { useAuthStore } from "../../stores/auth/auth.store";
+
+import {FaUserCircle } from 'react-icons/fa'; 
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -55,7 +56,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          <FaUserCircle size={50}/>
         </span>
 
         <svg
