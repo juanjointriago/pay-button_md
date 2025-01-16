@@ -1,6 +1,7 @@
+import { SetupDeviceForm } from "../../components/Forms/SetupDeviceForm"
 
 export const DataSetupDevice = () => {
   return (
-    <div>DataSetupDevice</div>
+    <><SetupDeviceForm/></>
   )
 }
