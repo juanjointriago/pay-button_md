@@ -18,20 +18,18 @@ export class AuthService {
   };
 
   static checkAuthStatus = async () => {
-    try {
-      const { data } = await API.get("auth/checkAuthStatus", {
-        headers: {
-          "auth-token": localStorage.getItem("token") || "",
-        },
-      });
-      console.log("✅ checkAuthStatus => ", { data });
-      if (data && data.msg === "Authenticated") return "authorized";
-    } catch (error) {
-      localStorage.removeItem("token");
-      // window.location.href = "/auth/signin";
-      console.log("❌Error en checkAuthStatus", error);
-      return "unauthorized";
-    }
+    // try {
+      // const { data } = await API.get("auth/checkAuthStatus");
+      // console.log("✅ checkAuthStatus => ", { data });
+      // if (data && data.msg === "Authenticated") return "authorized";
+    // } catch (error) {
+    //   localStorage.removeItem("token");
+    //   // window.location.href = "/auth/signin";
+    //   console.log("❌Error en checkAuthStatus", error);
+    //   return "unauthorized";
+    // }
+    if(!!localStorage.getItem("token")) return "authorized";
+    return "unauthorized";
   };
 
   static logout = () => {

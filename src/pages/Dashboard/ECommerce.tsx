@@ -1,11 +1,11 @@
 import {FC, useEffect} from 'react';
 import CardDataStats from '../../components/CardDataStats';
 import ChartOne from '../../components/Charts/ChartOne';
-import { useLogsStore } from '../../stores/logs/log.store';
+import { useUserStore } from '../../stores/users/users.store';
 
 const ECommerce: FC = () => {
-  const getAllLogs = useLogsStore((state) => state.getAndSetLogs);
-  const logs = useLogsStore((state) => state.logs);
+  const getAllLogs = useUserStore((state) => state.getUsers);
+  const logs = useUserStore((state) => state.users);
   useEffect(() => {
     getAllLogs()
   }, [getAllLogs])

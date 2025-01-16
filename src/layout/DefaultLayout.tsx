@@ -3,12 +3,10 @@ import Header from "../components/Header/index";
 import Sidebar from "../components/Sidebar/index";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "../stores/auth/auth.store";
-import { useLogsStore } from "../stores/logs/log.store";
 import { useUserStore } from "../stores/users/users.store";
 import { useProfileStore } from "../stores/profile/profile.store";
 import { useRoleStore } from "../stores/roles/roles.store";
 import { useParamStore } from "../stores/params/params.store";
-import { useEntitiesStore } from "../stores/entities/entities.store";
 
 export const DefaultLayout: FC = () => {
   const authStatus = useAuthStore((state) => state.status);
@@ -27,22 +25,18 @@ export const DefaultLayout: FC = () => {
     }
   }
 
-  const getAllLogs = useLogsStore((state) => state.getAndSetLogs);
   const getAllUsers = useUserStore((state) => state.getUsers);
   const getAllProfiles = useProfileStore((state) => state.getProfiles);
   const getAllRoles = useRoleStore((state) => state.getRoles);
   const getAllParams = useParamStore((state) => state.getAndSetParams);
-  const getAllEntities = useEntitiesStore((state) => state.getAndSetEntities);
 
   //get and set all tables data
   useEffect(() => {
-    getAllLogs();
     getAllUsers();
     getAllProfiles();
     getAllRoles();
     getAllParams();
-    getAllEntities();
-  }, [getAllLogs, getAllUsers, getAllProfiles, getAllRoles, getAllParams, getAllEntities]);
+  }, [ getAllUsers, getAllProfiles, getAllRoles, getAllParams]);
 
 
 

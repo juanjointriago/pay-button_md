@@ -5,14 +5,11 @@ import { DefaultLayout } from "../layout/DefaultLayout";
 import { AuthLayout } from "../layout/AuthLayout";
 import SignIn from "../pages/Authentication/SignIn";
 import ResetPassword from "../pages/Authentication/ResetPassword";
-import { DataLogs } from "../pages/Pages/DataLogs";
 import { DataDashboard } from "../pages/Pages/DataDashboard";
 import { DataUsers } from "../pages/Pages/DataUsers";
 import { DataParams } from "../pages/Pages/DataParams";
 import { DataProfile } from "../pages/Pages/DataProfile";
 import { DataRoles } from "../pages/Pages/DataRoles";
-import { DMLLogs } from "../pages/Pages/DMLLogs";
-import { Entities } from "../pages/Pages/Entities";
 
 export const router = createBrowserRouter([
   {
@@ -29,18 +26,18 @@ export const router = createBrowserRouter([
             path: '',
             element: <DataDashboard />,
           },
-          {
-            path: "logs-db",
-            element: <DataLogs />,
-          },
-          {
-            path: "entities",
-            element: <Entities />,
-          },
-          {
-            path: "logs-dml",
-            element: <DMLLogs />,
-          },
+          // {
+          //   path: "logs-db",
+          //   element: <DataLogs />,
+          // },
+          // {
+          //   path: "entities",
+          //   element: <Entities />,
+          // },
+          // {
+          //   path: "logs-dml",
+          //   element: <DMLLogs />,
+          // },
           {
             path: "users",
             element: <DataUsers />,

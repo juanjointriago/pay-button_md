@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loader from "../../common/Loader";
 import Swal from "sweetalert2";
+import {FaFileExcel} from 'react-icons/fa'
 
 type data = any[];
 type columns = any[];
@@ -30,7 +31,7 @@ const Export = ({ onExport }) => (
     className="rounded-md bg-success px-3 py-2 font-medium text-white hover:bg-opacity-90"
     onClick={(e: any) => onExport(e.target.value)}
   >
-    Exportar CSV
+    <FaFileExcel/>
   </button>
 );
 
@@ -321,8 +322,8 @@ export const DataTableGeneric: FC<Props> = ({
         fixedHeader={false}
         pagination
         responsive
-        noDataComponent="No hay coincidencias..."
-        progressPending={!data.length}
+        noDataComponent="No se encontraron registros ..."
+        // progressPending={!data.length}
         progressComponent={<Loader />}
         onSelectedRowsChange={handleRowSelected}
       />

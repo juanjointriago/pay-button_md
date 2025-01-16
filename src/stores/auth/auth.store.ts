@@ -3,7 +3,6 @@ import { immer } from "zustand/middleware/immer";
 import { devtools, persist } from "zustand/middleware";
 import { LoginData, LoginInterface } from "../../interfaces/auth.interface";
 import { AuthService } from "../../services/Auth.service";
-import { useLogsStore } from "../logs/log.store";
 import { useParamStore } from "../params/params.store";
 import { useUserStore } from "../users/users.store";
 import { useProfileStore } from "../profile/profile.store";
@@ -66,6 +65,7 @@ export const storeAPI: StateCreator<
   checkAuthStatus: async () => {
     const status = await AuthService.checkAuthStatus();
     set({ status });
+    console.log({status})
     return status;
   },
   logoutUser: () => {
@@ -76,7 +76,6 @@ export const storeAPI: StateCreator<
       token: null,
     });
     useAuthStore.persist.clearStorage();
-    useLogsStore.persist.clearStorage();
     useParamStore.persist.clearStorage();
     useProfileStore.persist.clearStorage();
     useRoleStore.persist.clearStorage();
