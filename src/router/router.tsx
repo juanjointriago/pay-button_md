@@ -10,6 +10,10 @@ import { DataUsers } from "../pages/Pages/DataUsers";
 import { DataParams } from "../pages/Pages/DataParams";
 import { DataProfile } from "../pages/Pages/DataProfile";
 import { DataRoles } from "../pages/Pages/DataRoles";
+import { DataDebt } from "../pages/Pages/DataDebt";
+import { DataTransactions } from "../pages/Pages/DataTransactions";
+import { DataDataFastsTransactions } from "../pages/Pages/DataDataFastsTransactions";
+import { DataSetupDevice } from "../pages/Pages/DataSetupDevice";
 
 export const router = createBrowserRouter([
   {
@@ -26,18 +30,22 @@ export const router = createBrowserRouter([
             path: '',
             element: <DataDashboard />,
           },
-          // {
-          //   path: "logs-db",
-          //   element: <DataLogs />,
-          // },
-          // {
-          //   path: "entities",
-          //   element: <Entities />,
-          // },
-          // {
-          //   path: "logs-dml",
-          //   element: <DMLLogs />,
-          // },
+          {
+            path: "debt",
+            element: <DataDebt />,
+          },
+          {
+            path: "transactions",
+            element: <DataTransactions />,
+          },
+          {
+            path: "t-dtafast",
+            element: <DataDataFastsTransactions />,
+          },
+          {
+            path: "setup-dtf",
+            element: <DataSetupDevice />,
+          },
           {
             path: "users",
             element: <DataUsers />,

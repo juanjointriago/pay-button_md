@@ -9,6 +9,7 @@ import {
   FaChartBar,
   FaWrench,
   FaUserFriends,
+  FaCalculator
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -131,7 +132,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <FaChartBar />
-                        Dashboard
+                        Estadísticas
                         {open ? (
                           <FaArrowAltCircleRight className="absolute right-4" />
                         ) : (
@@ -153,7 +154,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && "!text-white")
                               }
                             >
-                              Estadísticas Generales
+                              Tablero
                             </NavLink>
                           </li>
                         </ul>
@@ -225,7 +226,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <NavLink
-                              to="/home/entities"
+                              to="/home/t-dtafast"
                               className={({ isActive }) =>
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
                                 (isActive && "!text-white")
@@ -288,9 +289,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && "!text-white")
                               }
                             >
-                              Configuraciones
+                              Parámetros
                             </NavLink>
                           </li>
+                          
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -299,6 +301,62 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 }}
               </SidebarLinkGroup>
               {/* <!-- Menu Item Ui Elements --> */}
+
+
+              {/* Menu Item de DataFast */}
+              <SidebarLinkGroup
+                activeCondition={pathname === "/ui" || pathname.includes("ui")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <Fragment>
+                      <NavLink
+                        to="#"
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          (pathname === "/ui" || pathname.includes("ui")) &&
+                          "bg-graydark dark:bg-meta-4"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+                        <FaCalculator />
+                        DataFast
+                        {open ? (
+                          <FaArrowAltCircleRight className="absolute right-4" />
+                        ) : (
+                          <FaArrowCircleDown className="absolute right-4" />
+                        )}
+                      </NavLink>
+                      {/* <!-- Dropdown Menu Start --> */}
+                      <div
+                        className={`translate transform overflow-hidden ${
+                          !open && "hidden"
+                        }`}
+                      >
+                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                          <li>
+                            <NavLink
+                              to="/home/setup-dtf"
+                              className={({ isActive }) =>
+                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                (isActive && "!text-white")
+                              }
+                            >
+                              Configurar Dispositivo
+                            </NavLink>
+                          </li>
+                          
+                        </ul>
+                      </div>
+                      {/* <!-- Dropdown Menu End --> */}
+                    </Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
 
               {/* <!-- Menu Item Auth Pages --> */}
               <SidebarLinkGroup
