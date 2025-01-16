@@ -2,6 +2,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useDeviceStore } from "../../stores/devices/device.store";
 import Loader from "../../common/Loader";
+import { FaCalculator } from "react-icons/fa";
 
 export const SetupDeviceForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,9 @@ const setDevice = useDeviceStore((state) => state.setDevice);
           <Loader />
         ) : (
           <div className="w-full ">
+            <h2 className="text-2xl font-medium text-black dark:text-white mb-7">
+            <div className="flex flex-row justify-center"><FaCalculator className="mr-2"/> Configuración de Dispositivo DataFast </div>
+            </h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
