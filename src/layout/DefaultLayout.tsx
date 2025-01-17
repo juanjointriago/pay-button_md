@@ -11,17 +11,18 @@ import { useParamStore } from "../stores/params/params.store";
 export const DefaultLayout: FC = () => {
   const authStatus = useAuthStore((state) => state.status);
   const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
+  const logoutUser = useAuthStore((state) => state.logoutUser);
 
   useEffect(() => {
     authorizeCheck();
-  }, [authStatus])
+  }, [])
 
   const authorizeCheck = async ()=> {
     console.log("🔐AUTH STATUS", authStatus);
-    if (authStatus === "unauthorized") {
     checkAuthStatus();
-
-      return <Navigate to="/auth/signin" />;
+    if (authStatus === "unauthorized") {
+      logoutUser();
+      // return <Navigate to="/auth/signin" />;
     }
   }
 

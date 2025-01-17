@@ -56,17 +56,39 @@ export const storeAPI: StateCreator<
           icon: "error",
           title: "Error",
           text: get().errorMsg,
-        confirmButtonColor: "blue",
-      confirmButtonText: "Aceptar",});
+          confirmButtonColor: "blue",
+          confirmButtonText: "Aceptar",
+        });
       }
       return error;
     }
   },
+/**
+ * Checks the authentication status of the user.
+ * 
+ * Makes a request to the `AuthService` to determine if the user is authorized.
+ * Updates the store's status based on the authentication response.
+ * 
+ * @returns A promise that resolves to "authorized" if the user is authenticated,
+ *          otherwise "unauthorized".
+ * @throws Logs any errors encountered during the authentication check.
+ */
+
   checkAuthStatus: async () => {
-    const status = await AuthService.checkAuthStatus();
-    set({ status });
-    console.log({status})
-    return status;
+    try {
+      const statusAuth = await AuthService.checkAuthStatus();
+      console.log("✅ checkAuthStatus => ", { statusAuth });
+      set({ status: statusAuth });
+      if (statusAuth && statusAuth === "authorized") return "authorized";
+    } catch (error) {
+      console.log("token",localStorage.getItem("token"))
+      // if (localStorage.getItem("token")) {
+      //   localStorage.removeItem("token");
+      // }
+      // window.location.href = "/auth/signin";
+      // console.log("❌Error en checkAuthStatus", { error });
+      return "unauthorized";
+    }
   },
   logoutUser: () => {
     AuthService.logout();

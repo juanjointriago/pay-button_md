@@ -9,7 +9,7 @@ export const AuthLayout = () => {
   
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, [checkAuthStatus]);
   
 
   if (authStatus === "authorized") {
