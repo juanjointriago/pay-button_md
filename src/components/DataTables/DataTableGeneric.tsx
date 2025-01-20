@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loader from "../../common/Loader";
 import Swal from "sweetalert2";
-import {FaFileExcel} from 'react-icons/fa'
+import { FaFileExcel } from 'react-icons/fa'
 
 type data = any[];
 type columns = any[];
@@ -10,7 +10,7 @@ interface Props {
   data: data;
   columns: columns;
   selectableRows?: boolean;
-  searchTitle?:string,
+  searchTitle?: string,
   fieldPlaceHolder?: string;
   filterField?: string;
   title?: string | React.ReactNode;
@@ -34,7 +34,7 @@ const Export = ({ onExport }) => (
     className="rounded-md bg-success px-3 py-2 font-medium text-white hover:bg-opacity-90"
     onClick={(e: any) => onExport(e.target.value)}
   >
-    <FaFileExcel/>
+    <FaFileExcel />
   </button>
 );
 
@@ -44,7 +44,7 @@ export const DataTableGeneric: FC<Props> = ({
   selectableRows = false,
   filterField,
   fieldPlaceHolder = 'Buscar',
-  searchTitle ='Buscar',
+  searchTitle = 'Buscar',
   title = "Data Table",
   viewTitle = "Ver detalles",
   viewDetails = false,
@@ -70,7 +70,7 @@ export const DataTableGeneric: FC<Props> = ({
 
   const [toggleCleared, setToggleCleared] = useState(false);
 
-  
+
 
   const contextActions = useMemo(() => {
     const handleEdit = () => {
@@ -225,10 +225,12 @@ export const DataTableGeneric: FC<Props> = ({
   });
 
   const [records, setRecords] = useState([...data]);
+  
 
   const handleChange = (e) => {
     const filteredRedcords = data.filter((record) => {
       return record[`${filterField}`]
+        .toString()
         .toLowerCase()
         .includes(e.target.value.toLowerCase());
     });
@@ -296,15 +298,15 @@ export const DataTableGeneric: FC<Props> = ({
   return (
     <>
       <div className="container mx-auto flex justify-center items-center">
-        {filterField&&<>
-          <label className="mr-2">{searchTitle}</label>
-      <input
-        key={filterField}
-        type="text"
-        onChange={handleChange}
-        placeholder={`${fieldPlaceHolder}`}
-        className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
-      /></>}
+        {filterField && <>
+          <label className="mr-2 whitespace-nowrap">{searchTitle}</label>
+          <input
+            key={filterField}
+            type="text"
+            onChange={handleChange}
+            placeholder={`${fieldPlaceHolder}`}
+            className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+          /></>}
       </div>
       <DataTable
         actions={[exportMemo, addForm && addButton]}
@@ -341,9 +343,8 @@ export const DataTableGeneric: FC<Props> = ({
       {addTitle && (
         <div>
           <div
-            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
-              modalOpen ? "block" : "hidden"
-            }`}
+            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${modalOpen ? "block" : "hidden"
+              }`}
           >
             <div
               ref={modal}
@@ -369,9 +370,8 @@ export const DataTableGeneric: FC<Props> = ({
       {editable && (
         <div>
           <div
-            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${
-              editModalOpen ? "block" : "hidden"
-            }`}
+            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 ${editModalOpen ? "block" : "hidden"
+              }`}
           >
             <div
               ref={editModal}
@@ -396,9 +396,8 @@ export const DataTableGeneric: FC<Props> = ({
       {viewDetails && (
         <div>
           <div
-            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-6 py-5 ${
-              detailsModalOpen ? "block" : "hidden"
-            }`}
+            className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-6 py-5 ${detailsModalOpen ? "block" : "hidden"
+              }`}
           >
             <div
               ref={detailModal}

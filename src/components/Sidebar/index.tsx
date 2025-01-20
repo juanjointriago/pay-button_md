@@ -110,12 +110,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              {auth.profileId === 2 ? "Opciones" : "MENU"}
+              {auth?.profileId === 2 ? "Opciones" : "MENU"}
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              {auth.profileId !== 2 && (
+              {auth?.profileId !== 2 && (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/" || pathname.includes("home")
@@ -195,7 +195,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <FaCashRegister />
-                        {auth.profileId === 2
+                        {auth?.profileId === 2
                           ? "Consulta de impuestos"
                           : "Impuestos"}
                         {open ? (
@@ -219,7 +219,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && "!text-white")
                               }
                             >
-                              {auth.profileId === 2
+                              {auth?.profileId === 2
                                 ? "Por pagar"
                                 : "Por cobrar"}
                             </NavLink>
@@ -235,7 +235,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Pagos Realizados
                             </NavLink>
                           </li>
-                          {auth.profileId !== 2 && (
+                          {auth?.profileId !== 2 && (
                             <li>
                               <NavLink
                                 to="/home/t-dtafast"
@@ -260,7 +260,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Ui Elements --> */}
-              {auth.profileId !== 2 && (
+              {auth?.profileId !== 2 && (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/ui" || pathname.includes("ui")
@@ -319,7 +319,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Ui Elements --> */}
 
               {/* Menu Item de DataFast */}
-              {auth.profileId !== 2 && (
+              {auth?.profileId !== 2 && (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/ui" || pathname.includes("ui")
@@ -398,7 +398,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <FaUserFriends />
-                        {auth.profileId === 2
+                        {auth?.profileId === 2
                           ? "Mis Datos"
                           : "Gestion de Usuarios"}
                         {open ? (
@@ -414,7 +414,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          {auth.profileId !== 2 && (
+                          {auth?.profileId !== 2 && (
                             <li>
                               <NavLink
                                 to="/home/users"
@@ -427,7 +427,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               </NavLink>
                             </li>
                           )}
-                          {auth.profileId !== 2 && (
+                          {auth?.profileId !== 2 && (
                             <li>
                               <NavLink
                                 to="/home/profiles"
@@ -440,7 +440,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               </NavLink>
                             </li>
                           )}
-                          {auth.profileId !== 2 && <li>
+                          {auth?.profileId !== 2 && <li>
                             <NavLink
                               to="/home/roles"
                               className={({ isActive }) =>
@@ -451,7 +451,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Roles
                             </NavLink>
                           </li>}
-                          {auth.profileId === 2 &&<li>
+                          {auth?.profileId === 2 &&<li>
                             <NavLink
                               to="/home/my-profile"
                               className={({ isActive }) =>

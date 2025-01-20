@@ -11,6 +11,14 @@ export const ViewDebtForm = () => {
     setIsLoading(false)
 
   }, [selectedDebt]);
+
+  const handlePay = async (e) => {
+    e.preventDefault();
+    console.log('papyingg....');
+    
+  }
+
+
   return (
     <>
       {isLoading ? (
@@ -64,7 +72,7 @@ export const ViewDebtForm = () => {
               </label>
               <div className="relative">
                 <label className="mb-1 block font-medium text-black dark:text-white">
-                  {selectedDebt.actionLiquidationType }
+                  {selectedDebt.actionLiquidationType}
                 </label>
               </div>
             </div>
@@ -93,13 +101,13 @@ export const ViewDebtForm = () => {
 
             <div className="mb-5">
               <input
-                //   onClick={handleSaveParam}
+                onClick={handlePay}
                 type="submit"
                 value="Realizar Pago"
                 className="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white"
               />
             </div>
-            
+
           </form>
         </div>
       )}
