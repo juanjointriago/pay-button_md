@@ -20,7 +20,7 @@ export class AuthService {
   static checkAuthStatus = async () => {
     // try {
       const { data } = await API.get("auth/checkAuthStatus");
-      console.log("✅ checkAuthStatus => ", { data });
+      // console.log("✅ checkAuthStatus => ", { data });
       if (data && data.msg === "Authenticated") return "authorized";
       console.log("❌Error en checkAuthStatus");
       return "unauthorized";

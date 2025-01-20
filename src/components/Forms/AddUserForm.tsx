@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "../../stores/users/users.store";
 import Loader from "../../common/Loader";
 import { useProfileStore } from "../../stores/profile/profile.store";
-import { useRoleStore } from "../../stores/roles/roles.store";
 import { Message } from "../Texts/Message";
 
 export const AddUserForm = () => {
@@ -12,27 +11,21 @@ export const AddUserForm = () => {
   const [email, setEmail] = useState("");
   const addUser = useUserStore((state) => state.addUser);
   const getProfiles = useProfileStore((state) => state.getProfiles);
-  const getRoles = useRoleStore((state) => state.getRoles);
   const profiles = useProfileStore((state) => state.profiles);
-  const roles = useRoleStore((state) => state.roles);
   const getUsers = useUserStore((state) => state.getUsers);
   const users = useUserStore((state) => state.users);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [roleId, setRoleId] = useState(0);
   const [profileId, setProfileId] = useState<number>(0);
 
   useEffect(() => {
     getUsers();
     getProfiles();
-    getRoles();
+    // getRoles();
   }, []);
 
   const handleProfileChange = (value: number) => {
     setProfileId(value);
-  };
-  const handleRoleChange = (value: number) => {
-    setRoleId(value);
   };
   const validateSameData = () => {
     const uniqueEmail = users.find((user) => user.email === email);
@@ -48,7 +41,7 @@ export const AddUserForm = () => {
     return true;
   };
   const handleSaveUser = async () => {
-    if(username === "" || password === "" || email === "" || roleId === 0 || profileId === 0){
+    if(username === "" || password === "" || email === "" || profileId === 0){
       setErrorMessage("Por favor complete todos los campos");
       return;
     }
@@ -57,17 +50,14 @@ export const AddUserForm = () => {
       setIsLoading(false);
       return;
     }
-    await addUser({ username, password, email, roleId, profileId });
+    await addUser({ username, password, email, profileId });
     setUsername("");
     setPassword("");
     setEmail("");
-    setRoleId(0);
     setProfileId(0);
     setErrorMessage("Usuario creado exitosamente");
     setIsLoading(false);
-
     console.log("EXITO");
-
     // window.location.reload();
     window.location.href = window.location.href;
   };
@@ -95,7 +85,7 @@ export const AddUserForm = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   type="text"
-                  placeholder="Ingrese nombre de usuario"
+                  placeholder="Ingrese numero de cédula"
                   className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
@@ -164,51 +154,6 @@ export const AddUserForm = () => {
                             <span
                               className={`h-2.5 w-2.5 rounded-full bg-primary ${
                                 profileId === option.id ? "flex" : "hidden"
-                              }`}
-                            ></span>
-                          </span>
-                          {option.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mb-4 flex flex-row justify-between">
-              <label className="mb-2.5 block font-medium text-black dark:text-white">
-                Rol
-              </label>
-              <div className="relative">
-                <div className="mb-5.5">
-                  <label
-                    htmlFor="recommend"
-                    className="mb-4.5 block text-sm font-medium text-black dark:text-white"
-                  >
-                    Seleccione el Rol que desea asignar
-                  </label>
-
-                  <div className="flex flex-col gap-2.5">
-                    {roles.map((option) => (
-                      <div key={option.id}>
-                        <label className="relative flex cursor-pointer select-none items-center gap-2 text-sm font-medium text-black dark:text-white">
-                          <input
-                            className="sr-only"
-                            type="radio"
-                            name="roleId"
-                            id={`${option.id}`}
-                            onChange={() => handleRoleChange(option.id)}
-                          />
-                          <span
-                            className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                              roleId === option.id
-                                ? "border-primary"
-                                : "border-body"
-                            }`}
-                          >
-                            <span
-                              className={`h-2.5 w-2.5 rounded-full bg-primary ${
-                                roleId === option.id ? "flex" : "hidden"
                               }`}
                             ></span>
                           </span>

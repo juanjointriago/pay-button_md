@@ -25,7 +25,6 @@ export interface AddUserInterface {
     password:  string;
     email:     string;
     profileId: number;
-    roleId:    number;     
 }
 
 export interface RoleUser {

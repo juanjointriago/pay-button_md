@@ -4,7 +4,7 @@ import { ParamsService } from "../../services/Params.service";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-export interface ParamsStore{
+ interface ParamsStore{
     params: ParamInterface[]
     getAndSetParams: () => Promise<void>
     addParam: (param: ParamInterface) => Promise<void>

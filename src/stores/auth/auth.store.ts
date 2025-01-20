@@ -77,7 +77,7 @@ export const storeAPI: StateCreator<
   checkAuthStatus: async () => {
     try {
       const statusAuth = await AuthService.checkAuthStatus();
-      console.log("✅ checkAuthStatus => ", { statusAuth });
+      // console.log("✅ checkAuthStatus => ", { statusAuth });
       set({ status: statusAuth });
       if (statusAuth && statusAuth === "authorized") return "authorized";
     } catch (error) {

@@ -38,8 +38,16 @@ export const EditUserForm: FC = () => {
     // setPassword(selectedUser.password);
     setEmail(selectedUser.email);
   }, [selectedUser]);
-  console.log("User STATE", user);
+  // console.log("User STATE", user);
 
+  /**
+   * Actualiza un usuario con los datos que se le pasan en el formulario
+   * @param {string} username - Username del usuario
+   * @param {string} password - Contrase a del usuario
+   * @param {string} email - Correo electr nico del usuario
+   * @param {number} profileId - Perfil al que pertenece el usuario
+   * @returns {Promise<void>}
+   */
   const handleEditUser = async () => {
     if (
       username === "" ||
@@ -185,51 +193,7 @@ export const EditUserForm: FC = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-4 flex flex-row justify-between">
-              <label className="mb-2.5 block font-medium text-black dark:text-white">
-                Rol
-              </label>
-              <div className="relative">
-                <div className="mb-5.5">
-                  <label
-                    htmlFor="recommend"
-                    className="mb-4.5 block text-sm font-medium text-black dark:text-white"
-                  >
-                    Seleccione el Rol que desea asignar
-                  </label>
-
-                  {/* <div className="flex flex-col gap-2.5">
-                    {roles.map((option) => (
-                      <div key={option.id}>
-                        <label className="relative flex cursor-pointer select-none items-center gap-2 text-sm font-medium text-black dark:text-white">
-                          <input
-                            className="sr-only"
-                            type="radio"
-                            name="roleId"
-                            id={`${option.id}`}
-                            onChange={() => handleRoleChange(option.id)}
-                          />
-                          <span
-                            className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                              roleId === option.id
-                                ? "border-primary"
-                                : "border-body"
-                            }`}
-                          >
-                            <span
-                              className={`h-2.5 w-2.5 rounded-full bg-primary ${
-                                roleId === option.id ? "flex" : "hidden"
-                              }`}
-                            ></span>
-                          </span>
-                          {option.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div> */}
-                </div>
-              </div>
-            </div>
+            
             <div className="mb-5">
               <input
                 //   onClick={handleSaveParam}

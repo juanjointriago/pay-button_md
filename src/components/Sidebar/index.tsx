@@ -9,8 +9,9 @@ import {
   FaChartBar,
   FaWrench,
   FaUserFriends,
-  FaCalculator
+  FaCalculator,
 } from "react-icons/fa";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -28,6 +29,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
   );
+
+  const auth = useAuthStore((state) => state.user);
 
   // close on click outside
   useEffect(() => {
@@ -107,63 +110,67 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              MENU
+              {auth.profileId === 2 ? "Opciones" : "MENU"}
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              <SidebarLinkGroup
-                activeCondition={pathname === "/" || pathname.includes("home")}
-              >
-                {(handleClick, open) => {
-                  return (
-                    <Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/" || pathname.includes("home")) &&
-                          "bg-graydark dark:bg-meta-4"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <FaChartBar />
-                        Estadísticas
-                        {open ? (
-                          <FaArrowAltCircleRight className="absolute right-4" />
-                        ) : (
-                          <FaArrowCircleDown className="absolute right-4" />
-                        )}
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
-                        }`}
-                      >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Tablero
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+              {auth.profileId !== 2 && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/" || pathname.includes("home")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <Fragment>
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                            (pathname === "/" || pathname.includes("home")) &&
+                            "bg-graydark dark:bg-meta-4"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FaChartBar />
+                          Estadísticas
+                          {open ? (
+                            <FaArrowAltCircleRight className="absolute right-4" />
+                          ) : (
+                            <FaArrowCircleDown className="absolute right-4" />
+                          )}
+                        </NavLink>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                            <li>
+                              <NavLink
+                                to="/"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Tablero
+                              </NavLink>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
               {/* <!-- Menu Item Dashboard --> */}
               {/* <!-- Menu Item Tables --> */}
               <SidebarLinkGroup
@@ -188,7 +195,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <FaCashRegister />
-                        Impuestos
+                        {auth.profileId === 2
+                          ? "Consulta de impuestos"
+                          : "Impuestos"}
                         {open ? (
                           <FaArrowAltCircleRight className="absolute right-4" />
                         ) : (
@@ -210,7 +219,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && "!text-white")
                               }
                             >
-                              Por cobrar
+                              {auth.profileId === 2
+                                ? "Por pagar"
+                                : "Por cobrar"}
                             </NavLink>
                           </li>
                           <li>
@@ -224,17 +235,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Pagos Realizados
                             </NavLink>
                           </li>
-                          <li>
-                            <NavLink
-                              to="/home/t-dtafast"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Transac. DATAFAST
-                            </NavLink>
-                          </li>
+                          {auth.profileId !== 2 && (
+                            <li>
+                              <NavLink
+                                to="/home/t-dtafast"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Transac. DATAFAST
+                              </NavLink>
+                            </li>
+                          )}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -247,117 +260,121 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Ui Elements --> */}
-              <SidebarLinkGroup
-                activeCondition={pathname === "/ui" || pathname.includes("ui")}
-              >
-                {(handleClick, open) => {
-                  return (
-                    <Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/ui" || pathname.includes("ui")) &&
-                          "bg-graydark dark:bg-meta-4"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <FaWrench />
-                        Configuraciones
-                        {open ? (
-                          <FaArrowAltCircleRight className="absolute right-4" />
-                        ) : (
-                          <FaArrowCircleDown className="absolute right-4" />
-                        )}
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
-                        }`}
-                      >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/home/params"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Parámetros
-                            </NavLink>
-                          </li>
-                          
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+              {auth.profileId !== 2 && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/ui" || pathname.includes("ui")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <Fragment>
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                            (pathname === "/ui" || pathname.includes("ui")) &&
+                            "bg-graydark dark:bg-meta-4"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FaWrench />
+                          Configuraciones
+                          {open ? (
+                            <FaArrowAltCircleRight className="absolute right-4" />
+                          ) : (
+                            <FaArrowCircleDown className="absolute right-4" />
+                          )}
+                        </NavLink>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                            <li>
+                              <NavLink
+                                to="/home/params"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Parámetros
+                              </NavLink>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
               {/* <!-- Menu Item Ui Elements --> */}
 
-
               {/* Menu Item de DataFast */}
-              <SidebarLinkGroup
-                activeCondition={pathname === "/ui" || pathname.includes("ui")}
-              >
-                {(handleClick, open) => {
-                  return (
-                    <Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/ui" || pathname.includes("ui")) &&
-                          "bg-graydark dark:bg-meta-4"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <FaCalculator />
-                        DataFast
-                        {open ? (
-                          <FaArrowAltCircleRight className="absolute right-4" />
-                        ) : (
-                          <FaArrowCircleDown className="absolute right-4" />
-                        )}
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
-                        }`}
-                      >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/home/setup-dtf"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Configurar Dispositivo
-                            </NavLink>
-                          </li>
-                          
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-
+              {auth.profileId !== 2 && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/ui" || pathname.includes("ui")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <Fragment>
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                            (pathname === "/ui" || pathname.includes("ui")) &&
+                            "bg-graydark dark:bg-meta-4"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FaCalculator />
+                          DataFast
+                          {open ? (
+                            <FaArrowAltCircleRight className="absolute right-4" />
+                          ) : (
+                            <FaArrowCircleDown className="absolute right-4" />
+                          )}
+                        </NavLink>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                            <li>
+                              <NavLink
+                                to="/home/setup-dtf"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Configurar Dispositivo
+                              </NavLink>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
               {/* <!-- Menu Item Auth Pages --> */}
               <SidebarLinkGroup
                 activeCondition={
@@ -381,7 +398,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <FaUserFriends />
-                        Gestion de Usuarios
+                        {auth.profileId === 2
+                          ? "Mis Datos"
+                          : "Gestion de Usuarios"}
                         {open ? (
                           <FaArrowAltCircleRight className="absolute right-4" />
                         ) : (
@@ -395,29 +414,33 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/home/users"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Usuarios
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/home/profiles"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Perfiles
-                            </NavLink>
-                          </li>
-                          <li>
+                          {auth.profileId !== 2 && (
+                            <li>
+                              <NavLink
+                                to="/home/users"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Usuarios
+                              </NavLink>
+                            </li>
+                          )}
+                          {auth.profileId !== 2 && (
+                            <li>
+                              <NavLink
+                                to="/home/profiles"
+                                className={({ isActive }) =>
+                                  "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                  (isActive && "!text-white")
+                                }
+                              >
+                                Perfiles
+                              </NavLink>
+                            </li>
+                          )}
+                          {auth.profileId !== 2 && <li>
                             <NavLink
                               to="/home/roles"
                               className={({ isActive }) =>
@@ -427,7 +450,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Roles
                             </NavLink>
-                          </li>
+                          </li>}
+                          {auth.profileId === 2 &&<li>
+                            <NavLink
+                              to="/home/my-profile"
+                              className={({ isActive }) =>
+                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
+                                (isActive && "!text-white")
+                              }
+                            >
+                              Actualizar Mis datos
+                            </NavLink>
+                          </li>}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

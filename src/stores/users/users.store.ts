@@ -6,6 +6,7 @@ import {
 import { UserService } from "../../services/User.service";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import Swal from "sweetalert2";
 
 export interface UserStore {
   users: UserInterface[];
@@ -34,19 +35,28 @@ const usersAPI: StateCreator<
   },
   addUser: async (user) => {
     if (user) {
-      const updatedUser = await UserService.postUser(user);
-      console.log("RESPUESTA DEL SERVICIO", { updatedUser });
-      if (!updatedUser) {
+      try {
+        const response = await UserService.postUser(user);
+        console.log("RESPUESTA DEL SERVICIO", { response });
+        const userData = await UserService.getUserById(
+          response.data.updatedUser.id
+        );
+        set({ users: [...get().users, userData] });
+        console.log("STOREINFO user added", userData);
+      } catch (error) {
         console.warn("Error adding user data");
-        return;
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al agregar el usuario",
+          confirmButtonColor: "blue",
+          confirmButtonText: "Aceptar",
+        });
       }
-      const userData = await UserService.getUserById(updatedUser.id);
-      set({ users: [...get().users, userData] });
-      console.log("STOREINFO user added", userData);
     }
   },
   editUser: async (id, user) => {
-    console.log('STORE EDITUSER',id, user);
+    console.log("STORE EDITUSER", id, user);
     const { error } = await UserService.putUser(id, user);
     const newUsers = get().users.map((u) => (u.id === id ? user : u));
     console.log("newUsers", newUsers);

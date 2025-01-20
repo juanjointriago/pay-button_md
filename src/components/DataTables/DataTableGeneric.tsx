@@ -10,9 +10,12 @@ interface Props {
   data: data;
   columns: columns;
   selectableRows?: boolean;
+  searchTitle?:string,
+  fieldPlaceHolder?: string;
   filterField?: string;
   title?: string | React.ReactNode;
   viewDetails?: boolean;
+  viewTitle?: string;
   viewForm?: React.ReactNode;
   viewAction?: any;
   addTitle?: string;
@@ -39,8 +42,11 @@ export const DataTableGeneric: FC<Props> = ({
   columns,
   data,
   selectableRows = false,
-  // filterField,
+  filterField,
+  fieldPlaceHolder = 'Buscar',
+  searchTitle ='Buscar',
   title = "Data Table",
+  viewTitle = "Ver detalles",
   viewDetails = false,
   viewForm,
   viewAction,
@@ -180,7 +186,7 @@ export const DataTableGeneric: FC<Props> = ({
             key="viewdetails"
             onClick={handleViewDetails}
           >
-            Ver Detalles
+            {viewTitle}
           </button>
         )}
       </div>
@@ -218,16 +224,16 @@ export const DataTableGeneric: FC<Props> = ({
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  // const [records, setRecords] = useState([...data]);
+  const [records, setRecords] = useState([...data]);
 
-  // const handleChange = (e) => {
-  //   const filteredRedcords = data.filter((record) => {
-  //     return record[`${filterField}`]
-  //       .toLowerCase()
-  //       .includes(e.target.value.toLowerCase());
-  //   });
-  //   setRecords(filteredRedcords);
-  // };
+  const handleChange = (e) => {
+    const filteredRedcords = data.filter((record) => {
+      return record[`${filterField}`]
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase());
+    });
+    setRecords(filteredRedcords);
+  };
 
   const convertArrayOfObjectsToCSV = (array) => {
     let result;
@@ -289,13 +295,17 @@ export const DataTableGeneric: FC<Props> = ({
 
   return (
     <>
-      {/* <input
+      <div className="container mx-auto flex justify-center items-center">
+        {filterField&&<>
+          <label className="mr-2">{searchTitle}</label>
+      <input
         key={filterField}
         type="text"
         onChange={handleChange}
-        placeholder={`Buscar por ${filterField} ...`}
+        placeholder={`${fieldPlaceHolder}`}
         className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
-      /> */}
+      /></>}
+      </div>
       <DataTable
         actions={[exportMemo, addForm && addButton]}
         key={addTitle}
@@ -317,7 +327,8 @@ export const DataTableGeneric: FC<Props> = ({
         // expandableRowsComponentProps={{name: 'Ver detalles...'}}
         title={title}
         columns={columns}
-        data={data}
+        // data={data}
+        data={records}
         selectableRows={selectableRows}
         fixedHeader={false}
         pagination

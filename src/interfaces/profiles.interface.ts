@@ -17,10 +17,25 @@ export interface ProfileInterface {
     name:        string;
     description: string;
     active:      number;
+    roles:       RoleProfileInterface[];
+}
+
+
+export interface RoleProfileInterface {
+    id:          number;
+    profileId:   number;
+    rolesId:      number;
+    assignedAt?:  Date;
 }
 
 export interface ProfileAddInterface {
     name:        string;
     description: string;
+
+
 }
+
+
+
+
 

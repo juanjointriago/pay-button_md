@@ -7,6 +7,7 @@ import { useUserStore } from "../stores/users/users.store";
 import { useProfileStore } from "../stores/profile/profile.store";
 import { useRoleStore } from "../stores/roles/roles.store";
 import { useParamStore } from "../stores/params/params.store";
+import { useDebts } from "../stores/debts/dbts.store";
 
 export const DefaultLayout: FC = () => {
   const authStatus = useAuthStore((state) => state.status);
@@ -15,33 +16,31 @@ export const DefaultLayout: FC = () => {
 
   useEffect(() => {
     authorizeCheck();
-  }, [])
+  }, []);
 
-  const authorizeCheck = async ()=> {
+  const authorizeCheck = async () => {
     console.log("🔐AUTH STATUS", authStatus);
     checkAuthStatus();
     if (authStatus === "unauthorized") {
       logoutUser();
-      // return <Navigate to="/auth/signin" />;
+      return <Navigate to="/auth/signin" />;
     }
-  }
+  };
 
   const getAllUsers = useUserStore((state) => state.getUsers);
   const getAllProfiles = useProfileStore((state) => state.getProfiles);
   const getAllRoles = useRoleStore((state) => state.getRoles);
   const getAllParams = useParamStore((state) => state.getAndSetParams);
+  const getAllDebts = useDebts((state) => state.getAndSetDebts);
 
   //get and set all tables data
   useEffect(() => {
+    getAllDebts();
     getAllUsers();
     getAllProfiles();
     getAllRoles();
     getAllParams();
-  }, [ getAllUsers, getAllProfiles, getAllRoles, getAllParams]);
-
-
-
-  
+  }, [getAllUsers, getAllProfiles, getAllRoles, getAllParams, getAllDebts]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

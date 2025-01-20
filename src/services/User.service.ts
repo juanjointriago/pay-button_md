@@ -37,26 +37,22 @@ export class UserService {
     }
   };
 
-  static postUser = async (user: AddUserInterface): Promise<UpdatedUser> => {
-    console.log("💩 INFO adding user data =>", user);
+  static postUser = async (user: AddUserInterface) => {
+    // console.log("💩 INFO adding user data =>", user);
     const route = "users";
-    try {
-      const { data } = await API.post<ReponsePostUserInterface>(route, user);
-      console.log(" 💩 RESPONSE api post =>", { data });
-      const newUser = data.updatedUser;
-      console.log(" 💩 const newUser = data.data;", { newUser });
-      console.log("next");
-      return newUser;
-    } catch (error) {
-      console.log("❌Error en postUser", error);
-      console.log("noooooooooo");
-      // return {
-      //     msg: "Error en postUser",
-      //     error: true,
-      //     records: 0,
-      //     data: null,
-      // };
-    }
+    // try {
+      const response= await API.post<ReponsePostUserInterface>(route, user);
+      return response
+    // } catch (error) {
+    //   console.log("❌Error en postUser", error);
+    //   console.log("noooooooooo");
+    //   // return {
+    //   //     msg: "Error en postUser",
+    //   //     error: true,
+    //   //     records: 0,
+    //   //     data: null,
+    //   // };
+    // }
   };
   static putUser = async (
     id: number,
