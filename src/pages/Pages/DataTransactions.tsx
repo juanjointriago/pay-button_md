@@ -66,8 +66,8 @@ export const DataTransactions = () => {
   return (
     <>
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
-        {auth.profileId !== 2 && <div className="flex flex-row gap-5">
-          <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white">
+        {auth.profileId !== 2 && <div className="flex flex-row gap-5 items-center">
+          <label className="text-gray-900 block text-sm font-medium dark:text-white whitespace-nowrap items-center">
             Filtrar por Usuario
           </label>
           <select
@@ -124,7 +124,7 @@ export const DataTransactions = () => {
           viewForm={<ViewDebtForm />}
           filterField={auth.profileId === 2 ? null : filterBy}
           viewTitle="Realizar Pago"
-          searchTitle={`Buscar por ${filterBy}`}
+          searchTitle={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
           title={
             auth.profileId !== 2 ? <div

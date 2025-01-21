@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
 import Swal from "sweetalert2";
 import Loader from "../../common/Loader";
 import { useAuthStore } from "../../stores/auth/auth.store";
-import {FaIdCard, FaLock, FaArrowRight} from "react-icons/fa"
+import { FaIdCard, FaLock, FaArrowRight } from "react-icons/fa"
 
 
 const SignIn: FC = () => {
@@ -22,7 +22,7 @@ const SignIn: FC = () => {
     }
     await signin({ username: userName, password });
     console.log("errorMsg", errorMsg);
-    if(errorMsg !== ""){
+    if (errorMsg !== "") {
       setIsLoading(false);
       return;
     }
@@ -70,7 +70,7 @@ const SignIn: FC = () => {
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
                       <span className="absolute right-4 top-4">
-                        <FaIdCard size={22}/>
+                        <FaIdCard size={22} />
                       </span>
                     </div>
                   </div>
@@ -87,7 +87,7 @@ const SignIn: FC = () => {
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
                       <span className="absolute right-4 top-4">
-                       <FaLock size={22}/>
+                        <FaLock size={22} />
                       </span>
                     </div>
                   </div>
@@ -98,6 +98,21 @@ const SignIn: FC = () => {
                       value="Continuar ➡️"
                       className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                     />
+
+                    {/* <NavLink to="/auth/signup">
+                      <span className="text-sm mt-2 hover:underline inline-block hover:cursor-pointer text-gray-500 hover:text-graydark">
+                        No tienes cuenta? Regístrate
+                      </span>
+                    </NavLink> */}
+
+                    <div className="mt-2 text-center">
+                      <p>
+                        No tienes una cuenta?{' '}
+                        <Link to="/auth/signup" className="text-primary hover:underline">
+                          Regístrate
+                        </Link>
+                      </p>
+                    </div>
                   </div>
                 </form>
               </div>

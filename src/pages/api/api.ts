@@ -4,8 +4,8 @@ import { API_HOST } from "../../constants/constants";
 export const baseURL = `${API_HOST}/api/`;
 const API = axios.create({ baseURL });
 
-API.interceptors.request.use(async (config) => {
-  const token = await localStorage.getItem("token");
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
   if (token) {
     if (config.headers instanceof AxiosHeaders) {
       config.headers.set("auth-token", token);

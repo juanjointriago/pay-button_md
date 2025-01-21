@@ -15,7 +15,6 @@ export const ViewDebtForm = () => {
   const handlePay = async (e) => {
     e.preventDefault();
     console.log('papyingg....');
-    
   }
 
 

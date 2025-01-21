@@ -14,6 +14,7 @@ import { DataDebt } from "../pages/Pages/DataDebt";
 import { DataTransactions } from "../pages/Pages/DataTransactions";
 import { DataDataFastsTransactions } from "../pages/Pages/DataDataFastsTransactions";
 import { DataSetupDevice } from "../pages/Pages/DataSetupDevice";
+import SignUp from "../pages/Authentication/SignUp";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
           {
             path: "signin",
             element: <SignIn />,
+          },
+          {
+            path: "signup",
+            element: <SignUp />,
           },
           {
             path: "reset-password",

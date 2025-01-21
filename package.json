@@ -14,6 +14,7 @@
     "url": "https://purple-widget.com"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "apexcharts": "^3.37.0",
     "axios": "^1.7.9",
     "dropzone": "^6.0.0-beta.2",
@@ -29,6 +30,7 @@
     "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
     "react-flatpickr": "^3.10.13",
+    "react-hook-form": "^7.54.2",
     "react-icons": "^5.4.0",
     "react-router-dom": "^6.8.1",
     "react-table": "^7.8.0",
@@ -36,6 +38,7 @@
     "sort-by": "^0.0.2",
     "sweetalert2": "^11.6.13",
     "swiper": "^9.4.1",
+    "zod": "^3.24.1",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
