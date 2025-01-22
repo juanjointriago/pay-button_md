@@ -58,11 +58,7 @@ const SignUp: React.FC = () => {
       text: "Se envió un correo de confirmación", // 'Please try again!',
       confirmButtonColor: "blue",
     });
-  }
-
-  console.log(form.getValues());
-
-  console.log(form.formState.errors);
+  };
 
 
   return (

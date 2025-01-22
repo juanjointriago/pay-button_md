@@ -1,20 +1,22 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
-import { useUserStore } from "../../stores/users/users.store";
+// import { useUserStore } from "../../stores/users/users.store";
 import { useDebts } from "../../stores/debts/dbts.store";
 import { TableColumn } from "react-data-table-component";
 import { DebtInterface } from "../../interfaces/debt.interface";
 import { FaTrash } from 'react-icons/fa'
 import { ViewDebtForm } from "../../components/Forms/ViewDebtForm";
 import { useAuthStore } from "../../stores/auth/auth.store";
+import { PaymentButton } from "../../components/Payment/PaymentButton";
 
 export const DataDebt = () => {
-  const users = useUserStore((state) => state.users);
+  // const users = useUserStore((state) => state.users);
   const debts = useDebts((state) => state.debts);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
   const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id) : debts);
   const [filterBy, setFilterBy] = useState('localCode');
+  // const useRef(null);
 
   const columns: TableColumn<DebtInterface>[] = [
     {
@@ -141,6 +143,25 @@ export const DataDebt = () => {
     },
   ];
 
+  // useEffect(() => {
+  //   var wpwlOptions = {
+  //     onReady: function (onReady) {
+  //       var datafast = '<br/><br/><img src=' + '"https://www.datafast.com.ec/images/verified.png" style=' + '"display:block;margin:0 auto; width:100%;">';
+  //       $('form.wpwl-form-card').find('.wpwl-button').before(datafast);
+  //     },
+  //     style: "card",
+  //     locale: "es",
+  //     maskCvv: true,
+  //     brandDetection: true,
+  //     labels: {
+  //       cvv: "CVV",
+  //       cardHolder: "Nombre(Igual que en la tarjeta)"
+  //     }
+  //   }
+
+  // }, []);
+  
+
   return (
     <>
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
@@ -216,7 +237,8 @@ export const DataDebt = () => {
           }
         />
       </div>
-    </>
 
+      <PaymentButton />
+    </>
   );
 };
