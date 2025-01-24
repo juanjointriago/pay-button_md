@@ -213,6 +213,7 @@ export const DataDebt = () => {
 
         <DataTableGeneric
           data={filteredData}
+          onSearch={console.log}
           columns={columns}
           selectableRows
           viewDetails
@@ -238,7 +239,7 @@ export const DataDebt = () => {
         />
       </div>
 
-      <PaymentButton />
+      {/* <PaymentButton /> */}
     </>
   );
 };

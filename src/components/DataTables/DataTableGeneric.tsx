@@ -2,7 +2,13 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loader from "../../common/Loader";
 import Swal from "sweetalert2";
-import { FaFileExcel } from 'react-icons/fa'
+import { FaFileExcel, FaSearch } from 'react-icons/fa'
+import { SelectorKeys } from "../../pages/Pages/DataTransactions";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { PaymentButton } from "../Payment/PaymentButton";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 type data = any[];
 type columns = any[];
@@ -25,6 +31,7 @@ interface Props {
   editForm?: React.ReactNode;
   deletable?: boolean;
   deleteAction?: any;
+  onSearch: any;
 }
 
 const Export = ({ onExport }) => (
@@ -37,6 +44,36 @@ const Export = ({ onExport }) => (
     <FaFileExcel />
   </button>
 );
+
+const zod = z.object({
+  localCode: z.string().trim().nullable(), // codigo catastral
+  actionLiquidationType: z.number().min(1).max(3).nullable(), // tipo de liquidacion
+  liquidationCode: z.string().nullable(), // codigo de liquidacion
+  ext: z.string().trim().nullable(), // codigo extension (codigo de local)
+})
+  .refine((data) => {
+    if (data.actionLiquidationType.toString() === SelectorKeys["CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION"] && !data.liquidationCode?.trim()) return false;
+    return true;
+  }, {
+    path: ['liquidationCode'],
+    message: 'Debe ingresar el codigo de la liquidación',
+  })
+  .refine((data) => {
+    if (data.actionLiquidationType.toString() !== SelectorKeys["CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION"] && !data.localCode?.trim()) return false;
+    return true;
+  }, {
+    path: ['localCode'],
+    message: 'Debe ingresar el código catastral',
+  })
+  .refine((data) => {
+    if (data.actionLiquidationType.toString() === SelectorKeys["CONSULTA DEUDA PERMISO DE FUNCIONAMIENTO"] && !data.ext?.trim()) return false;
+    return true;
+  }, {
+    path: ['ext'],
+    message: 'Debe ingresar el codigo de local',
+  });
+
+type FormValues = z.infer<typeof zod>;
 
 export const DataTableGeneric: FC<Props> = ({
   columns,
@@ -57,10 +94,23 @@ export const DataTableGeneric: FC<Props> = ({
   editForm = null,
   deletable = false,
   deleteAction,
+  onSearch,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+
+  const user = useAuthStore((state) => state.user);  
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(zod),
+    defaultValues: {
+      actionLiquidationType: Number(filterField),
+      localCode: null,
+      liquidationCode: null,
+      ext: null,
+    },
+  });
 
   //for selected rows
   const [selectedRows, setSelectedRows] = useState([]);
@@ -69,7 +119,6 @@ export const DataTableGeneric: FC<Props> = ({
   }, []);
 
   const [toggleCleared, setToggleCleared] = useState(false);
-
 
 
   const contextActions = useMemo(() => {
@@ -109,6 +158,7 @@ export const DataTableGeneric: FC<Props> = ({
       });
       console.log("edit", selectedRows);
     };
+    
     const handleViewDetails = () => {
       if (selectedRows.length > 1) {
         Swal.fire({
@@ -181,6 +231,26 @@ export const DataTableGeneric: FC<Props> = ({
           </button>
         )}
         {viewDetails && (
+          // <button
+          //   className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
+          //   key="viewdetails"
+          //   onClick={handleViewDetails}
+          // >
+          //   {viewTitle}
+          // </button>
+
+          <PaymentButton 
+            onStartPayment={(onStartPayment) => {
+              if(selectedRows.length > 1) return;
+              const paymentValues = {
+                customerId: user.id,
+                debtId: selectedRows[0].id,
+              }
+              onStartPayment(paymentValues);
+            }}
+          />
+        )}
+        {/* {viewDetails && (
           <button
             className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
             key="viewdetails"
@@ -188,7 +258,7 @@ export const DataTableGeneric: FC<Props> = ({
           >
             {viewTitle}
           </button>
-        )}
+        )} */}
       </div>
     );
   }, [data, selectedRows, toggleCleared]);
@@ -197,6 +267,16 @@ export const DataTableGeneric: FC<Props> = ({
   const modal = useRef<any>(null);
   const editModal = useRef<any>(null);
   const detailModal = useRef<any>(null);
+
+
+  useEffect(() => {
+    form.reset({
+      localCode: null,
+      actionLiquidationType: Number(filterField),
+      liquidationCode: null,
+      ext: null,
+    })
+  }, [filterField]);
 
   // close on click outside
   useEffect(() => {
@@ -224,18 +304,18 @@ export const DataTableGeneric: FC<Props> = ({
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const [records, setRecords] = useState([...data]);
-  
+  // const [records, setRecords] = useState([...data]);
 
-  const handleChange = (e) => {
-    const filteredRedcords = data.filter((record) => {
-      return record[`${filterField}`]
-        .toString()
-        .toLowerCase()
-        .includes(e.target.value.toLowerCase());
-    });
-    setRecords(filteredRedcords);
-  };
+
+  // const handleChange = (e) => {
+  //   // const filteredRedcords = data.filter((record) => {
+  //   //   return record[`${filterField}`]
+  //   //     .toString()
+  //   //     .toLowerCase()
+  //   //     .includes(e.target.value.toLowerCase());
+  //   // });
+  //   // setRecords(filteredRedcords);
+  // };
 
   const convertArrayOfObjectsToCSV = (array) => {
     let result;
@@ -295,18 +375,97 @@ export const DataTableGeneric: FC<Props> = ({
     </button>
   );
 
+
+  // console.log(filterField);
+
   return (
     <>
       <div className="container mx-auto flex justify-center items-center">
-        {filterField && <>
-          <label className="mr-2 whitespace-nowrap">{searchTitle}</label>
-          <input
-            key={filterField}
-            type="text"
-            onChange={handleChange}
-            placeholder={`${fieldPlaceHolder}`}
-            className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
-          /></>}
+        {filterField && (
+          <form
+            className="flex items-center w-full gap-4"
+            onSubmit={form.handleSubmit(onSearch)}
+          >
+            <div className="flex items-center gap-8 w-full">
+              <div className="flex items-center w-full gap-2">
+                {
+                  SelectorKeys["CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION"] === filterField ? (
+                    <>
+                      <label className="whitespace-nowrap font-semibold">Código de la Liquidación</label>
+                      <div className="w-full">
+                        <input
+                          key={filterField}
+                          type="text"
+                          placeholder={`${fieldPlaceHolder}`}
+                          className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+                          {...form.register("liquidationCode")}
+                        />
+                        {
+                          form.formState.errors && form.formState.errors.liquidationCode && form.formState.errors.liquidationCode.message && (
+                            <p className="text-rose-400 text-xs italic">
+                              {form.formState.errors.liquidationCode.message}
+                            </p>
+                          )
+                        }
+                      </div>
+                    </>
+                  )
+                    : (
+                      <>
+                        <label className="whitespace-nowrap font-semibold">Código catastral</label>
+                        <div className="w-full">
+                          <input
+                            key={filterField}
+                            type="text"
+                            placeholder={`${fieldPlaceHolder}`}
+                            className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+                            {...form.register("localCode")}
+                          />
+                          {
+                            form.formState.errors && form.formState.errors.localCode && form.formState.errors.localCode.message && (
+                              <p className="text-rose-400 text-xs italic">
+                                {form.formState.errors.localCode.message}
+                              </p>
+                            )
+                          }
+                        </div>
+                      </>
+                    )
+                }
+              </div>
+
+              {
+                SelectorKeys["CONSULTA DEUDA PERMISO DE FUNCIONAMIENTO"] === filterField &&
+                <div className="flex items-center gap-2 w-full">
+                  <label className="whitespace-nowrap font-semibold">Número de Local:</label>
+                  <div>
+                    <input
+                      key={filterField}
+                      type="number"
+                      placeholder={`${fieldPlaceHolder}`}
+                      className="w-full rounded-md border border-stroke px-5 py-2.5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+                      {...form.register("ext")}
+                    />
+                    {
+                      form.formState.errors && form.formState.errors.ext && form.formState.errors.ext.message && (
+                        <p className="text-rose-400 text-xs italic">
+                          {form.formState.errors.ext.message}
+                        </p>
+                      )
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <button
+              type="submit"
+              className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2"
+            >
+              Buscar <FaSearch />
+            </button>
+          </form>
+        )}
       </div>
       <DataTable
         actions={[exportMemo, addForm && addButton]}
@@ -330,7 +489,7 @@ export const DataTableGeneric: FC<Props> = ({
         title={title}
         columns={columns}
         // data={data}
-        data={records}
+        data={data}
         selectableRows={selectableRows}
         fixedHeader={false}
         pagination

@@ -1,21 +1,50 @@
 import { useState } from "react";
 import { useAuthStore } from "../../stores/auth/auth.store";
 import { useDebts } from "../../stores/debts/dbts.store";
-import { useUserStore } from "../../stores/users/users.store";
 import { TableColumn } from "react-data-table-component";
 import { TransactionInterface } from "../../interfaces/transactions.interface";
 import { FaTrash } from "react-icons/fa";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { ViewDebtForm } from "../../components/Forms/ViewDebtForm";
+import { ScreenLoader } from "../../components/shared/ScreenLoader";
+import API from "../api/api";
+import { to } from "../../utils/to";
+import { AxiosResponse } from "axios";
+import Swal from "sweetalert2";
+
+export enum SelectorKeys {
+  'CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS' = '1',
+  'CONSULTA DEUDA PERMISO DE FUNCIONAMIENTO' = '2',
+  'CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION' = '3'
+}
+
+const selectOptions = [
+  {
+    id: '1',
+    name: 'CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS',
+  },
+  {
+    id: '2',
+    name: 'CONSULTA DEUDA PERMISO DE FUNCIONAMIENTO',
+  },
+  {
+    id: '3',
+    name: 'CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION',
+  }
+]
 
 export const DataTransactions = () => {
   // const users = useUserStore((state) => state.users);
-  const debts = useDebts((state) => state.debts);
+  const [debts, setDebts] = useState([]);
+  // const debts = useDebts((state) => state.debts);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
   const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id).filter((debt) => debt.actionLiquidationType === 1) : debts);
 
-  const [filterBy, setFilterBy] = useState('localCode');
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+
+  // const [filterBy, setFilterBy] = useState('localCode');
+  const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
 
   const columns: TableColumn<TransactionInterface>[] = [
     {
@@ -62,9 +91,45 @@ export const DataTransactions = () => {
     },
   ];
 
+  const handleSearch = async (formValues) => {
+    setIsLoadingSearch(true);
+    if (auth.profileId === 1) {
+      const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
+        if (formValues[key]) {
+          acc[key] = formValues[key];
+        }
+        return acc;
+      }, {});
+
+      const { actionLiquidationType, ...rest } = dataQuery;
+
+      const params = new URLSearchParams(rest);
+      const url = `/debt?${params.toString()}`;
+
+      const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error", // 'Oops...',
+          text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+          confirmButtonColor: "blue",
+        });
+      } else {
+        setDebts(response.data.data);
+      }
+    } else {
+      const searchValue = formValues['codigoCatastral'];
+
+      // TODO: CALL API SERVICE FOR CLIENT
+    }
+    setIsLoadingSearch(false);
+  }
+
 
   return (
     <>
+      <ScreenLoader isLoading={isLoadingSearch} />
+
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
         {auth.profileId !== 2 && <div className="flex flex-row gap-5 items-center">
           <label className="text-gray-900 block text-sm font-medium dark:text-white whitespace-nowrap items-center">
@@ -79,7 +144,7 @@ export const DataTransactions = () => {
               const value = e.target.value;
               setFilterBy(value);
               // console.log({value});
-              
+
               // const userFilteredData = debts.filter((debt) => debt.customerId === Number(e.target.value.trim()))
               // console.log("userFilteredData", userFilteredData.length);
               // setFilteredData(userFilteredData);
@@ -91,9 +156,17 @@ export const DataTransactions = () => {
               </option>
             ))} */}
 
-            {
+            {/* {
               columns.map(column => (
                 <option key={column.id} value={column.id as string}>
+                  {column.name}
+                </option>
+              ))
+            } */}
+
+            {
+              selectOptions.map(column => (
+                <option key={column.id} value={column.id}>
                   {column.name}
                 </option>
               ))
@@ -116,7 +189,7 @@ export const DataTransactions = () => {
         </div>}
 
         <DataTableGeneric
-          data={filteredData}
+          data={debts}
           columns={columns}
           selectableRows
           viewDetails
@@ -124,8 +197,9 @@ export const DataTransactions = () => {
           viewForm={<ViewDebtForm />}
           filterField={auth.profileId === 2 ? null : filterBy}
           viewTitle="Realizar Pago"
-          searchTitle={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
+          searchTitle={`Buscar por Código Catastral:`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
+          onSearch={handleSearch}
           title={
             auth.profileId !== 2 ? <div
               style={{
