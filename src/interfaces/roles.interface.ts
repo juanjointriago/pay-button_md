@@ -18,7 +18,7 @@ export interface ResponseRolesInterface {
     name: string;
     description: string | null;
     active: number;
-    roleDetails: RoleDetail[];
+    entities: string[];
   }
   
   export interface PostRoleInterface{

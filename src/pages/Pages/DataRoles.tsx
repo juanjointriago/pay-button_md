@@ -41,6 +41,13 @@ export const DataRoles = () => {
       width: "300px",
     },
     {
+      name: "Pantalla de Ejecución",
+      selector: (row) => row.entities?.map((e) => e).join(", ") ?? '',
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "300px",
+    },
+    {
       name: "Activo",
       selector: (row) => row.active,
       sortable: true,

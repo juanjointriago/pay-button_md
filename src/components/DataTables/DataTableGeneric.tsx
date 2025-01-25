@@ -31,6 +31,7 @@ interface Props {
   editForm?: React.ReactNode;
   deletable?: boolean;
   deleteAction?: any;
+  payable?: boolean;
   onSearch: any;
 }
 
@@ -94,7 +95,7 @@ export const DataTableGeneric: FC<Props> = ({
   editForm = null,
   deletable = false,
   deleteAction,
-  onSearch= () => {},
+  onSearch,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);

@@ -9,10 +9,10 @@ export const EditRoleForm = () => {
   const entities = useUIStore((state) => state.ScreenAvaliable);
   const [name, setName] = useState(selectedRole.name);
   const [description, setDescription] = useState(selectedRole.description);
-  const selectedRoleDetails = !!selectedRole.roleDetails;
+  const selectedRoleDetails = !!selectedRole.entities;
   const [selectedEntities, setSelectedEntities] = useState<string[]>(
     selectedRoleDetails
-      ? selectedRole.roleDetails.map((roleDetail) => roleDetail.entity)
+      ? selectedRole.entities.map((roleDetail) => roleDetail)
       : []
   );
   const edit = useRoleStore((state) => state.editRole);
@@ -24,20 +24,15 @@ export const EditRoleForm = () => {
       Swal.fire("Error", "Por favor ingrese los datos faltantes", "warning");
       return; 
     }
-    const newRole: RoleInterface = {
+    const editRole: RoleInterface = {
       id: selectedRole.id,
       name: selectedRole.name,
       description,
-      roleDetails: selectedEntities.map((entity, index) => ({
-        id: index,
-        roleId: index,
-        entity,
-        active: 1,
-      })),
+      entities: selectedEntities,
       active: 1,
     };
-    console.log({ newRole });
-    edit(selectedRole.id, newRole);
+    console.log({ editRole });
+    edit(selectedRole.id, editRole);
   };
   return (
     <>

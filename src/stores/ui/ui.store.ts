@@ -14,27 +14,13 @@ interface ScreenSettings {
 interface UIStore {
     ScreenSettings: ScreenSettings;
     ScreenAvaliable: string[];
-    setScreenSettings: (screenSettings: ScreenSettings) => void;
+    setScreenSettings: () => void;
 }
 
 
 const uiAPI: StateCreator<UIStore, [["zustand/devtools", never], ["zustand/immer", never]]> = (set, get) => ({
     ScreenSettings: {}as ScreenSettings,
-    ScreenAvaliable: [
-        'Stats',
-        'Dashboard',
-        'Taxes',
-        'ForPayment',
-        'Pays',
-        'DataFastTransaction',
-        'Settings',
-        'Params',
-        'SetupEstablishment',
-        'Users',
-        'Profiles','Roles','Users',
-        'MyProfile',
-        'MyInfo'
-    ],
+    ScreenAvaliable: [ ],
 /**
  * Updates the ScreenSettings with the provided screenSettings object.
  * Retrieves the roles, user, and profile information from their respective stores.
@@ -44,7 +30,7 @@ const uiAPI: StateCreator<UIStore, [["zustand/devtools", never], ["zustand/immer
  * @param screenSettings - The new screen settings to be applied.
  */
 
-    setScreenSettings: (screenSettings) => {
+    setScreenSettings: () => {
         const roles = useRoleStore(state=>state.roles);
         const user = useAuthStore(state=>state.user);
 
