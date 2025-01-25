@@ -3,90 +3,31 @@ import {
   ReponsePostUserInterface,
   ResponseUserInterface,
   ResponseUsersInterface,
-  UpdatedUser,
-  UserInterface,
 } from "../interfaces/user.interface";
 import API from "../pages/api/api";
 
 export class UserService {
-  static getUsers = async (): Promise<ResponseUsersInterface> => {
+  static getUsers = async () => {
     const route = "users";
-    try {
-      const { data } = await API.get<ResponseUsersInterface>(route);
-      return data;
-    } catch (error) {
-      console.log("❌Error en getUsers", error);
-      return {
-        msg: "Error en getUsers",
-        error: true,
-        records: 0,
-        page: 0,
-        data: [],
-      };
-    }
+    return await API.get<ResponseUsersInterface>(route);
   };
 
-  static getUserById = async (id: number): Promise<UserInterface> => {
+  static getUserById = async (id: number) => {
     const route = `users/${id}`;
-    try {
-      const { data } = await API.get<ResponseUserInterface>(route);
-      return data.data;
-    } catch (error) {
-      console.log("❌Error en getUser", error);
-      return {} as UserInterface;
-    }
+    return await API.get<ResponseUserInterface>(route);
   };
 
   static postUser = async (user: AddUserInterface) => {
-    // console.log("💩 INFO adding user data =>", user);
     const route = "users";
-    // try {
-      const response= await API.post<ReponsePostUserInterface>(route, user);
-      return response
-    // } catch (error) {
-    //   console.log("❌Error en postUser", error);
-    //   console.log("noooooooooo");
-    //   // return {
-    //   //     msg: "Error en postUser",
-    //   //     error: true,
-    //   //     records: 0,
-    //   //     data: null,
-    //   // };
-    // }
+    const reponse= await API.post<ReponsePostUserInterface>(route, user);
+    return reponse;
   };
-  static putUser = async (
-    id: number,
-    user: any
-  ): Promise<ResponseUserInterface> => {
+  static putUser = async (id: number, user: any) => {
     const route = `users/${id}`;
-    try {
-        console.log("DATA TO UPDATE", user);
-      const { data } = await API.put<ResponseUserInterface>(route, user);
-      console.log("RESPONSE PUT", data);
-      return data;
-    } catch (error) {
-      console.log("❌Error en putUser", error);
-      return {
-        msg: "Error en putUser",
-        error: true,
-        records: 0,
-        data: null,
-      };
-    }
+    return await API.put<ResponseUserInterface>(route, user);
   };
-  static deleteUser = async (id: number): Promise<ResponseUserInterface> => {
+  static deleteUser = async (id: number) => {
     const route = `users/${id}`;
-    try {
-      const { data } = await API.delete<ResponseUserInterface>(route);
-      return data;
-    } catch (error) {
-      console.log("❌Error en deleteUser", error);
-      return {
-        msg: "Error en deleteUser",
-        error: true,
-        records: 0,
-        data: null,
-      };
-    }
+    return await API.delete<ResponseUserInterface>(route);
   };
 }

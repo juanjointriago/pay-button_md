@@ -165,7 +165,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </li>
                           </ul>
                         </div>
-                        {/* <!-- Dropdown Menu End --> */}
                       </Fragment>
                     );
                   }}
@@ -459,7 +458,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && "!text-white")
                               }
                             >
-                              Actualizar Mis datos
+                              Ver Mis datos
                             </NavLink>
                           </li>}
                         </ul>

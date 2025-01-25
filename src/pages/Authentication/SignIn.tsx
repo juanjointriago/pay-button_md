@@ -1,15 +1,13 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
 import Swal from "sweetalert2";
 import Loader from "../../common/Loader";
 import { useAuthStore } from "../../stores/auth/auth.store";
-import { FaIdCard, FaLock } from "react-icons/fa"
-
+import { FaIdCard, FaLock } from "react-icons/fa";
 
 const SignIn: FC = () => {
-  const navigate = useNavigate();
   const signin = useAuthStore((state) => state.signInUser);
   const errorMsg = useAuthStore((state) => state.errorMsg);
   const [userName, setUserName] = useState("");
@@ -20,22 +18,22 @@ const SignIn: FC = () => {
     if (!userName && !password) {
       Swal.fire("Error", "Por favor ingrese su usuario y contraseña", "error");
     }
-    await signin({ username: userName, password});
+    await signin({ username: userName, password });
     console.log("errorMsg", errorMsg);
-    if (!!!errorMsg) {
-      console.log('Login correcto');
+    if (!errorMsg) {
+      console.log("✅LOGIN SUCCESS");
       setIsLoading(false);
       return;
     }
-    // navigate("/home");
-    Swal.fire({
+    // navigate("/auth/signin");
+    await Swal.fire({
       icon: "error",
       title: "Error",
       text: errorMsg,
       confirmButtonColor: "blue",
       confirmButtonText: "Aceptar",
     });
-   
+
     setIsLoading(false);
   };
 
@@ -52,7 +50,9 @@ const SignIn: FC = () => {
                   <img className="hidden dark:block" src={Logo} alt="Logo" />
                   <img className="dark:hidden" src={LogoDark} alt="Logo" />
                 </Link>
-                <p className="2xl:px-20">Plataforma para recaudación de predios municipales</p>
+                <p className="2xl:px-20">
+                  Plataforma para recaudación de predios municipales
+                </p>
               </div>
             </div>
             <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
@@ -116,8 +116,11 @@ const SignIn: FC = () => {
 
                     <div className="mt-2 text-center">
                       <p>
-                        No tienes una cuenta?{' '}
-                        <Link to="/auth/signup" className="text-primary hover:underline">
+                        No tienes una cuenta?{" "}
+                        <Link
+                          to="/auth/signup"
+                          className="text-primary hover:underline"
+                        >
                           Regístrate
                         </Link>
                       </p>

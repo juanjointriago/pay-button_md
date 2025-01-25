@@ -7,7 +7,6 @@ import { useParamStore } from "../params/params.store";
 import { useUserStore } from "../users/users.store";
 import { useProfileStore } from "../profile/profile.store";
 import { useRoleStore } from "../roles/roles.store";
-import Swal from "sweetalert2";
 
 type authStatus = "authorized" | "unauthorized" | "checking";
 export interface AuthState {
@@ -28,7 +27,7 @@ export const storeAPI: StateCreator<
   status: "unauthorized",
   user: undefined,
   token: null,
-  errorMsg: "",
+  errorMsg: undefined,
   setErrorMsg: (msg) => set({ errorMsg: msg }),
   signInUser: async ({ username, password }) => {
     try {
@@ -36,7 +35,6 @@ export const storeAPI: StateCreator<
         username,
         password,
       });
-      console.log("✅LOGIN RESULT", { data });
       localStorage.setItem("token", data.token);
       set({ status: "authorized", user: data.data, token: data.token });
       return data;
@@ -58,10 +56,11 @@ export const storeAPI: StateCreator<
   checkAuthStatus: async () => {
     try {
       const { data } = await AuthService.checkAuthStatus();
-
       set({ status: data.msg });
       return data.msg === "Authenticated" ? "authorized" : "unauthorized";
     } catch (error) {
+      set({ status: "unauthorized" });
+      console.log("❌Error en checkAuthStatus", error);
       return "unauthorized";
     }
   },
