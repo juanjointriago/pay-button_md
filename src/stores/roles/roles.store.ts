@@ -1,5 +1,8 @@
 import { create, StateCreator } from "zustand";
-import { PostRoleInterface, RoleInterface } from "../../interfaces/roles.interface";
+import {
+  PostRoleInterface,
+  RoleInterface,
+} from "../../interfaces/roles.interface";
 import { RoleService } from "../../services/Role.service";
 import { devtools, persist } from "zustand/middleware";
 import { AuthService } from "../../services/Auth.service";
@@ -9,6 +12,7 @@ export interface RoleState {
   selectedRole: RoleInterface;
   getRoles: () => Promise<void>;
   getRoleById: (id: number) => RoleInterface;
+  getRoleBydescription: (description: string) => RoleInterface| undefined;
   setSelectedRoleById: (id: number) => void;
   addRole: (role: PostRoleInterface) => Promise<void>;
   editRole: (id: number, role: RoleInterface) => Promise<void>;
@@ -35,6 +39,11 @@ const rolesAPI: StateCreator<
   },
   getRoleById: (id) => {
     return get().roles.find((r) => r.id === id);
+  },
+  getRoleBydescription: (description) => {
+    const roleQuery = get().roles.find((r) => r.description === description);
+    if (roleQuery) return roleQuery;
+    return undefined;
   },
   setSelectedRoleById: (id) => {
     set({ selectedRole: get().roles.find((r) => r.id === id) });
@@ -67,7 +76,7 @@ const rolesAPI: StateCreator<
   },
   deleteRole: async (id) => {
     try {
-       await RoleService.deleteRole(id);
+      await RoleService.deleteRole(id);
       set({ roles: get().roles.filter((r) => r.id !== id) });
     } catch (error) {
       console.log("❌Error en deleteRole", error);

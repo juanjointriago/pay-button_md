@@ -4,11 +4,15 @@ import { useRoleStore } from "../../stores/roles/roles.store";
 import { RoleInterface } from "../../interfaces/roles.interface";
 import { useEffect } from "react";
 import { AddRoleForm } from "../../components/Forms/AddRoleForm";
+import { ViewRoleDetail } from "../../components/Forms/ViewRoleDetail";
+import { EditRoleForm } from "../../components/Forms/EditRoleForm";
 
 export const DataRoles = () => {
   const getAllRoles = useRoleStore((state) => state.getRoles);
   const roles = useRoleStore((state) => state.roles);
   const deleteRole = useRoleStore((state) => state.deleteRole);
+  const setSelectedRoleById = useRoleStore((state) => state.setSelectedRoleById);
+
 
   useEffect(() => {
     getAllRoles();
@@ -48,6 +52,7 @@ export const DataRoles = () => {
   return (
     <div className="container flex flex-col gap-5 md:gap-7 2xl:gap-10">
       <DataTableGeneric
+        
         data={roles}
         columns={columns}
         selectableRows={true}
@@ -55,6 +60,13 @@ export const DataRoles = () => {
         deleteAction={deleteRole}
         addTitle="Agregar Rol"
         addForm={<AddRoleForm />}
+        viewDetails
+        viewForm={<ViewRoleDetail />}
+        viewAction={setSelectedRoleById}
+        editable
+        editForm={<EditRoleForm />}
+        editAction={setSelectedRoleById}
+        onSearch={null}
         filterField="key"
         title="Roles "
       />

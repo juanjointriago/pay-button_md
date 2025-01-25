@@ -1,45 +1,47 @@
 import { useState } from "react";
 import { useRoleStore } from "../../stores/roles/roles.store";
+import { RoleInterface } from "../../interfaces/roles.interface";
 import Swal from "sweetalert2";
-import { PostRoleInterface } from "../../interfaces/roles.interface";
-import Loader from "../../common/Loader";
 import { useUIStore } from "../../stores/ui/ui.store";
 
-export const AddRoleForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
+export const EditRoleForm = () => {
+  const selectedRole = useRoleStore((state) => state.selectedRole);
   const entities = useUIStore((state) => state.ScreenAvaliable);
-  const [selectedEntities, setSelectedEntities] = useState<string[]>([]);
-  const addRole = useRoleStore((state) => state.addRole);
+  const [name, setName] = useState(selectedRole.name);
+  const [description, setDescription] = useState(selectedRole.description);
+  const selectedRoleDetails = !!selectedRole.roleDetails;
+  const [selectedEntities, setSelectedEntities] = useState<string[]>(
+    selectedRoleDetails
+      ? selectedRole.roleDetails.map((roleDetail) => roleDetail.entity)
+      : []
+  );
+  const edit = useRoleStore((state) => state.editRole);
   const handleSaveRole = async () => {
-    setIsLoading(true);
     console.log("name", name);
     console.log("description", description);
     console.log("selectedEntities", { selectedEntities });
     if (name === "" || description === "" || selectedEntities.length === 0) {
       Swal.fire("Error", "Por favor ingrese los datos faltantes", "warning");
-      return;
+      return; 
     }
-    const newRole: PostRoleInterface = {
-      name,
+    const newRole: RoleInterface = {
+      id: selectedRole.id,
+      name: selectedRole.name,
       description,
-      entities: selectedEntities.map((entity) => entity),
+      roleDetails: selectedEntities.map((entity, index) => ({
+        id: index,
+        roleId: index,
+        entity,
+        active: 1,
+      })),
+      active: 1,
     };
     console.log({ newRole });
-    await addRole(newRole);
-    setName(undefined);
-    setDescription(undefined);
-    setSelectedEntities([]);
-    setIsLoading(false);
-    window.location.reload();
+    edit(selectedRole.id, newRole);
   };
-
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {selectedEntities && (
         <div className="w-full ">
           <form
             onSubmit={(e) => {
@@ -54,7 +56,7 @@ export const AddRoleForm = () => {
               <div className="relative">
                 <input
                   name="name"
-                  value={name}
+                  value={selectedRole.name}
                   onChange={(e: any) => setName(e.target.value)}
                   type="text"
                   placeholder="Ingrese nombre del rol"
@@ -69,7 +71,7 @@ export const AddRoleForm = () => {
               <div className="relative">
                 <input
                   name="description"
-                  value={description}
+                  value={selectedRole.description}
                   type="text"
                   onChange={(e: any) => setDescription(e.target.value)}
                   placeholder="Ingrese descripción de rol"
@@ -77,12 +79,12 @@ export const AddRoleForm = () => {
                 />
               </div>
             </div>
-            <div className="mb-4 flex flex-row justify-between" style={{height:"200px"}}>
+            <div className="mb-4 flex flex-row justify-between">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Seleccione Entidades:
               </label>
-              <div className="relative overflow-auto">
-                <ul className="text-gray-900 dark:bg-gray-700 w-48 rounded-lg bg-white text-sm font-medium dark:text-white">
+              <div className="relative">
+                <ul className="text-gray-900 border-gray-200 dark:bg-gray-700 dark:border-gray-600 w-48 rounded-lg border bg-white text-sm font-medium dark:text-white">
                   {entities.map((entity) => (
                     // <option value={entity.table_name}>{entity.table_name}</option>
                     <div
@@ -90,9 +92,9 @@ export const AddRoleForm = () => {
                       key={entity}
                     >
                       <input
-                        checked={selectedEntities.includes(entity)}
                         id={entity}
                         type="checkbox"
+                        checked={selectedEntities.some( (entity) => selectedEntities.includes(entity))}
                         value={entity}
                         onChange={(e) => {
                           console.log("e.target.checked", e.target.checked);
@@ -124,7 +126,7 @@ export const AddRoleForm = () => {
               <input
                 //   onClick={handleSaveParam}
                 type="submit"
-                value="Guardar"
+                value="Actualizar"
                 className="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white"
               />
             </div>

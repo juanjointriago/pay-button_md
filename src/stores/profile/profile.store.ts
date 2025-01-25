@@ -15,6 +15,7 @@ export interface ProfileStore {
   editProfile: (id: number, profile: ProfileAddInterface) => Promise<void>;
   selectedProfile: ProfileInterface;
   getSelectedProfile: () => ProfileInterface;
+  getProfileById: (id: number) => ProfileInterface;
   setSelectedProfileById: (id: number) => void;
   deleteProfile: (id: number) => Promise<void>;
 }
@@ -69,6 +70,7 @@ const profilesAPI: StateCreator<
     set({ selectedProfile: get().profiles.find((p) => p.id === id) });
   },
   getSelectedProfile: () => get().selectedProfile,
+  getProfileById: (id: number) => get().profiles.find((p) => p.id === id),
   deleteProfile: async (id) => {
     try {
       await ProfileService.deleteProfile(id);
