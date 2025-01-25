@@ -5,7 +5,7 @@ import Logo from "../../images/logo/logo-m-duran.jpg";
 import Swal from "sweetalert2";
 import Loader from "../../common/Loader";
 import { useAuthStore } from "../../stores/auth/auth.store";
-import { FaIdCard, FaLock, FaArrowRight } from "react-icons/fa"
+import { FaIdCard, FaLock } from "react-icons/fa"
 
 
 const SignIn: FC = () => {
@@ -20,13 +20,22 @@ const SignIn: FC = () => {
     if (!userName && !password) {
       Swal.fire("Error", "Por favor ingrese su usuario y contraseña", "error");
     }
-    await signin({ username: userName, password });
+    await signin({ username: userName, password});
     console.log("errorMsg", errorMsg);
-    if (errorMsg !== "") {
+    if (!!!errorMsg) {
+      console.log('Login correcto');
       setIsLoading(false);
       return;
     }
-    navigate("/home");
+    // navigate("/home");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: errorMsg,
+      confirmButtonColor: "blue",
+      confirmButtonText: "Aceptar",
+    });
+   
     setIsLoading(false);
   };
 
