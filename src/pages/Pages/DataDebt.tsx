@@ -4,20 +4,51 @@ import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { useDebts } from "../../stores/debts/dbts.store";
 import { TableColumn } from "react-data-table-component";
 import { DebtInterface } from "../../interfaces/debt.interface";
-import { FaTrash } from 'react-icons/fa'
 import { ViewDebtForm } from "../../components/Forms/ViewDebtForm";
 import { useAuthStore } from "../../stores/auth/auth.store";
+import { selectOptions, SelectorKeys } from "./DataTransactions";
+import Swal from "sweetalert2";
+import { to } from "../../utils/to";
+import { AxiosResponse } from "axios";
+import API from "../api/api";
+import { ScreenLoader } from "../../components/shared/ScreenLoader";
 
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);
-  const debts = useDebts((state) => state.debts);
+  // const debts = useDebts((state) => state.debts);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
-  const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id) : debts);
-  const [filterBy, setFilterBy] = useState('localCode');
+
+  // const [filterBy, setFilterBy] = useState('localCode');
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+  const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
+  const [debts, setDebts] = useState([]);
   // const useRef(null);
+  const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id) : debts);
 
   const columns: TableColumn<DebtInterface>[] = [
+    {
+      id: 'actions',
+      name: 'Acciones',
+      button: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
+      center: false,
+      cell(row) {
+        return (
+          <div className="flex flex-1 min-w-[200px] mx-auto">
+            <button
+              className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
+              onClick={() => {
+                setSelectedDebtById(row.id);
+                setDetailsModalOpen(true);
+              }}
+            >Realizar Pago</button>
+          </div>
+        );
+      },
+    },
     {
       id: "localCode",
       name: "Código Local",
@@ -139,7 +170,7 @@ export const DataDebt = () => {
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "150px",
-    },
+    }
   ];
 
   // useEffect(() => {
@@ -159,15 +190,52 @@ export const DataDebt = () => {
   //   }
 
   // }, []);
-  
+
+  const handleSearch = async (formValues) => {
+    setIsLoadingSearch(true);
+    if (auth.profileId === 1) {
+      const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
+        if (formValues[key]) {
+          acc[key] = formValues[key];
+        }
+        return acc;
+      }, {});
+
+      // const { actionLiquidationType, ...rest } = dataQuery;
+
+      const params = new URLSearchParams(dataQuery);
+      const url = `/debt?${params.toString()}`;
+
+      const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error", // 'Oops...',
+          text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+          confirmButtonColor: "blue",
+        });
+      } else {
+        setDebts(response.data.data);
+      }
+    } else {
+      const searchValue = formValues['codigoCatastral'];
+
+      // TODO: CALL API SERVICE FOR CLIENT
+    }
+    setIsLoadingSearch(false);
+  }
+
 
   return (
     <>
+      <ScreenLoader isLoading={isLoadingSearch} />
+
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
         {auth.profileId !== 2 && <div className="flex flex-row gap-5 items-center">
           <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white whitespace-nowrap">
             Filtrar por Usuario
           </label>
+
           <select
             id="type"
             className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -186,9 +254,16 @@ export const DataDebt = () => {
             </option>
           ))} */}
 
-            {
+            {/* {
               columns.map(column => (
                 <option key={column.id} value={column.id as string}>
+                  {column.name}
+                </option>
+              ))
+            } */}
+            {
+              selectOptions.map(column => (
+                <option key={column.id} value={column.id}>
                   {column.name}
                 </option>
               ))
@@ -199,7 +274,7 @@ export const DataDebt = () => {
           Filtrar por Fecha
         </label> */}
           {/* <DatePickerOne/> */}
-          <button
+          {/* <button
             onClick={() => {
               console.log("Limpiando Registros");
               setFilteredData(debts)
@@ -207,14 +282,14 @@ export const DataDebt = () => {
             className="rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
             <FaTrash />
-          </button>
+          </button> */}
         </div>}
 
         <DataTableGeneric
-          data={filteredData}
-          onSearch={console.log}
+          data={debts}
+          onSearch={handleSearch}
           columns={columns}
-          selectableRows
+          // selectableRows
           viewDetails
           viewAction={setSelectedDebtById}
           viewForm={<ViewDebtForm />}
@@ -239,6 +314,35 @@ export const DataDebt = () => {
       </div>
 
       {/* <PaymentButton /> */}
+      {detailsModalOpen && (
+        <div>
+          <div
+            className={`fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-6 py-5 ${detailsModalOpen ? "block" : "hidden"
+              }`}
+          >
+            <div
+              // ref={detailModal}
+              onFocus={() => setDetailsModalOpen(true)}
+              className="w-full max-w-180 rounded-lg bg-white px-10 py-14 text-center dark:bg-boxdark md:px-17.5 md:py-15"
+            >
+              <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
+                Detalle
+              </h3>
+              <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+              <div>Detalles del registro</div>
+
+              <ViewDebtForm />
+
+              <button
+                onClick={() => setDetailsModalOpen(false)}
+                className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

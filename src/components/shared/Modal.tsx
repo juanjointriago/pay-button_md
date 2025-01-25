@@ -17,7 +17,7 @@ export const Modal = ({ onToggleModal, open, children, closeOnBlur = true }: Mod
         Modal 1
       </button> */}
       <div
-        className={`fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-2 py-4 ${open ? 'block' : 'hidden'
+        className={`fixed left-0 top-0 z-9999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-2 py-4 ${open ? 'block' : 'hidden'
           }`}
       >
         <div

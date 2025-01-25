@@ -9,10 +9,11 @@ import { createPortal } from "react-dom";
 import API from "../../pages/api/api";
 
 interface PaymentButtonProps {
+  classNameButton?: React.HTMLAttributes<HTMLButtonElement>['className'];
   onStartPayment: (generateCheckoutId: (paymentValues: any) => void) => void;
 }
 
-export const PaymentButton = ({ onStartPayment }: PaymentButtonProps) => {
+export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButtonProps) => {
   const [dataFastId, setDataFastId] = useState('');
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
@@ -40,34 +41,35 @@ export const PaymentButton = ({ onStartPayment }: PaymentButtonProps) => {
     const urlParams = new URLSearchParams(window.location.search);
     const paymentId = urlParams.get('id');
 
+    // console.log("paymentId", paymentId);
+
     if (!paymentId) return;
 
+    // to(axios.get(`http://localhost:3001/payment/${paymentId}`))
     to(API.post('paymentButton/savePayment', { checkoutId: paymentId }))
       .then(([error]) => {
+        navigate('/home/debt');
         if (error) {
           Swal.fire({
             title: 'Error!',
             text: 'Ocurrió un error al realizar el pago',
             icon: 'error',
             confirmButtonText: 'Aceptar',
-          }).then(() => {
-            navigate('/home/debt');
-          });
+          })
         } else {
           Swal.fire({
             title: 'Pago Realizado',
             text: 'Su pago ha sido realizado correctamente',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            navigate('/home/debt');
-          });
+          })
         }
       });
   }, []);
 
   const generateCheckoutId = async (paymentValues: any) => {
     setIsLoadingCheckout(true);
+    // const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(axios.post('http://localhost:3001/checkouts', paymentValues));
     const [error, response] = await to<AxiosResponse<{data: { id: string }}>>(API.post('paymentButton/requestCheckout', paymentValues));
     setIsLoadingCheckout(false);
     setPaymentModalOpen(true);
@@ -83,6 +85,7 @@ export const PaymentButton = ({ onStartPayment }: PaymentButtonProps) => {
     }
 
     const dataFastId = response.data.data.id;
+    // const dataFastId = response.data.id;
     setDataFastId(dataFastId);
   }
 
@@ -94,7 +97,7 @@ export const PaymentButton = ({ onStartPayment }: PaymentButtonProps) => {
       }
 
       <button
-        className="rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        className={classNameButton ? classNameButton : "rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"}
         onClick={() => onStartPayment(generateCheckoutId)}
       >Realizar Pago</button>
 
@@ -117,9 +120,10 @@ export const PaymentButton = ({ onStartPayment }: PaymentButtonProps) => {
             </div>
           </Modal>,
 
-          document.getElementById('root')
+          document.getElementById('body')
         )
       }
     </>
   )
 };
+

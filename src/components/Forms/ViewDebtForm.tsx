@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
 import { useDebts } from "../../stores/debts/dbts.store";
 import Loader from "../../common/Loader";
+import { PaymentButton } from "../Payment/PaymentButton";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
-export const ViewDebtForm = () => {
+interface ViewDebtFormProps {
+  onStartPayment?: () => void;
+}
+
+export const ViewDebtForm = ({ onStartPayment }: ViewDebtFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const selectedDebt = useDebts((state) => state.selectedDebt);
+  const user = useAuthStore((state) => state.user);
 
-  useEffect(() => {
-    setIsLoading(true)
-    setIsLoading(false)
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   setIsLoading(false)
 
-  }, [selectedDebt]);
+  // }, [selectedDebt]);
 
-  const handlePay = async (e) => {
-    e.preventDefault();
-    console.log('papyingg....');
-  }
+  // const handlePay = async (e) => {
+  //   e.preventDefault();
+  //   console.log('papyingg....');
+  // }
 
 
   return (
@@ -24,7 +31,7 @@ export const ViewDebtForm = () => {
         <Loader />
       ) : (
         <div className="w-full">
-          <form>
+          {/* <form> */}
             <div className="mb-1 flex flex-row justify-between">
               <label className="mb-1 block font-medium text-black dark:text-white">
                 Codigo Local
@@ -98,16 +105,28 @@ export const ViewDebtForm = () => {
               </div>
             </div> */}
 
-            <div className="mb-5">
+            {/* <div className="mb-5">
               <input
                 onClick={handlePay}
                 type="submit"
                 value="Realizar Pago"
                 className="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white"
               />
-            </div>
+            </div> */}
 
-          </form>
+            <PaymentButton 
+              classNameButton="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white mb-4"
+              onStartPayment={(generateCheckoutId) => {
+                // onStartPayment && onStartPayment();
+                const paymentValues = {
+                  customerId: user.id,
+                  debtId: selectedDebt.id,
+                }
+                generateCheckoutId(paymentValues);
+              }}
+            />
+
+          {/* </form> */}
         </div>
       )}
     </>

@@ -84,7 +84,7 @@ export const DataTableGeneric: FC<Props> = ({
   fieldPlaceHolder = 'Buscar',
   // searchTitle = 'Buscar',
   title = "Data Table",
-  // viewTitle = "Ver detalles",
+  viewTitle = "Ver detalles",
   viewDetails = false,
   viewForm,
   viewAction,
@@ -101,7 +101,7 @@ export const DataTableGeneric: FC<Props> = ({
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
-  const user = useAuthStore((state) => state.user);  
+  const user = useAuthStore((state) => state.user);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(zod),
@@ -159,7 +159,7 @@ export const DataTableGeneric: FC<Props> = ({
       });
       console.log("edit", selectedRows);
     };
-    
+
     const handleViewDetails = () => {
       if (selectedRows.length > 1) {
         Swal.fire({
@@ -232,24 +232,26 @@ export const DataTableGeneric: FC<Props> = ({
           </button>
         )}
         {viewDetails && (
-          // <button
-          //   className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
-          //   key="viewdetails"
-          //   onClick={handleViewDetails}
-          // >
-          //   {viewTitle}
-          // </button>
+          <button
+            className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
+            key="viewdetails"
+            onClick={handleViewDetails}
+          >
+            {viewTitle}
+          </button>
 
-          <PaymentButton 
-            onStartPayment={(onStartPayment) => {
-              if(selectedRows.length > 1) return;
-              const paymentValues = {
-                customerId: user.id,
-                debtId: selectedRows[0].id,
-              }
-              onStartPayment(paymentValues);
-            }}
-          />
+          // <PaymentButton 
+          //   onStartPayment={(onStartPayment) => {
+          //     // handleViewDetails();
+          //     // return;
+          //     if(selectedRows.length > 1) return;
+          //     const paymentValues = {
+          //       customerId: user.id,
+          //       debtId: selectedRows[0].id,
+          //     }
+          //     onStartPayment(paymentValues);
+          //   }}
+          // />
         )}
         {/* {viewDetails && (
           <button
@@ -262,7 +264,7 @@ export const DataTableGeneric: FC<Props> = ({
         )} */}
       </div>
     );
-  }, [data, selectedRows, toggleCleared]);
+  }, [data, selectedRows, toggleCleared])
 
   const addRef = useRef<any>(null);
   const modal = useRef<any>(null);

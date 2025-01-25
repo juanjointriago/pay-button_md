@@ -3,9 +3,7 @@ import { useAuthStore } from "../../stores/auth/auth.store";
 import { useDebts } from "../../stores/debts/dbts.store";
 import { TableColumn } from "react-data-table-component";
 import { TransactionInterface } from "../../interfaces/transactions.interface";
-import { FaTrash } from "react-icons/fa";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
-import { ViewDebtForm } from "../../components/Forms/ViewDebtForm";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import API from "../api/api";
 import { to } from "../../utils/to";
@@ -18,7 +16,7 @@ export enum SelectorKeys {
   'CONSULTA DEUDA POR EL CODIGO DE LA LIQUIDACION' = '3'
 }
 
-const selectOptions = [
+export const selectOptions = [
   {
     id: '1',
     name: 'CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS',
@@ -42,6 +40,7 @@ export const DataTransactions = () => {
   const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id).filter((debt) => debt.actionLiquidationType === 1) : debts);
 
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+  // const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
   // const [filterBy, setFilterBy] = useState('localCode');
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
@@ -53,7 +52,7 @@ export const DataTransactions = () => {
       selector: (row) => row.localCode,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "150px",
+      width: "250px",
     },
 
     {
@@ -87,8 +86,32 @@ export const DataTransactions = () => {
       selector: (row) => row.createdAt as any,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "150px",
+      width: "250px",
     },
+    // {
+    //   id: 'payment',
+    //   name: 'Acciones',
+    //   button: true,
+    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
+    //   center: true,
+    //   cell(row) {
+    //     return (
+    //       <div className="flex flex-1 min-w-[200px] mx-auto">
+    //         <button
+    //           className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
+    //           // onClick={() => onStartPayment(generateCheckoutId)}
+    //           onClick={() => {
+    //             setSelectedDebtById(row.id);
+    //             setDetailsModalOpen(true);
+    //             // console.log("✏️ view =>", selectedRows[0]);
+    //             // viewAction(selectedRows[0].id);
+    //             // console.log("view", selectedRows);
+    //           }}
+    //         >Realizar Pago</button>
+    //       </div>
+    //     );
+    //   },
+    // }
   ];
 
   const handleSearch = async (formValues) => {
@@ -101,10 +124,13 @@ export const DataTransactions = () => {
         return acc;
       }, {});
 
-      const { actionLiquidationType, ...rest } = dataQuery;
+      // const { actionLiquidationType, ...rest } = dataQuery;
 
-      const params = new URLSearchParams(rest);
-      const url = `/debt?${params.toString()}`;
+      const params = new URLSearchParams(dataQuery);
+
+
+      //! TODO: change to transactions
+      const url = `/payment?${params.toString()}`;
 
       const [error, response] = await to<AxiosResponse<any>>(API.get(url));
       if (error) {
@@ -124,7 +150,6 @@ export const DataTransactions = () => {
     }
     setIsLoadingSearch(false);
   }
-
 
   return (
     <>
@@ -177,7 +202,7 @@ export const DataTransactions = () => {
               Filtrar por Fecha
             </label> */}
           {/* <DatePickerOne/> */}
-          <button
+          {/* <button
             onClick={() => {
               console.log("Limpiando Registros");
               setFilteredData(debts)
@@ -185,7 +210,7 @@ export const DataTransactions = () => {
             className="rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
             <FaTrash />
-          </button>
+          </button> */}
         </div>}
 
         <DataTableGeneric
@@ -193,8 +218,8 @@ export const DataTransactions = () => {
           columns={columns}
           selectableRows
           viewDetails
-          viewAction={setSelectedDebtById}
-          viewForm={<ViewDebtForm />}
+          // viewAction={setSelectedDebtById}
+          // viewForm={<ViewDebtForm />}
           filterField={auth.profileId === 2 ? null : filterBy}
           viewTitle="Realizar Pago"
           searchTitle={`Buscar por Código Catastral:`}

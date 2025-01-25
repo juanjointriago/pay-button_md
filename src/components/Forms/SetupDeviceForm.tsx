@@ -36,12 +36,18 @@ export const SetupDeviceForm = () => {
       .then(([error, response]) => {
         if (error) {
           console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error", // 'Oops...',
+            text: "Error al tratar de cargar los parametros", // 'Debes seleccionar una sola fila',
+            confirmButtonColor: "blue",
+          });
+          setIsLoading(false);
           return;
         }
         setData(response.data.data);
         setIsLoading(false);
-      });
-
+      })
   }, []);
 
 
@@ -51,6 +57,7 @@ export const SetupDeviceForm = () => {
       form.setValue(param.key, param.value);
     });
   }, [data]);
+
   //   Establecimiento
   // const [url, setUrl] = useState<string>();
   // const [mid, setMid] = useState<string>();
@@ -119,11 +126,11 @@ export const SetupDeviceForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <fieldset className="px-10 rounded-lg bg-white py-12 shadow-md border-black border-2 border-opacity-10">
-            <legend className="mx-auto px-4">
-              <h2 className="text-3xl font-semibold text-black dark:text-white">
+            {/* <legend className="mx-auto px-4"> */}
+              <h2 className="text-3xl font-semibold text-black dark:text-white mb-12">
                 <div className="flex flex-row justify-center">Configurar datos del establecimiento</div>
               </h2>
-            </legend>
+            {/* </legend> */}
 
             <div className="grid grid-cols-2 gap-8 gap-x-16">
               <div>
