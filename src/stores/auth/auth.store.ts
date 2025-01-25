@@ -23,7 +23,7 @@ export interface AuthState {
 export const storeAPI: StateCreator<
   AuthState,
   [["zustand/devtools", never], ["zustand/immer", never]]
-> = (set, get) => ({
+> = (set) => ({
   status: "unauthorized",
   user: undefined,
   token: null,

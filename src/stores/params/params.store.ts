@@ -52,7 +52,7 @@ const paramsAPI: StateCreator<
    */
   editParam: async (id, param) => {
     try {
-      const { data } = await ParamsService.putParam(id, param);
+      await ParamsService.putParam(id, param);
       set({ params: get().params.map((p) => (p.id === id ? param : p)) });
     } catch (error) {
       console.log("Error editing param data", error);
@@ -68,7 +68,7 @@ const paramsAPI: StateCreator<
   getSelectedParam: () => get().selectedParam,
   deleteParam: async (id) => {
     try {
-      const { data } = await ParamsService.deleteParam(id);
+      await ParamsService.deleteParam(id);
       set({ params: get().params.filter((p) => p.id !== id) });
     } catch (error) {
       console.log("Error deleting param data", error);

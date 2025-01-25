@@ -12,7 +12,7 @@ interface DeviceStore{
 
 const deviceAPI:StateCreator<
 DeviceStore,
-[["zustand/devtools", never], ["zustand/immer", never]]>= (set, get) => ({
+[["zustand/devtools", never], ["zustand/immer", never]]>= (set) => ({
     device: {} as DeviceInterface,
     setDevice: (data) => {
         set({ device: data });

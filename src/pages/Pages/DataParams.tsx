@@ -50,6 +50,7 @@ export const DataParams: FC = () => {
   return (
     <div className="container flex flex-col gap-5 md:gap-7 2xl:gap-10">
       <DataTableGeneric
+      onSearch={null}
         addForm={<AddParamForm />}
         addTitle="Crear Parametro"
         editable

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Modal } from "../shared/Modal";
 import { to } from "../../utils/to";
 import { AxiosResponse } from "axios";
-import { IDataFastCheckoutResponse } from "../../interfaces/datafast.interface";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { ScreenLoader } from "../shared/ScreenLoader";

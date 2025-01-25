@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 // import { useUserStore } from "../../stores/users/users.store";
 import { useDebts } from "../../stores/debts/dbts.store";
@@ -7,7 +7,6 @@ import { DebtInterface } from "../../interfaces/debt.interface";
 import { FaTrash } from 'react-icons/fa'
 import { ViewDebtForm } from "../../components/Forms/ViewDebtForm";
 import { useAuthStore } from "../../stores/auth/auth.store";
-import { PaymentButton } from "../../components/Payment/PaymentButton";
 
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);

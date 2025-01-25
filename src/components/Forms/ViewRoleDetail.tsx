@@ -2,9 +2,9 @@ import { useRoleStore } from "../../stores/roles/roles.store";
 
 export const ViewRoleDetail = () => {
   const selectedRole = useRoleStore((state) => state.selectedRole);
-  const selectedRoleDetails = !!selectedRole.roleDetails;
+  const selectedRoleDetails = !!selectedRole.entities;
   const entities = selectedRoleDetails
-    ? selectedRole.roleDetails.map((detail) => detail.entity).join(", ")
+    ? selectedRole.entities.map((detail) => detail).join(", ")
     : [];
   return (
     <>

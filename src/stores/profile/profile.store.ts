@@ -53,7 +53,7 @@ const profilesAPI: StateCreator<
   },
   editProfile: async (id, profile) => {
     try {
-      const { data } = await ProfileService.putProfile(id, profile);
+      await ProfileService.putProfile(id, profile);
       set({
         profiles: get().profiles.map((p) =>
           p.id === id ? { ...p, profile } : p

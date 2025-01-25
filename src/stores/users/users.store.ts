@@ -62,7 +62,7 @@ const usersAPI: StateCreator<
   editUser: async (id, user) => {
     try {
       console.log("STORE EDITUSER", id, user);
-      const { data } = await UserService.putUser(id, user);
+      await UserService.putUser(id, user);
       const newUsers = get().users.map((u) =>
         u.id === id ? { u, ...user } : u
       );
@@ -78,7 +78,7 @@ const usersAPI: StateCreator<
   },
   deleteUser: async (id) => {
     try {
-      const { data } = await UserService.deleteUser(id);
+      await UserService.deleteUser(id);
       set({ users: get().users.filter((u) => u.id !== id) });
     } catch (error) {
       console.error("Error deleting user data", error);
