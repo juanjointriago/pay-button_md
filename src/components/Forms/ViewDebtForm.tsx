@@ -105,16 +105,16 @@ export const ViewDebtForm = ({ onStartPayment }: ViewDebtFormProps) => {
               </div>
             </div> */}
 
-            {/* <div className="mb-5">
+            <div className="mb-5">
               <input
-                onClick={handlePay}
+                onClick={onStartPayment}
                 type="submit"
                 value="Realizar Pago"
                 className="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white"
               />
-            </div> */}
+            </div>
 
-            <PaymentButton 
+            {/* <PaymentButton 
               classNameButton="block w-full border-separate rounded border bg-inherit p-3 text-center font-medium text-graydark transition hover:border-meta-3 hover:bg-meta-3 hover:bg-opacity-90 hover:text-white mb-4"
               onStartPayment={(generateCheckoutId) => {
                 // onStartPayment && onStartPayment();
@@ -124,7 +124,7 @@ export const ViewDebtForm = ({ onStartPayment }: ViewDebtFormProps) => {
                 }
                 generateCheckoutId(paymentValues);
               }}
-            />
+            /> */}
 
           {/* </form> */}
         </div>

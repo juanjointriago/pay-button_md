@@ -12,10 +12,12 @@ import { to } from "../../utils/to";
 import { AxiosResponse } from "axios";
 import API from "../api/api";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
+import { usePayment } from "../../hooks/usePayment";
 
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);
   // const debts = useDebts((state) => state.debts);
+  const selectedDebt = useDebts((state) => state.selectedDebt);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
 
@@ -25,6 +27,7 @@ export const DataDebt = () => {
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
   const [debts, setDebts] = useState([]);
+  const { PaymentModal, generateCheckoutId, isLoadingCheckout } = usePayment();
   // const useRef(null);
 
   const columns: TableColumn<DebtInterface>[] = [
@@ -200,9 +203,9 @@ export const DataDebt = () => {
         return acc;
       }, {});
 
-      // const { actionLiquidationType, ...rest } = dataQuery;
+      const { actionLiquidationType, ...rest } = dataQuery;
 
-      const params = new URLSearchParams(dataQuery);
+      const params = new URLSearchParams(rest);
       const url = `debt?${params.toString()}`;
 
       const [error, response] = await to<AxiosResponse<any>>(API.get(url, {
@@ -228,10 +231,19 @@ export const DataDebt = () => {
     setIsLoadingSearch(false);
   }
 
+  const handlePay = async () => {
+    setDetailsModalOpen(false);
+    const paymentValues = {
+      customerId: auth.id,
+      debtId: selectedDebt.id,
+    }
+    generateCheckoutId(paymentValues);
+  };
+
 
   return (
     <>
-      <ScreenLoader isLoading={isLoadingSearch} />
+      <ScreenLoader isLoading={isLoadingSearch || isLoadingCheckout} />
 
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
         {<div className="flex flex-row gap-5 items-center">
@@ -333,7 +345,9 @@ export const DataDebt = () => {
               <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
               <div>Detalles del registro</div>
 
-              <ViewDebtForm />
+              <ViewDebtForm 
+                onStartPayment={handlePay}
+              />
 
               <button
                 onClick={() => setDetailsModalOpen(false)}
@@ -345,6 +359,11 @@ export const DataDebt = () => {
           </div>
         </div>
       )}
+
+
+      {
+        PaymentModal
+      }
     </>
   );
 };

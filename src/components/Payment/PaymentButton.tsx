@@ -38,30 +38,30 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
   const navigate = useNavigate();
 
   // DATAFAST CERTIFICATION FOR PRODUCTION
-  useEffect(() => {
-    if (!dataFastId) return;
-    if(!window.wpwlOptions) window.wpwlOptions = {};
-    wpwlOptions.onReady = function () {
-      var datafast = '<br/><br/><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;">';
-      const form = document.querySelector('form.wpwl-form-card');
-      const button = form?.querySelector('.wpwl-button');
+  // useEffect(() => {
+  //   if (!dataFastId) return;
+  //   if(!window.wpwlOptions) window.wpwlOptions = {};
+  //   wpwlOptions.onReady = function () {
+  //     var datafast = '<br/><br/><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;">';
+  //     const form = document.querySelector('form.wpwl-form-card');
+  //     const button = form?.querySelector('.wpwl-button');
       
       
-      button?.insertAdjacentHTML('beforebegin', datafast);
-      // setReload(s => !s);
-    };
-    wpwlOptions.style = "card";
-    wpwlOptions.locale = "es";
-    wpwlOptions.labels = { cvv: "CVV", cardHolder: "Nombre(Igual que en la tarjeta)" };
+  //     button?.insertAdjacentHTML('beforebegin', datafast);
+  //     // setReload(s => !s);
+  //   };
+  //   wpwlOptions.style = "card";
+  //   wpwlOptions.locale = "es";
+  //   wpwlOptions.labels = { cvv: "CVV", cardHolder: "Nombre(Igual que en la tarjeta)" };
 
-    return () => {
-      window.wpwlOptions.onReady = undefined;
-      window.wpwlOptions.onBeforeSubmitCard = undefined;
-      window.wpwlOptions.style = undefined;
-      window.wpwlOptions.locale = undefined;
-      window.wpwlOptions.labels = undefined;
-    }
-  }, [dataFastId]);
+  //   return () => {
+  //     window.wpwlOptions.onReady = undefined;
+  //     window.wpwlOptions.onBeforeSubmitCard = undefined;
+  //     window.wpwlOptions.style = undefined;
+  //     window.wpwlOptions.locale = undefined;
+  //     window.wpwlOptions.labels = undefined;
+  //   }
+  // }, [dataFastId]);
 
   useEffect(() => {
     if (!dataFastId) return;
@@ -81,57 +81,56 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
     };
   }, [dataFastId]);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentId = urlParams.get('id');
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const paymentId = urlParams.get('id');
 
-    // console.log("paymentId", paymentId);
+  //   // console.log("paymentId", paymentId);
 
-    if (!paymentId) return;
+  //   if (!paymentId) return;
 
-    // to(axios.get(`http://localhost:3001/payment/${paymentId}`))
-    to(API.post('paymentButton/savePayment', { checkoutId: paymentId }))
-      .then(([error]) => {
-        navigate('/home/debt');
-        if (error) {
-          Swal.fire({
-            title: 'Error!',
-            text: 'Ocurrió un error al realizar el pago',
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-          })
-        } else {
-          Swal.fire({
-            title: 'Pago Realizado',
-            text: 'Su pago ha sido realizado correctamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-          })
-        }
-      });
-  }, []);
+  //   // to(axios.get(`http://localhost:3001/payment/${paymentId}`))
+  //   to(API.post('paymentButton/savePayment', { checkoutId: paymentId }))
+  //     .then(([error]) => {
+  //       navigate('/home/debt');
+  //       if (error) {
+  //         Swal.fire({
+  //           title: 'Error!',
+  //           text: 'Ocurrió un error al realizar el pago',
+  //           icon: 'error',
+  //           confirmButtonText: 'Aceptar',
+  //         })
+  //       } else {
+  //         Swal.fire({
+  //           title: 'Pago Realizado',
+  //           text: 'Su pago ha sido realizado correctamente',
+  //           icon: 'success',
+  //           confirmButtonText: 'Aceptar'
+  //         })
+  //       }
+  //     });
+  // }, []);
 
-  const generateCheckoutId = async (paymentValues: any) => {
-    setIsLoadingCheckout(true);
-    // const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(axios.post('http://localhost:3001/checkouts', paymentValues));
-    const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(API.post('paymentButton/requestCheckout', paymentValues));
-    setIsLoadingCheckout(false);
-    setPaymentModalOpen(true);
-    if (error) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Ocurrió un error al realizar el pago',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-      });
-      setPaymentModalOpen(false);
-      return;
-    }
+  // const generateCheckoutId = async (paymentValues: any) => {
+  //   setIsLoadingCheckout(true);
+  //   const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(API.post('paymentButton/requestCheckout', paymentValues));
+  //   setIsLoadingCheckout(false);
+  //   setPaymentModalOpen(true);
+  //   if (error) {
+  //     Swal.fire({
+  //       title: 'Error!',
+  //       text: 'Ocurrió un error al realizar el pago',
+  //       icon: 'error',
+  //       confirmButtonText: 'Aceptar',
+  //     });
+  //     setPaymentModalOpen(false);
+  //     return;
+  //   }
 
-    const dataFastId = response.data.data.id;
-    // const dataFastId = response.data.id;
-    setDataFastId(dataFastId);
-  }
+  //   const dataFastId = response.data.data.id;
+  //   // const dataFastId = response.data.id;
+  //   setDataFastId(dataFastId);
+  // }
 
 
   return (
@@ -142,7 +141,7 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
 
       <button
         className={classNameButton ? classNameButton : "rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"}
-        onClick={() => onStartPayment(generateCheckoutId)}
+        // onClick={() => onStartPayment(generateCheckoutId)}
       >Realizar Pago</button>
 
       {
