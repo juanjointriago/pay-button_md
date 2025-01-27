@@ -234,7 +234,7 @@ export const DataDebt = () => {
       <ScreenLoader isLoading={isLoadingSearch} />
 
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
-        {auth.profileId !== 2 && <div className="flex flex-row gap-5 items-center">
+        {<div className="flex flex-row gap-5 items-center">
           <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white whitespace-nowrap">
             Filtrar por Usuario
           </label>
