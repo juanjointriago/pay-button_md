@@ -81,7 +81,7 @@ export const DataTableGeneric: FC<Props> = ({
   filterField,
   fieldPlaceHolder = 'Buscar',
   // searchTitle = 'Buscar',
-  title = "Data Table",
+  title = '',
   viewTitle = "Ver detalles",
   viewDetails = false,
   viewForm,
@@ -494,6 +494,7 @@ export const DataTableGeneric: FC<Props> = ({
         selectableRows={selectableRows}
         fixedHeader={false}
         pagination
+        paginationDefaultPage={1}
         responsive
         noDataComponent="No se encontraron registros ..."
         // progressPending={!data.length}

@@ -135,7 +135,7 @@ export const DataTransactions = () => {
 
   const handleSearch = async (formValues) => {
     setIsLoadingSearch(true);
-    if (auth.profileId === 1) {
+    // if (auth.profileId === 1) {
       const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
         if (formValues[key]) {
           acc[key] = formValues[key];
@@ -157,17 +157,18 @@ export const DataTransactions = () => {
           confirmButtonColor: "blue",
         });
       } else {
-        setDebts(response.data.data.map(item => ({
-          ...item,
-          ...item.debt,
-          ...item.payment
-        })));
+        setDebts(response.data.data);
+        // setDebts(response.data.data.map(item => ({
+        //   ...item,
+        //   ...item.debt,
+        //   ...item.payment
+        // })));
       }
-    } else {
-      // const searchValue = formValues['codigoCatastral'];
+    // } else {
+    //   // const searchValue = formValues['codigoCatastral'];
 
-      // TODO: CALL API SERVICE FOR CLIENT
-    }
+    //   // TODO: CALL API SERVICE FOR CLIENT
+    // }
     setIsLoadingSearch(false);
   }
 
@@ -240,7 +241,8 @@ export const DataTransactions = () => {
           viewDetails
           // viewAction={setSelectedDebtById}
           // viewForm={<ViewDebtForm />}
-          filterField={auth.profileId === 2 ? null : filterBy}
+          // filterField={auth.profileId === 2 ? null : filterBy}
+          filterField={filterBy}
           viewTitle="Realizar Pago"
           searchTitle={`Buscar por Código Catastral:`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
