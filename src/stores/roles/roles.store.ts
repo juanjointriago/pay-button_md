@@ -63,9 +63,9 @@ const rolesAPI: StateCreator<
   editRole: async (id, role) => {
     try {
       const { data } = await RoleService.putRole(id, role);
-      console.log("✅editRole", { data });
+      console.log("✅editRole response", { data });
       set({
-        roles: get().roles.map((r) => (r.id === id ? data.newRole : r)),
+        roles: get().roles.map((r) => (r.id === id ? {...r, ...role} : r)),
       });
     } catch (error) {
       console.log("❌Error en editRole", error);
@@ -73,6 +73,7 @@ const rolesAPI: StateCreator<
         AuthService.logout();
       }
     }
+    // window.location.reload();
   },
   deleteRole: async (id) => {
     try {

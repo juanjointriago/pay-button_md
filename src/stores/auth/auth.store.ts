@@ -30,6 +30,7 @@ export const storeAPI: StateCreator<
   errorMsg: undefined,
   setErrorMsg: (msg) => set({ errorMsg: msg }),
   signInUser: async ({ username, password }) => {
+    set({ errorMsg: undefined });
     try {
       const { data } = await AuthService.login({
         username,
@@ -39,7 +40,7 @@ export const storeAPI: StateCreator<
       set({ status: "authorized", user: data.data, token: data.token });
       return data;
     } catch (error) {
-      set({ errorMsg: "" });
+      set({ errorMsg: undefined });
       console.log("❌Error en Login", error);
       const { data } = error.response;
       console.log("data.msg", { data: data.msg });

@@ -32,7 +32,7 @@ export const EditRoleForm = () => {
       active: 1,
     };
     console.log({ editRole });
-    edit(selectedRole.id, editRole);
+    await edit(selectedRole.id, editRole);
   };
   return (
     <>
@@ -88,7 +88,7 @@ export const EditRoleForm = () => {
                       <input
                         id={`${entity.id}`}
                         type="checkbox"
-                        checked={selectedEntities.includes(entity.name)}
+                        checked={!!(selectedEntities.find((e) => entity.name === e))}
                         value={entity.name}
                         onChange={(e) => {
                           console.log("e.target.checked", e.target.checked);

@@ -21,7 +21,7 @@ export const DataRoles = () => {
   const columns: TableColumn<RoleInterface>[] = [
     {
       name: "ID",
-      selector: (row) => row.id,
+      selector: (row) => row.id ?? 0,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",

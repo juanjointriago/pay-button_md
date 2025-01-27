@@ -1,6 +1,7 @@
 import {
   PostRoleInterface,
   ResponsePOSTRole,
+  ResponsePutRoleInterface,
   ResponseRoleInterface,
   ResponseRolesInterface,
   RoleInterface,
@@ -28,7 +29,8 @@ export class RoleService {
 
   static putRole = async (id: number, role: RoleInterface) => {
     const route = `roles/${id}`;
-    return await API.put<ResponsePOSTRole>(route, role);
+    const response = await API.put<ResponsePutRoleInterface>(route, role);
+    return response;
   };
 
   static deleteRole = async (id: number) => {

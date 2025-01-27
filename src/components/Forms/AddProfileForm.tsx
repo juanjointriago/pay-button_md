@@ -3,8 +3,6 @@ import { useProfileStore } from "../../stores/profile/profile.store";
 import Swal from "sweetalert2";
 import Loader from "../../common/Loader";
 import { useRoleStore } from "../../stores/roles/roles.store";
-import Select from "react-tailwindcss-select";
-import { Options } from "react-tailwindcss-select/dist/components/type";
 
 export const AddProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,13 +10,11 @@ export const AddProfileForm = () => {
   const [description, setDescription] = useState("");
   const addProfile = useProfileStore((state) => state.addProfile);
   const roles = useRoleStore((state) => state.roles);
-  const optionRoles: Options = roles.map((rol) => {
-    return { value: `${rol.id}`, label: rol.description };
-  });
-  const [roleIds, setRoleIds] = useState(null);
+  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
+
   const handleSaveProfile = async () => {
     setIsLoading(true);
-    if (!name && !description && !roleIds) {
+    if (!name && !description && !!!selectedRoles) {
       Swal.fire("Error", "Por favor ingrese los datos faltantes", "warning");
     }
     try {
@@ -30,7 +26,7 @@ export const AddProfileForm = () => {
     // window.location.reload();
   };
 
-  console.log("Roles", roleIds);
+  console.log("Roles", selectedRoles);
   return (
     <>
       {isLoading ? (
@@ -73,16 +69,46 @@ export const AddProfileForm = () => {
                 />
               </div>
             </div>
-            <div className="mb-4 flex flex-row justify-between">
-              <Select
-                placeholder="Escoja Roles para el perfil"
-                isMultiple
-                noOptionsMessage="No hay opciones disponibles"
-                primaryColor={"indigo"}
-                value={roleIds}
-                onChange={setRoleIds}
-                options={optionRoles}
-              />
+              <div
+                className="mb-4 flex flex-row justify-between"
+                style={{ height: "200px" }}
+              >
+                <label className="mb-2.5 block font-medium text-black dark:text-white">
+                  Roles:
+                </label>
+                <div className="relative overflow-auto">
+                  <ul className="text-gray-900 dark:bg-gray-700 w-48 rounded-lg bg-white text-sm font-medium dark:text-white">
+                    {roles.map((role) => (
+                      // <option value={role.table_name}>{role.table_name}</option>
+                      <div className="flex items-center ps-3" key={role.id}>
+                        <input
+                          checked={selectedRoles.includes(role.id)}
+                          id={`${role.id}`}
+                          type="checkbox"
+                          value={role.name}
+                          onChange={(e) => {
+                            console.log("e.target.checked", e.target.checked);
+                            if (e.target.checked) {
+                              setSelectedRoles([...selectedRoles, role.id]);
+                            } else {
+                              setSelectedRoles(
+                                selectedRoles.filter(
+                                  (selectedEntity) => selectedEntity !== role.id
+                                )
+                              );
+                            }
+                          }}
+                          className="bg-gray-100 border-gray-300 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500 h-4 w-4 rounded text-blue-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600"
+                        />
+                        <label className="text-gray-900 dark:text-gray-300 ms-2 w-full py-3 text-sm font-medium">
+                          {`${role.name}: ${role.description} [${
+                            role.entities?.map((e) => e).join(", ") ?? ""
+                          }]`}
+                        </label>
+                      </div>
+                    ))}
+                  </ul>
+              </div>
             </div>
             <div className="mb-5">
               <input

@@ -10,6 +10,7 @@ import { FaIdCard, FaLock } from "react-icons/fa";
 const SignIn: FC = () => {
   const signin = useAuthStore((state) => state.signInUser);
   const errorMsg = useAuthStore((state) => state.errorMsg);
+  const setErrorMsg = useAuthStore((state) => state.setErrorMsg);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,13 +21,13 @@ const SignIn: FC = () => {
     }
     await signin({ username: userName, password });
     console.log("errorMsg", errorMsg);
-    if (!errorMsg) {
+    if (!!!errorMsg) {
       console.log("✅LOGIN SUCCESS");
       setIsLoading(false);
       return;
     }
     // navigate("/auth/signin");
-    await Swal.fire({
+    if(!!errorMsg)await Swal.fire({
       icon: "error",
       title: "Error",
       text: errorMsg,
