@@ -204,9 +204,13 @@ export const DataDebt = () => {
       // const { actionLiquidationType, ...rest } = dataQuery;
 
       const params = new URLSearchParams(dataQuery);
-      const url = `/debt?${params.toString()}`;
+      const url = `debt?${params.toString()}`;
 
-      const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+      const [error, response] = await to<AxiosResponse<any>>(API.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }));
       if (error) {
         Swal.fire({
           icon: "error",

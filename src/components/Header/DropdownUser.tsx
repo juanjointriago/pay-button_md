@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/auth/auth.store";
 
 import { FaUserCircle } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -79,14 +80,25 @@ const DropdownUser = () => {
               />
             </svg>
           </Link>
+
+
           <div
             ref={dropdown}
             onFocus={() => setDropdownOpen(true)}
             onBlur={() => setDropdownOpen(false)}
-            className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-              dropdownOpen === true ? "block" : "hidden"
-            }`}
+            className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen === true ? "block" : "hidden"
+              }`}
           >
+            <button
+              onClick={() => {
+                navigate("/home/profile");
+              }}
+              className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            >
+              <FiUser size={22} />
+              Perfil
+            </button>
+
             <button
               onClick={() => {
                 logout();

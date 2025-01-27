@@ -8,6 +8,23 @@ import { ScreenLoader } from "../shared/ScreenLoader";
 import { createPortal } from "react-dom";
 import API from "../../pages/api/api";
 
+declare global {
+  var wpwlOptions: {
+    onReady?: () => void;
+    onBeforeSubmitCard?: () => void;
+    registrations?: {
+      requireCvv?: boolean;
+      hideInitialPaymentForms?: boolean;
+    };
+    style?: string;
+    locale?: string;
+    labels?: {
+      cvv?: string;
+      cardHolder?: string;
+    };
+  };
+}
+
 interface PaymentButtonProps {
   classNameButton?: React.HTMLAttributes<HTMLButtonElement>['className'];
   onStartPayment: (generateCheckoutId: (paymentValues: any) => void) => void;
@@ -17,7 +34,34 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
   const [dataFastId, setDataFastId] = useState('');
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
+  // const [reload, setReload] = useState(false);
   const navigate = useNavigate();
+
+  // DATAFAST CERTIFICATION FOR PRODUCTION
+  useEffect(() => {
+    if (!dataFastId) return;
+    if(!window.wpwlOptions) window.wpwlOptions = {};
+    wpwlOptions.onReady = function () {
+      var datafast = '<br/><br/><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;">';
+      const form = document.querySelector('form.wpwl-form-card');
+      const button = form?.querySelector('.wpwl-button');
+      
+      
+      button?.insertAdjacentHTML('beforebegin', datafast);
+      // setReload(s => !s);
+    };
+    wpwlOptions.style = "card";
+    wpwlOptions.locale = "es";
+    wpwlOptions.labels = { cvv: "CVV", cardHolder: "Nombre(Igual que en la tarjeta)" };
+
+    return () => {
+      window.wpwlOptions.onReady = undefined;
+      window.wpwlOptions.onBeforeSubmitCard = undefined;
+      window.wpwlOptions.style = undefined;
+      window.wpwlOptions.locale = undefined;
+      window.wpwlOptions.labels = undefined;
+    }
+  }, [dataFastId]);
 
   useEffect(() => {
     if (!dataFastId) return;
@@ -70,7 +114,7 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
   const generateCheckoutId = async (paymentValues: any) => {
     setIsLoadingCheckout(true);
     // const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(axios.post('http://localhost:3001/checkouts', paymentValues));
-    const [error, response] = await to<AxiosResponse<{data: { id: string }}>>(API.post('paymentButton/requestCheckout', paymentValues));
+    const [error, response] = await to<AxiosResponse<{ data: { id: string } }>>(API.post('paymentButton/requestCheckout', paymentValues));
     setIsLoadingCheckout(false);
     setPaymentModalOpen(true);
     if (error) {
@@ -102,11 +146,28 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
       >Realizar Pago</button>
 
       {
-        createPortal(
+        // createPortal(
           <Modal open={paymentModalOpen} onToggleModal={setPaymentModalOpen} closeOnBlur={false}>
             <div className="pt-4">
               <div className="[&>div>form>button]:hidden">
                 <form action={'/home/debt'} className='paymentWidgets flex justify-center' data-brands='VISA MASTER AMEX DISCOVER'></form>
+
+                {/* <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                  var wpwlOptions = {
+                    onReady: function() {
+                    console.log("onReady");
+                    
+                    var datafast= '<br/><br/><img src='+'"https://www.datafast.com.ec/images/verified.png"
+                    style='+'"display:block;margin:0 auto; width:100%;">';
+                    $('form.wpwl-form-card').find('.wpwl-button').before(datafast);
+                    },
+                  style: "card",locale: "es", labels: {cvv: "CVV", cardHolder: "Nombre(Igual que en la tarjeta)"}
+                  }
+          `,
+                  }}
+                /> */}
               </div>
 
               <div className="2xsm:w-1/2 w-full mx-auto">
@@ -118,10 +179,11 @@ export const PaymentButton = ({ classNameButton, onStartPayment }: PaymentButton
                 </button>
               </div>
             </div>
-          </Modal>,
+          </Modal>
+        //   ,
 
-          document.getElementById('body')
-        )
+        //   document.getElementById('body')
+        // )
       }
     </>
   )
