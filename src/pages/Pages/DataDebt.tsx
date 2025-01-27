@@ -26,7 +26,6 @@ export const DataDebt = () => {
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
   const [debts, setDebts] = useState([]);
   // const useRef(null);
-  const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id) : debts);
 
   const columns: TableColumn<DebtInterface>[] = [
     {
@@ -297,8 +296,7 @@ export const DataDebt = () => {
           viewDetails
           viewAction={setSelectedDebtById}
           viewForm={<ViewDebtForm />}
-          // filterField={auth.profileId === 2 ? null : "localCode"}
-          filterField={auth.profileId === 2 ? null : filterBy}
+          filterField={ filterBy}
           viewTitle="Realizar Pago"
           searchTitle={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
