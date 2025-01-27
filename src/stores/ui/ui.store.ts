@@ -15,6 +15,7 @@ interface UIStore {
     ScreenSettings: ScreenSettings;
     ScreenAvaliable: string[];
     setScreenSettings: () => void;
+    hasPermission:(entity:string, roleDescription:string)=>boolean;
 }
 
 
@@ -42,7 +43,17 @@ const uiAPI: StateCreator<UIStore, [["zustand/devtools", never], ["zustand/immer
         
         set({ ScreenSettings:  userScreenSettings });
     },
-});
+    hasPermission: (entity:string, roleDescription:string) => {
+        const roles = useRoleStore(state=>state.roles);
+        // const entities = 
+        const hasRole = roles.find((r)=>r.description===roleDescription);        
+        const hasEntity = roles.map((r)=>{
+            return r.entities?.find((e)=>e===entity);
+        });
+        if((!!hasRole)&&(!!hasEntity))return true;
+        return false;
+    }
+})
 
 
 export const useUIStore = create<UIStore>()(

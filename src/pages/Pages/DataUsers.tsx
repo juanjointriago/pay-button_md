@@ -3,7 +3,6 @@ import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { useUserStore } from "../../stores/users/users.store";
 import { TableColumn } from "react-data-table-component";
 import { UserInterface } from "../../interfaces/user.interface";
-// import { useRoleStore } from "../../stores/roles/roles.store";
 import { AddUserForm } from "../../components/Forms/AddUserForm";
 import { EditUserForm } from "../../components/Forms/EditUserForm";
 
@@ -81,6 +80,7 @@ export const DataUsers: FC = () => {
   return (
     <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
       { <DataTableGeneric
+        onSearch={null}
         data={users.filter((user)=>!!user)}
         addTitle="Agregar Usuario"
         addForm={<AddUserForm />}

@@ -7,8 +7,6 @@ import { SelectorKeys } from "../../pages/Pages/DataTransactions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { PaymentButton } from "../Payment/PaymentButton";
-import { useAuthStore } from "../../stores/auth/auth.store";
 
 type data = any[];
 type columns = any[];
@@ -101,7 +99,7 @@ export const DataTableGeneric: FC<Props> = ({
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(zod),

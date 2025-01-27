@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthStore } from "../../stores/auth/auth.store";
-import { useDebts } from "../../stores/debts/dbts.store";
+// import { useDebts } from "../../stores/debts/dbts.store";
 import { TableColumn } from "react-data-table-component";
 import { TransactionInterface } from "../../interfaces/transactions.interface";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
@@ -35,9 +35,9 @@ export const DataTransactions = () => {
   // const users = useUserStore((state) => state.users);
   const [debts, setDebts] = useState([]);
   // const debts = useDebts((state) => state.debts);
-  const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
+  // const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
-  const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id).filter((debt) => debt.actionLiquidationType === 1) : debts);
+  // const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id).filter((debt) => debt.actionLiquidationType === 1) : debts);
 
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   // const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -144,7 +144,7 @@ export const DataTransactions = () => {
         setDebts(response.data.data);
       }
     } else {
-      const searchValue = formValues['codigoCatastral'];
+      // const searchValue = formValues['codigoCatastral'];
 
       // TODO: CALL API SERVICE FOR CLIENT
     }

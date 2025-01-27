@@ -8,6 +8,7 @@ import { useProfileStore } from "../stores/profile/profile.store";
 import { useRoleStore } from "../stores/roles/roles.store";
 import { useParamStore } from "../stores/params/params.store";
 import { useDebts } from "../stores/debts/dbts.store";
+import { useEntitiesStore } from "../stores/entities/entities.store";
 
 export const DefaultLayout: FC = () => {
   const authStatus = useAuthStore((state) => state.status);
@@ -32,6 +33,7 @@ export const DefaultLayout: FC = () => {
   const getAllRoles = useRoleStore((state) => state.getRoles);
   const getAllParams = useParamStore((state) => state.getAndSetParams);
   const getAllDebts = useDebts((state) => state.getAndSetDebts);
+  const getAllEntities = useEntitiesStore((state) => state.getAndSetEntities);
 
   //get and set all tables data
   useEffect(() => {
@@ -40,7 +42,8 @@ export const DefaultLayout: FC = () => {
     getAllProfiles();
     getAllRoles();
     getAllParams();
-  }, [getAllUsers, getAllProfiles, getAllRoles, getAllParams, getAllDebts]);
+    getAllEntities();
+  }, [getAllUsers, getAllProfiles, getAllRoles, getAllParams, getAllDebts, getAllEntities]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

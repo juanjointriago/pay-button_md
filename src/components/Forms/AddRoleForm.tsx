@@ -3,13 +3,13 @@ import { useRoleStore } from "../../stores/roles/roles.store";
 import Swal from "sweetalert2";
 import { PostRoleInterface } from "../../interfaces/roles.interface";
 import Loader from "../../common/Loader";
-import { useUIStore } from "../../stores/ui/ui.store";
+import { useEntitiesStore } from "../../stores/entities/entities.store";
 
 export const AddRoleForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState();
   const [description, setDescription] = useState();
-  const entities = useUIStore((state) => state.ScreenAvaliable);
+  const entities = useEntitiesStore((state) => state.entities);
   const [selectedEntities, setSelectedEntities] = useState<string[]>([]);
   const addRole = useRoleStore((state) => state.addRole);
   const handleSaveRole = async () => {
@@ -87,25 +87,25 @@ export const AddRoleForm = () => {
                     // <option value={entity.table_name}>{entity.table_name}</option>
                     <div
                       className="flex items-center ps-3"
-                      key={entity}
+                      key={entity.id}
                     >
                       <input
-                        checked={selectedEntities.includes(entity)}
-                        id={entity}
+                        checked={selectedEntities.includes(entity.name)}
+                        id={`${entity.id}`}
                         type="checkbox"
-                        value={entity}
+                        value={entity.name}
                         onChange={(e) => {
                           console.log("e.target.checked", e.target.checked);
                           if (e.target.checked) {
                             setSelectedEntities([
                               ...selectedEntities,
-                              entity,
+                              entity.name,
                             ]);
                           } else {
                             setSelectedEntities(
                               selectedEntities.filter(
                                 (selectedEntity) =>
-                                  selectedEntity !== entity
+                                  selectedEntity !== entity.name
                               )
                             );
                           }
@@ -113,7 +113,7 @@ export const AddRoleForm = () => {
                         className="bg-gray-100 border-gray-300 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500 h-4 w-4 rounded text-blue-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600"
                       />
                       <label className="text-gray-900 dark:text-gray-300 ms-2 w-full py-3 text-sm font-medium">
-                        {entity}
+                        {entity.name}
                       </label>
                     </div>
                   ))}

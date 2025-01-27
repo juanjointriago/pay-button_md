@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useRoleStore } from "../../stores/roles/roles.store";
 import { RoleInterface } from "../../interfaces/roles.interface";
 import Swal from "sweetalert2";
-import { useUIStore } from "../../stores/ui/ui.store";
+import { useEntitiesStore } from "../../stores/entities/entities.store";
 
 export const EditRoleForm = () => {
   const selectedRole = useRoleStore((state) => state.selectedRole);
-  const entities = useUIStore((state) => state.ScreenAvaliable);
+  const entities = useEntitiesStore((state) => state.entities);
   const [name, setName] = useState(selectedRole.name);
   const [description, setDescription] = useState(selectedRole.description);
   const selectedRoleDetails = !!selectedRole.entities;
@@ -74,35 +74,34 @@ export const EditRoleForm = () => {
                 />
               </div>
             </div>
-            <div className="mb-4 flex flex-row justify-between">
+            <div className="mb-4 flex flex-row justify-between" style={{height:"200px"}}>
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Seleccione Entidades:
               </label>
-              <div className="relative">
-                <ul className="text-gray-900 border-gray-200 dark:bg-gray-700 dark:border-gray-600 w-48 rounded-lg border bg-white text-sm font-medium dark:text-white">
+              <div className="relative overflow-auto">
+                <ul className="text-gray-900 dark:bg-gray-700 w-48 rounded-lg border bg-white text-sm font-medium dark:text-white">
                   {entities.map((entity) => (
-                    // <option value={entity.table_name}>{entity.table_name}</option>
                     <div
                       className="flex items-center ps-3"
-                      key={entity}
+                      key={entity.id}
                     >
                       <input
-                        id={entity}
+                        id={`${entity.id}`}
                         type="checkbox"
-                        checked={selectedEntities.some( (entity) => selectedEntities.includes(entity))}
-                        value={entity}
+                        checked={selectedEntities.includes(entity.name)}
+                        value={entity.name}
                         onChange={(e) => {
                           console.log("e.target.checked", e.target.checked);
                           if (e.target.checked) {
                             setSelectedEntities([
                               ...selectedEntities,
-                              entity,
+                              entity.name,
                             ]);
                           } else {
                             setSelectedEntities(
                               selectedEntities.filter(
                                 (selectedEntity) =>
-                                  selectedEntity !== entity
+                                  selectedEntity !== entity.name
                               )
                             );
                           }
@@ -110,7 +109,7 @@ export const EditRoleForm = () => {
                         className="bg-gray-100 border-gray-300 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500 h-4 w-4 rounded text-blue-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600"
                       />
                       <label className="text-gray-900 dark:text-gray-300 ms-2 w-full py-3 text-sm font-medium">
-                        {entity}
+                        {entity.name}
                       </label>
                     </div>
                   ))}
