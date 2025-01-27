@@ -15,6 +15,7 @@ import { DataTransactions } from "../pages/Pages/DataTransactions";
 import { DataDataFastsTransactions } from "../pages/Pages/DataDataFastsTransactions";
 import { DataSetupDevice } from "../pages/Pages/DataSetupDevice";
 import SignUp from "../pages/Authentication/SignUp";
+import { ProfilePage } from "../pages/Pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
           {
             path: "roles",
             element: <DataRoles />,
+          },
+          {
+            path: "profile",
+            element: <ProfilePage />,
           }
         ],
       },

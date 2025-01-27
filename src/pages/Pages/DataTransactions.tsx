@@ -47,6 +47,25 @@ export const DataTransactions = () => {
 
   const columns: TableColumn<TransactionInterface>[] = [
     {
+      id: 'actions',
+      name: 'Acciones',
+      button: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
+      center: false,
+      cell(row) {
+        return (
+          <div className="flex flex-1 min-w-[200px] mx-auto">
+            <button
+              className="rounded px-4 py-2 font-bold text-rose-800 hover:bg-rose-700/15 flex mx-auto"
+              onClick={() => {
+                //TODO: AQUI VA LA LOGICA DEL PDF
+              }}
+            >Ver PDF</button>
+          </div>
+        );
+      },
+    },
+    {
       id: "localCode",
       name: "Código Local",
       selector: (row) => row.localCode,
@@ -127,10 +146,7 @@ export const DataTransactions = () => {
       // const { actionLiquidationType, ...rest } = dataQuery;
 
       const params = new URLSearchParams(dataQuery);
-
-
-      //! TODO: change to transactions
-      const url = `/payment?${params.toString()}`;
+      const url = `/transaction?${params.toString()}`;
 
       const [error, response] = await to<AxiosResponse<any>>(API.get(url));
       if (error) {
@@ -141,7 +157,11 @@ export const DataTransactions = () => {
           confirmButtonColor: "blue",
         });
       } else {
-        setDebts(response.data.data);
+        setDebts(response.data.data.map(item => ({
+          ...item,
+          ...item.debt,
+          ...item.payment
+        })));
       }
     } else {
       // const searchValue = formValues['codigoCatastral'];
@@ -216,7 +236,7 @@ export const DataTransactions = () => {
         <DataTableGeneric
           data={debts}
           columns={columns}
-          selectableRows
+          // selectableRows
           viewDetails
           // viewAction={setSelectedDebtById}
           // viewForm={<ViewDebtForm />}
