@@ -59,6 +59,8 @@ export const ProfilePage = () => {
   }, [user]);
 
   const onSubmit = async (data: any) => {
+    data = data.filter((item: any) => typeof item.value === 'string' ? Boolean(item.value.trim()) : Boolean(item.value));
+
     const [error] =await to(API.put(`users/${user.id}`, data));
 
     if (error) {
