@@ -428,17 +428,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Roles
                             </NavLink>
                           </li>}
-                          {auth?.profileId === 2 &&<li>
-                            <NavLink
-                              to="/home/my-profile"
-                              className={({ isActive }) =>
-                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white " +
-                                (isActive && "!text-white")
-                              }
-                            >
-                              Ver Mis datos
-                            </NavLink>
-                          </li>}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

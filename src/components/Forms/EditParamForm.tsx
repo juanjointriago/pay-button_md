@@ -55,7 +55,7 @@ export const EditParamForm: FC<Props> = ({ id }) => {
               <div className="relative">
                 <input
                   name="key"
-                  value={key}
+                  value={selectedParam.key}
                   onChange={(e) => setKey(e.target.value)}
                   type="text"
                   placeholder="Ingrese clave o key "
@@ -70,7 +70,7 @@ export const EditParamForm: FC<Props> = ({ id }) => {
               <div className="relative">
                 <input
                   name="value"
-                  value={value}
+                  value={selectedParam.value}
                   type="text"
                   onChange={(e) => setValue(e.target.value)}
                   placeholder="Ingrese valor de key"

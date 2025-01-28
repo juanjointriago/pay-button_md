@@ -195,7 +195,7 @@ export const DataDebt = () => {
 
   const handleSearch = async (formValues) => {
     setIsLoadingSearch(true);
-    if (auth.profileId === 1) {
+    // if (auth.profileId === 1) {
       const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
         if (formValues[key]) {
           acc[key] = formValues[key];
@@ -223,11 +223,11 @@ export const DataDebt = () => {
       } else {
         setDebts(response.data.data);
       }
-    } else {
-      const searchValue = formValues['codigoCatastral'];
+    // } else {
+    //   const searchValue = formValues['codigoCatastral'];
 
       // TODO: CALL API SERVICE FOR CLIENT
-    }
+    // }
     setIsLoadingSearch(false);
   }
 
