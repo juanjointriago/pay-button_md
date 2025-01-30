@@ -17,12 +17,14 @@ import { usePayment } from "../../hooks/usePayment";
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);
   // const debts = useDebts((state) => state.debts);
-  const selectedDebt = useDebts((state) => state.selectedDebt);
+  // const selectedDebt = useDebts((state) => state.selectedDebt);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
   const auth = useAuthStore((state) => state.user);
 
   // const [filterBy, setFilterBy] = useState('localCode');
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
@@ -31,26 +33,26 @@ export const DataDebt = () => {
   // const useRef(null);
 
   const columns: TableColumn<DebtInterface>[] = [
-    {
-      id: 'actions',
-      name: 'Acciones',
-      button: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
-      center: false,
-      cell(row) {
-        return (
-          <div className="flex flex-1 min-w-[200px] mx-auto">
-            <button
-              className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
-              onClick={() => {
-                setSelectedDebtById(row.id);
-                setDetailsModalOpen(true);
-              }}
-            >Realizar Pago</button>
-          </div>
-        );
-      },
-    },
+    // {
+    //   id: 'actions',
+    //   name: 'Acciones',
+    //   button: true,
+    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
+    //   center: false,
+    //   cell(row) {
+    //     return (
+    //       <div className="flex flex-1 min-w-[200px] mx-auto">
+    //         <button
+    //           className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
+    //           onClick={() => {
+    //             setSelectedDebtById(row.id);
+    //             setDetailsModalOpen(true);
+    //           }}
+    //         >Realizar Pago</button>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       id: "localCode",
       name: "Código Local",
@@ -232,11 +234,15 @@ export const DataDebt = () => {
   }
 
   const handlePay = async () => {
+    // console.log(rows);
     setDetailsModalOpen(false);
     const paymentValues = {
       customerId: auth.id,
-      debtId: selectedDebt.id,
+      debtIds: selectedRows.map(row => row.id)
     }
+
+    console.log({paymentValues});
+    
     generateCheckoutId(paymentValues);
   };
 
@@ -303,8 +309,12 @@ export const DataDebt = () => {
         <DataTableGeneric
           data={debts}
           onSearch={handleSearch}
+          onStartPayment={(rows) =>{
+            setDetailsModalOpen(true);
+            setSelectedRows(rows);
+          }}
           columns={columns}
-          // selectableRows
+          selectableRows
           viewDetails
           viewAction={setSelectedDebtById}
           viewForm={<ViewDebtForm />}

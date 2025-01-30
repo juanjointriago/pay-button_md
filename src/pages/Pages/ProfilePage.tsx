@@ -15,7 +15,7 @@ const signUpSchema = z.object({
   // name: z.string({ message: 'El nombre es obligatorio' }).min(2, { message: 'El nombre es demasiado corto' }),
   // middlename: z.string().min(2, { message: 'El segundo nombre es demasiado corto' }),
   // lastname: z.string().min(2, { message: 'El apellido es demasiado corto' }),
-  street1: z.string().min(2, { message: 'La calle es demasiado corta' }), // direccion de entrega
+  address: z.string().min(2, { message: 'La calle es demasiado corta' }), // direccion de entrega
   // street2: z.string().min(2, { message: 'La calle es demasiado corta' }), // direccion del cliente
   username: z.string().min(2, { message: 'Campo inválido' }),
   email: z.string().email({ message: 'El email es incorrecto' }),
@@ -42,7 +42,7 @@ export const ProfilePage = () => {
       password: '',
       phone: '',
       postCode: '',
-      street1: '',
+      address: '',
       confirmPassword: '',
       profileId: 2,
     },
@@ -55,11 +55,14 @@ export const ProfilePage = () => {
     form.setValue('email', user.email);
     form.setValue('phone', user.phone);
     form.setValue('postCode', user.postCode);
-    form.setValue('street1', user.address);
+    form.setValue('address', user.address);
   }, [user]);
 
   const onSubmit = async (data: any) => {
-    data = data.filter((item: any) => typeof item.value === 'string' ? Boolean(item.value.trim()) : Boolean(item.value));
+    data = Object.keys(data).reduce((acc, key) => {
+      if (typeof data[key] === 'string' ? !Boolean(data[key].trim()) : !Boolean(data[key])) return acc;
+      return { ...acc, [key]: data[key] };
+    }, {});    
 
     const [error] =await to(API.put(`users/${user.id}`, data));
 
@@ -238,12 +241,12 @@ export const ProfilePage = () => {
                 type="text"
                 placeholder="Dirección"
                 className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                {...form.register("street1")}
+                {...form.register("address")}
               />
               {
-                form.formState.errors.street1 && form.formState.errors.street1.message && (
+                form.formState.errors.address && form.formState.errors.address.message && (
                   <p className="text-rose-400 text-xs italic">
-                    {form.formState.errors.street1.message}
+                    {form.formState.errors.address.message}
                   </p>
                 )
               }

@@ -31,6 +31,7 @@ interface Props {
   deleteAction?: any;
   payable?: boolean;
   onSearch: any;
+  onStartPayment?: any;
 }
 
 const Export = ({ onExport }) => (
@@ -94,6 +95,7 @@ export const DataTableGeneric: FC<Props> = ({
   deletable = false,
   deleteAction,
   onSearch,
+  onStartPayment,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -159,6 +161,7 @@ export const DataTableGeneric: FC<Props> = ({
     };
 
     const handleViewDetails = () => {
+      if(onStartPayment) return onStartPayment(selectedRows);
       if (selectedRows.length > 1) {
         Swal.fire({
           icon: "error",

@@ -146,7 +146,7 @@ export const DataTransactions = () => {
       // const { actionLiquidationType, ...rest } = dataQuery;
 
       const params = new URLSearchParams(dataQuery);
-      const url = `/transaction?${params.toString()}`;
+      const url = `/payment?${params.toString()}`;
 
       const [error, response] = await to<AxiosResponse<any>>(API.get(url));
       if (error) {
