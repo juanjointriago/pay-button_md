@@ -18,12 +18,12 @@ export class AuthService {
 
   static checkAuthStatus = async () => {
     return await API.get("auth/checkAuthStatus");
-      // return await API.get("auth/checkAuthStatus", {
-      //   headers: {
-      //     "auth-token": localStorage.getItem("token") || "",
-      //   },
-      // });
-      
+    // return await API.get("auth/checkAuthStatus", {
+    //   headers: {
+    //     "auth-token": localStorage.getItem("token") || "",
+    //   },
+    // });
+
   };
 
   static logout = () => {
@@ -35,13 +35,13 @@ export class AuthService {
 
   static forgotPassword = async (username: string) => {
     const route = "auth/forgotPassword";
-       return await API.post(route, { username });
+    return await API.post(route, { username });
 
   };
 
   static resetPassword = async (username: string) => {
     const route = "auth/resetPassword";
-      return await API.post(route, { username });
-    
+    return await API.post(route, { username });
+
   };
 }

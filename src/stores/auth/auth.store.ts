@@ -7,16 +7,18 @@ import { useParamStore } from "../params/params.store";
 import { useUserStore } from "../users/users.store";
 import { useProfileStore } from "../profile/profile.store";
 import { useRoleStore } from "../roles/roles.store";
+import { to } from "../../utils/to";
 
 type authStatus = "authorized" | "unauthorized" | "checking";
 export interface AuthState {
   status: authStatus;
   user?: LoginData;
+  showLoginModal?: boolean;
   errorMsg?: string;
   token: string | null;
   setErrorMsg: (msg: string) => void;
   signInUser: (user: LoginInterface) => Promise<void>;
-  checkAuthStatus: () => Promise<authStatus>;
+  checkAuthStatus: () => Promise<void>;
   logoutUser: () => void;
 }
 
@@ -24,49 +26,62 @@ export const storeAPI: StateCreator<
   AuthState,
   [["zustand/devtools", never], ["zustand/immer", never]]
 > = (set) => ({
-  status: "unauthorized",
+  status: "checking",
   user: undefined,
   token: null,
   errorMsg: undefined,
   setErrorMsg: (msg) => set({ errorMsg: msg }),
   signInUser: async ({ username, password }) => {
     set({ errorMsg: undefined });
-    try {
-      const { data } = await AuthService.login({
-        username,
-        password,
-      });
-      localStorage.setItem("token", data.token);
-      set({ status: "authorized", user: data.data, token: data.token });
-      return data;
-    } catch (error) {
-      set({ errorMsg: undefined });
-      console.log("❌Error en Login", error);
-      const { data } = error.response;
-      console.log("data.msg", { data: data.msg });
-      if (error) {
-        const text =
-          data.msg == "User not found"
-            ? "Credenciales incorrectas"
-            : "Error en login";
-        set({ errorMsg: text });
-      }
-      return error;
+    const [error, response] = await to(AuthService.login({ username, password }));
+
+    if (error) {
+      set({ errorMsg: 'Error en login', showLoginModal: true });
+      return;
     }
+
+    localStorage.setItem('token', (response as any).data.token);
+
+    set({ status: "authorized", user: (response as any).data.data, token: (response as any).data.token, showLoginModal: false });
+
+    // try {
+    //   const { data } = await AuthService.login({ username, password });
+    //   localStorage.setItem("token", data.token);
+    //   set({ status: "authorized", user: data.data, token: data.token });
+    //   return data;
+    // } catch (error) {
+    //   set({ errorMsg: undefined });
+    //   console.log("❌Error en Login", error);
+    //   const { data } = error.response;
+    //   console.log("data.msg", { data: data.msg });
+    //   if (error) {
+    //     // const text =
+    //     //   data.msg == "User not found"
+    //     //     ? "Credenciales incorrectas"
+    //     //     : "Error en login";
+    //     set({ errorMsg: 'Error en login' });
+    //   }
+    //   return error;
+    // }
   },
   checkAuthStatus: async () => {
-    try {
-      const { data } = await AuthService.checkAuthStatus();
-      set({ status: data.msg });
-      return data.msg === "Authenticated" ? "authorized" : "unauthorized";
-    } catch (error) {
-      set({ status: "unauthorized" });
-      console.log("❌Error en checkAuthStatus", error);
-      return "unauthorized";
-    }
+    const [error, response] = await to(AuthService.checkAuthStatus());
+    if (error) return set({ status: "unauthorized" });
+    set({ status: (response as any).msg });
+    // return response.msg === "Authenticated" ? "authorized" : "unauthorized";
+    // try {
+    //   const { data } = await AuthService.checkAuthStatus();
+    //   console.log({ data });
+
+    //   set({ status: data.msg });
+    //   return data.msg === "Authenticated" ? "authorized" : "unauthorized";
+    // } catch (error) {
+    //   set({ status: "unauthorized" });
+    //   console.log("❌Error en checkAuthStatus", error);
+    //   return "unauthorized";
+    // }
   },
   logoutUser: () => {
-    AuthService.logout();
     set({
       status: "unauthorized",
       user: undefined,
@@ -77,7 +92,8 @@ export const storeAPI: StateCreator<
     useProfileStore.persist.clearStorage();
     useRoleStore.persist.clearStorage();
     useUserStore.persist.clearStorage();
-    window.location.href = "/auth/signin";
+    AuthService.logout();
+    // window.location.href = "/auth/signin";
   },
 });
 

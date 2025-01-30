@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
@@ -9,34 +9,49 @@ import { FaIdCard, FaLock } from "react-icons/fa";
 
 const SignIn: FC = () => {
   const signin = useAuthStore((state) => state.signInUser);
+  const showLoginModal = useAuthStore((state) => state.showLoginModal);
   const errorMsg = useAuthStore((state) => state.errorMsg);
-  const setErrorMsg = useAuthStore((state) => state.setErrorMsg);
+  // const setErrorMsg = useAuthStore((state) => state.setErrorMsg);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const login = async () => {
     setIsLoading(true);
     if (!userName && !password) {
       Swal.fire("Error", "Por favor ingrese su usuario y contraseña", "error");
     }
+
     await signin({ username: userName, password });
-    console.log("errorMsg", errorMsg);
-    if (!!!errorMsg) {
-      console.log("✅LOGIN SUCCESS");
-      setIsLoading(false);
-      return;
-    }
-    // navigate("/auth/signin");
-    if(!!errorMsg)await Swal.fire({
+
+    // if (!errorMsg) {
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    // if (!!errorMsg) await Swal.fire({
+    //   icon: "error",
+    //   title: "Error",
+    //   text: errorMsg,
+    //   confirmButtonColor: "blue",
+    //   confirmButtonText: "Aceptar",
+    // });
+
+    setIsLoading(false);
+  };
+
+
+  useEffect(() => {
+    if (!errorMsg || !showLoginModal) return;
+
+    Swal.fire({
       icon: "error",
       title: "Error",
       text: errorMsg,
       confirmButtonColor: "blue",
       confirmButtonText: "Aceptar",
     });
-
-    setIsLoading(false);
-  };
+  }, [errorMsg]);
 
   return (
     <div style={{ padding: "50px" }}>

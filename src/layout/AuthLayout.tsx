@@ -6,14 +6,16 @@ import { useAuthStore } from "../stores/auth/auth.store";
 export const AuthLayout = () => {
   const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
   const authStatus = useAuthStore((state) => state.status);
-  
+
   useEffect(() => {
     checkAuthStatus();
-  }, [checkAuthStatus]);
+  }, []);
+
+  if(authStatus === 'checking') return <></>;
   
 
   if (authStatus === "authorized") {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return (

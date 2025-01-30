@@ -13,7 +13,7 @@ import { useEntitiesStore } from "../stores/entities/entities.store";
 export const DefaultLayout: FC = () => {
   const authStatus = useAuthStore((state) => state.status);
   const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
-  const logoutUser = useAuthStore((state) => state.logoutUser);
+  // const logoutUser = useAuthStore((state) => state.logoutUser);
 
   useEffect(() => {
     authorizeCheck();
@@ -22,10 +22,10 @@ export const DefaultLayout: FC = () => {
   const authorizeCheck = async () => {
     console.log("🔐AUTH STATUS", authStatus);
     await checkAuthStatus();
-    if (authStatus === "unauthorized") {
-      await logoutUser();
-      return <Navigate to="/auth/signin" />;
-    }
+    // if (authStatus === "unauthorized") {
+    //   logoutUser();
+    //   return <Navigate to="/auth/signin" />;
+    // }
   };
 
   const getAllUsers = useUserStore((state) => state.getUsers);
@@ -46,6 +46,12 @@ export const DefaultLayout: FC = () => {
   }, [getAllUsers, getAllProfiles, getAllRoles, getAllParams, getAllDebts, getAllEntities]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  if(authStatus === 'checking') return <></>;
+
+  if(authStatus === 'unauthorized') {
+    return <Navigate to="/logout" />;
+  }
 
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">

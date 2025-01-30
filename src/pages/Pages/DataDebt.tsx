@@ -205,9 +205,9 @@ export const DataDebt = () => {
         return acc;
       }, {});
 
-      const { actionLiquidationType, ...rest } = dataQuery;
+      // const { actionLiquidationType, ...rest } = dataQuery;
 
-      const params = new URLSearchParams(rest);
+      const params = new URLSearchParams(dataQuery);
       const url = `debt?${params.toString()}`;
 
       const [error, response] = await to<AxiosResponse<any>>(API.get(url, {

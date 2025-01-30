@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import ErrorPage from "../pages/Pages/ErrorPage";
 import { Root } from "../Root";
 import { DefaultLayout } from "../layout/DefaultLayout";
@@ -16,12 +16,13 @@ import { DataDataFastsTransactions } from "../pages/Pages/DataDataFastsTransacti
 import { DataSetupDevice } from "../pages/Pages/DataSetupDevice";
 import SignUp from "../pages/Authentication/SignUp";
 import { ProfilePage } from "../pages/Pages/ProfilePage";
+import { Logout } from "../pages/Pages/Logout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <ErrorPage />,
+    errorElement: <Navigate to="/" />,
     children: [
       //DefaultLayout Routes
       {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfilePage />,
+          },
+          {
+            path: '*',
+            element: <Navigate to="/" />
           }
         ],
       },
@@ -91,4 +96,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "logout",
+    element: <Logout />,
+  }
 ]);
