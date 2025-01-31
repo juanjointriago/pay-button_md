@@ -9,127 +9,159 @@ import API from "../api/api";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineCleaningServices } from "react-icons/md";
+import { useDisclosure } from "../../hooks/useDisclosure";
+import { Modal } from "../../components/shared/Modal";
+import { formatter } from "../../utils/formatter";
 
 export const DataDataFastsTransactions = () => {
   const [data, setData] = useState([]);
   const [filterBy, setFilterBy] = useState('debt.titleName');
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [filterValue, setFilterValue] = useState('');
+  const detailModal = useDisclosure();
+  const [jsonRes, setJsonRes] = useState('');
 
   const columns: TableColumn<IDatafastTransaction>[] = useMemo(() => ([
-    // {
-    //   id: 'actions',
-    //   name: 'Acciones',
-    //   button: true,
-    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
-    //   center: false,
-    //   cell(row) {
-    //     return (
-    //       <div className="flex flex-1 min-w-[200px] mx-auto">
-    //         <button
-    //           className="rounded px-4 py-2 font-bold text-rose-800 hover:bg-rose-700/15 flex mx-auto"
-    //           onClick={() => {
-    //             //TODO: AQUI VA LA LOGICA DEL PDF
-    //           }}
-    //         >Ver PDF</button>
-    //       </div>
-    //     );
-    //   },
-    // },
     {
-      id: "debt.titleName",
-      name: "Nombre de la deuda",
-      selector: (row) => row.debt.titleName,
+      id: "actions",
+      name: "Acciones",
+      button: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
+      center: true,
+      cell(row) {
+        return (
+          <div className="flex flex-1 min-w-[200px] mx-auto">
+            <button
+              onClick={() => {
+                setJsonRes(row.jsonResponse);
+                detailModal.onOpen();
+              }}
+              className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
+            >Ver JSON</button>
+          </div>
+        );
+      },
+    },
+    {
+      id: "type",
+      name: "Tipo",
+      selector: (row) => row.type,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "250px",
+      width: "80px",
     },
     {
       id: "state",
-      name: "Estado",
+      name: "Estado de la transacción",
       selector: (row) => row.state,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "180px",
+    },
+    {
+      id: "order",
+      name: "Orden",
+      selector: (row) => row.order,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
     {
-      id: "debt.discount",
-      name: "Descuento",
-      selector: (row) => row.debt.discount,
+      id: "executionDate",
+      name: "Fecha de Ejecución",
+      selector: (row) => `${row.executionDate?.toString().split('T')[0]} ${row.executionDate?.toString().split('T')[1]?.split('.')[0]}`,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "180px",
+    },
+    {
+      id: "trxId",
+      name: "Id Trx",
+      selector: (row) => row.trxId,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "180px",
+    },
+    {
+      id: "responseText",
+      name: "Descripción",
+      selector: (row) => row.responseText,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "180px",
+    },
+    {
+      id: "lot",
+      name: "Lote",
+      selector: (row) => row.lot,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
+    {
+      id: "reference",
+      name: "Referencia",
+      selector: (row) => row.reference,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "120px",
     },
     {
-      id: "debt.totalAmount",
-      name: "Total",
-      selector: (row) => row.debt.totalAmount,
+      id: "acquirerId",
+      name: "Adq.",
+      selector: (row) => row.acquirerId,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
+    {
+      id: "authorization",
+      name: "Auth.",
+      selector: (row) => row.authorization,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
+    {
+      id: "authorization",
+      name: "Auth.",
+      selector: (row) => row.authorization,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
+    {
+      id: "amount",
+      name: "Monto",
+      selector: (row) => formatter({ value: row.amount }),
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
-    // {
-    //   id: "interest",
-    //   name: "Interés",
-    //   selector: (row) => row.interest,
-    //   sortable: true,
-    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-    //   width: "100px",
-    // },
-
-    // {
-    //   id: "createdAt",
-    //   name: "Fecha de Registro",
-    //   selector: (row) => row.createdAt as any,
-    //   sortable: true,
-    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-    //   width: "250px",
-    // },
-    // {
-    //   id: 'payment',
-    //   name: 'Acciones',
-    //   button: true,
-    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
-    //   center: true,
-    //   cell(row) {
-    //     return (
-    //       <div className="flex flex-1 min-w-[200px] mx-auto">
-    //         <button
-    //           className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
-    //           // onClick={() => onStartPayment(generateCheckoutId)}
-    //           onClick={() => {
-    //             setSelectedDebtById(row.id);
-    //             setDetailsModalOpen(true);
-    //             // console.log("✏️ view =>", selectedRows[0]);
-    //             // viewAction(selectedRows[0].id);
-    //             // console.log("view", selectedRows);
-    //           }}
-    //         >Realizar Pago</button>
-    //       </div>
-    //     );
-    //   },
-    // }
+    {
+      id: "interest",
+      name: "Interés",
+      selector: (row) => row.interest,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "totalAmount",
+      name: "Monto Total",
+      selector: (row) => formatter({ value: row.totalAmount }),
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "140px",
+    },
   ]), []);
 
   useEffect(() => {
     handleSearch();
   }, []);
 
-
   const handleSearch = async () => {
     setIsLoadingSearch(true);
-    // if (auth.profileId === 1) {
-    // const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
-    //   if (formValues[key]) {
-    //     acc[key] = formValues[key];
-    //   }
-    //   return acc;
-    // }, {});
-
-    // const { actionLiquidationType, ...rest } = dataQuery;
-
-    // const params = new URLSearchParams(dataQuery);
-    // const url = `/transaction?${params.toString()}`;
     const url = `/transaction`;
 
     const [error, response] = await to<AxiosResponse<any>>(API.get(url));
@@ -165,7 +197,6 @@ export const DataDataFastsTransactions = () => {
 
               if (!filterBy || filterValue.trim() === '') return;
               await handleSearch();
-              // await new Promise(resolve => setTimeout(resolve, 500));
 
               let keyValue = filterBy;
               let keySubvalue = null;
@@ -247,6 +278,32 @@ export const DataDataFastsTransactions = () => {
         // title={'Transacciones Datafast'}
         />
       </div>
+
+
+      <Modal
+        open={detailModal.isOpen}
+        onToggleModal={detailModal.toggle}
+        closeOnBlur={false}
+      >
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">JSON de Respuesta</h3>
+
+        <textarea
+          readOnly
+          className="w-full h-[400px] p-4 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none resize-none cursor-default"
+        >
+
+          {
+            !!jsonRes && JSON.stringify(JSON.parse(jsonRes), null, 2)
+          }
+        </textarea>
+
+        <div className="flex justify-end mt-4">
+          <button
+            className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
+            onClick={detailModal.onClose}
+          >Cerrar</button>
+        </div>
+      </Modal>
     </>
   )
 }

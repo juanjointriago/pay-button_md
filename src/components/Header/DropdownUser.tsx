@@ -8,7 +8,7 @@ import { FiUser } from "react-icons/fi";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const logout = useAuthStore((state) => state.logoutUser);
+  // const logout = useAuthStore((state) => state.logoutUser);
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
 
