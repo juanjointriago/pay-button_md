@@ -7,6 +7,7 @@ import { SelectorKeys } from "../../pages/Pages/DataTransactions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { formatter } from "../../utils/formatter";
 
 type data = any[];
 type columns = any[];
@@ -159,7 +160,7 @@ export const DataTableGeneric: FC<Props> = ({
           confirmButtonColor: "blue",
         });
       });
-      console.log("edit", selectedRows);
+      // console.log("edit", selectedRows);
     };
 
     const handleViewDetails = () => {
@@ -238,7 +239,9 @@ export const DataTableGeneric: FC<Props> = ({
         <div className="flex items-center gap-x-8">
           {
             showAmount && (
-              <p>Cantidad a paga: <span className="font-semibold">$0.00</span></p>
+              <p>Cantidad a pagar: <span className="font-semibold">{
+                formatter({ value: selectedRows.reduce((acc, row) => acc + row.totalAmount, 0) })
+              }</span></p>
             )
           }
           {viewDetails && (
@@ -260,7 +263,6 @@ export const DataTableGeneric: FC<Props> = ({
   const modal = useRef<any>(null);
   const editModal = useRef<any>(null);
   const detailModal = useRef<any>(null);
-
 
   useEffect(() => {
     form.reset({
