@@ -32,6 +32,7 @@ interface Props {
   payable?: boolean;
   onSearch: any;
   onStartPayment?: any;
+  showAmount?: boolean;
 }
 
 const Export = ({ onExport }) => (
@@ -96,6 +97,7 @@ export const DataTableGeneric: FC<Props> = ({
   deleteAction,
   onSearch,
   onStartPayment,
+  showAmount = false,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -232,37 +234,24 @@ export const DataTableGeneric: FC<Props> = ({
             Eliminar
           </button>
         )}
-        {viewDetails && (
-          <button
-            className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
-            key="viewdetails"
-            onClick={handleViewDetails}
-          >
-            {viewTitle}
-          </button>
 
-          // <PaymentButton 
-          //   onStartPayment={(onStartPayment) => {
-          //     // handleViewDetails();
-          //     // return;
-          //     if(selectedRows.length > 1) return;
-          //     const paymentValues = {
-          //       customerId: user.id,
-          //       debtId: selectedRows[0].id,
-          //     }
-          //     onStartPayment(paymentValues);
-          //   }}
-          // />
-        )}
-        {/* {viewDetails && (
-          <button
-            className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
-            key="viewdetails"
-            onClick={handleViewDetails}
-          >
-            {viewTitle}
-          </button>
-        )} */}
+        <div className="flex items-center gap-x-8">
+          {
+            showAmount && (
+              <p>Cantidad a paga: <span className="font-semibold">$0.00</span></p>
+            )
+          }
+          {viewDetails && (
+            <button
+              className="rounded-md bg-danger px-3 py-2 font-medium text-white hover:bg-opacity-90"
+              key="viewdetails"
+              onClick={handleViewDetails}
+            >
+              {viewTitle}
+            </button>
+          )}
+        </div>
+        
       </div>
     );
   }, [data, selectedRows, toggleCleared])

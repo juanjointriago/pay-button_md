@@ -177,24 +177,6 @@ export const DataDebt = () => {
     }
   ];
 
-  // useEffect(() => {
-  //   var wpwlOptions = {
-  //     onReady: function (onReady) {
-  //       var datafast = '<br/><br/><img src=' + '"https://www.datafast.com.ec/images/verified.png" style=' + '"display:block;margin:0 auto; width:100%;">';
-  //       $('form.wpwl-form-card').find('.wpwl-button').before(datafast);
-  //     },
-  //     style: "card",
-  //     locale: "es",
-  //     maskCvv: true,
-  //     brandDetection: true,
-  //     labels: {
-  //       cvv: "CVV",
-  //       cardHolder: "Nombre(Igual que en la tarjeta)"
-  //     }
-  //   }
-
-  // }, []);
-
   const handleSearch = async (formValues) => {
     setIsLoadingSearch(true);
     // if (auth.profileId === 1) {
@@ -240,8 +222,6 @@ export const DataDebt = () => {
       customerId: auth.id,
       debtIds: selectedRows.map(row => row.id)
     }
-
-    console.log({paymentValues});
     
     generateCheckoutId(paymentValues);
   };
@@ -307,6 +287,7 @@ export const DataDebt = () => {
         </div>}
 
         <DataTableGeneric
+          showAmount
           data={debts}
           onSearch={handleSearch}
           onStartPayment={(rows) =>{

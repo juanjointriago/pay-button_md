@@ -123,14 +123,6 @@ export const DataDataFastsTransactions = () => {
       width: "80px",
     },
     {
-      id: "authorization",
-      name: "Auth.",
-      selector: (row) => row.authorization,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "80px",
-    },
-    {
       id: "amount",
       name: "Monto",
       selector: (row) => formatter({ value: row.amount }),
@@ -138,22 +130,22 @@ export const DataDataFastsTransactions = () => {
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
-    {
-      id: "interest",
-      name: "Interés",
-      selector: (row) => row.interest,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
-    },
-    {
-      id: "totalAmount",
-      name: "Monto Total",
-      selector: (row) => formatter({ value: row.totalAmount }),
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "140px",
-    },
+    // {
+    //   id: "interest",
+    //   name: "Interés",
+    //   selector: (row) => row.interest,
+    //   sortable: true,
+    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+    //   width: "100px",
+    // },
+    // {
+    //   id: "totalAmount",
+    //   name: "Monto Total",
+    //   selector: (row) => formatter({ value: row.totalAmount }),
+    //   sortable: true,
+    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+    //   width: "140px",
+    // },
   ]), []);
 
   useEffect(() => {
