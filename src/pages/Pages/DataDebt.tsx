@@ -13,6 +13,7 @@ import { AxiosResponse } from "axios";
 import API from "../api/api";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import { usePayment } from "../../hooks/usePayment";
+import { formatter } from "../../utils/formatter";
 
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);
@@ -33,65 +34,47 @@ export const DataDebt = () => {
   // const useRef(null);
 
   const columns: TableColumn<DebtInterface>[] = [
-    // {
-    //   id: 'actions',
-    //   name: 'Acciones',
-    //   button: true,
-    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
-    //   center: false,
-    //   cell(row) {
-    //     return (
-    //       <div className="flex flex-1 min-w-[200px] mx-auto">
-    //         <button
-    //           className="rounded px-4 py-2 font-bold text-blue-950 hover:bg-blue-700/15 flex mx-auto"
-    //           onClick={() => {
-    //             setSelectedDebtById(row.id);
-    //             setDetailsModalOpen(true);
-    //           }}
-    //         >Realizar Pago</button>
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      id: 'year',
+      name: "AÑO",
+      selector: (row) => row.year,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
     {
       id: "localCode",
       name: "Código Local",
       selector: (row) => row.localCode,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "150px",
+      width: "180px",
     },
-    {
-      id: "identification",
-      name: "ID Cliente",
-      selector: (row) => row.identification,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "120px",
-    },
+    // {
+    //   id: "identification",
+    //   name: "ID Cliente",
+    //   selector: (row) => row.identification,
+    //   sortable: true,
+    //   style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+    //   width: "120px",
+    // },
     {
       id: "titleName",
       name: "Detalle",
       selector: (row) => row.titleName,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "200px",
-    },
-    {
-      id: "totalAmount",
-      name: "Total",
-      selector: (row) => row.totalAmount,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
-    },
-    {
-      id: "discount",
-      name: "Dsto",
-      selector: (row) => row.discount,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
+      width: "300px",
+      cell(row) {
+        return (
+          <div className="flex flex-1 min-w-[300px] mx-auto">
+            <div className="flex flex-col">
+              <p className="text-sm">{row.titleName}</p>
+              {/* <div className="text-xs text-gray-500">{row.identification}</div> */}
+            </div>
+          </div>
+        );
+      },
     },
     {
       id: "interest",
@@ -102,9 +85,25 @@ export const DataDebt = () => {
       width: "100px",
     },
     {
-      id: 'year',
-      name: "AÑO",
-      selector: (row) => row.year,
+      id: 'surcharge',
+      name: "Recargo",
+      selector: (row) => row.surcharge,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "120px",
+    },
+    {
+      id: "discount",
+      name: "Dsto",
+      selector: (row) => row.discount,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "totalAmount",
+      name: "Total",
+      selector: (row) => formatter({ value: row.totalAmount }),
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
@@ -136,7 +135,7 @@ export const DataDebt = () => {
 
     {
       id: 'plotId',
-      name: "PLOT",
+      name: "Predio",
       selector: (row) => row.plotId,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
@@ -151,26 +150,9 @@ export const DataDebt = () => {
       width: "200px",
     },
     {
-      id: 'surcharge',
-      name: "Sur Charge",
-      selector: (row) => row.surcharge,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "120px",
-    },
-
-    {
-      id: 'debtDate',
-      name: "Fecha Max Pago",
-      selector: (row) => row.debtDate as any,
-      sortable: true,
-      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "150px",
-    },
-    {
       id: 'createdAt',
       name: "Fecha de Registro",
-      selector: (row) => row.createdAt,
+      selector: (row) => row.createdAt.toString(),
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "150px",
@@ -215,12 +197,12 @@ export const DataDebt = () => {
     setIsLoadingSearch(false);
   }
 
-  const handlePay = async () => {
+  const handlePay = async (rows: any) => {
     // console.log(rows);
     setDetailsModalOpen(false);
     const paymentValues = {
       customerId: auth.id,
-      debtIds: selectedRows.map(row => row.id)
+      debtIds: rows.map(row => row.id)
     }
     
     generateCheckoutId(paymentValues);
@@ -249,19 +231,6 @@ export const DataDebt = () => {
               setFilterBy(value);
             }}
           >
-            {/* {users.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.username}
-            </option>
-          ))} */}
-
-            {/* {
-              columns.map(column => (
-                <option key={column.id} value={column.id as string}>
-                  {column.name}
-                </option>
-              ))
-            } */}
             {
               selectOptions.map(column => (
                 <option key={column.id} value={column.id}>
@@ -291,8 +260,10 @@ export const DataDebt = () => {
           data={debts}
           onSearch={handleSearch}
           onStartPayment={(rows) =>{
-            setDetailsModalOpen(true);
-            setSelectedRows(rows);
+            // setDetailsModalOpen(true);
+            // setSelectedRows(rows);
+            
+            handlePay(rows);
           }}
           columns={columns}
           selectableRows
@@ -336,9 +307,9 @@ export const DataDebt = () => {
               <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
               <div>Detalles del registro</div>
 
-              <ViewDebtForm 
+              {/* <ViewDebtForm 
                 onStartPayment={handlePay}
-              />
+              /> */}
 
               <button
                 onClick={() => setDetailsModalOpen(false)}

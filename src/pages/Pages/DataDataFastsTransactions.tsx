@@ -15,7 +15,7 @@ import { formatter } from "../../utils/formatter";
 
 export const DataDataFastsTransactions = () => {
   const [data, setData] = useState([]);
-  const [filterBy, setFilterBy] = useState('debt.titleName');
+  const [filterBy, setFilterBy] = useState('state');
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const detailModal = useDisclosure();
@@ -218,7 +218,9 @@ export const DataDataFastsTransactions = () => {
               }}
             >
               {
-                columns.map(column => (
+                columns
+                  .filter(column => column.id !== 'actions')
+                  .map(column => (
                   <option key={column.id} value={column.id}>
                     {column.name}
                   </option>
