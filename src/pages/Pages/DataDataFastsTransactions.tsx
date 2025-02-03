@@ -12,6 +12,15 @@ import { MdOutlineCleaningServices } from "react-icons/md";
 import { useDisclosure } from "../../hooks/useDisclosure";
 import { Modal } from "../../components/shared/Modal";
 import { formatter } from "../../utils/formatter";
+import { useForm } from "react-hook-form";
+
+interface IFilterForm {
+  lot: string;
+  dateStart: string;
+  dateEnd: string;
+  state: string;
+  type: string;
+}
 
 export const DataDataFastsTransactions = () => {
   const [data, setData] = useState([]);
@@ -20,6 +29,16 @@ export const DataDataFastsTransactions = () => {
   const [filterValue, setFilterValue] = useState('');
   const detailModal = useDisclosure();
   const [jsonRes, setJsonRes] = useState('');
+
+  const filterForm = useForm<IFilterForm>({
+    defaultValues: {
+      lot: '',
+      dateStart: '',
+      dateEnd: '',
+      state: 'Todos',
+      type: 'DB'
+    },
+  });
 
   const columns: TableColumn<IDatafastTransaction>[] = useMemo(() => ([
     {
@@ -170,6 +189,29 @@ export const DataDataFastsTransactions = () => {
     setIsLoadingSearch(false);
   }
 
+  const onSubmit = async (data: IFilterForm) => {
+    setIsLoadingSearch(true);
+    if (data.state === 'Todos') delete data.state;
+    if(data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`
+    const filterData = Object.keys(data).reduce((acc, key) => data[key]?.trim() ? { ...acc, [key]: data[key] } : acc, {})
+
+    const searchParams = new URLSearchParams(filterData);
+    const url = `/transaction`;
+    const [error, response] = await to<AxiosResponse<any>>(API.get(url, { params: searchParams }));
+
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error", // 'Oops...',
+        text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+        confirmButtonColor: "blue",
+      });
+    } else {
+      setData(response.data.data);
+    }
+    setIsLoadingSearch(false);
+  }
+
   return (
     <>
       <ScreenLoader isLoading={isLoadingSearch} />
@@ -179,79 +221,110 @@ export const DataDataFastsTransactions = () => {
         <h1 className="font-semibold text-2xl text-center">Transacciones Realizadas</h1>
 
         <div>
-          <label className="text-gray-900 block text-sm font-medium dark:text-white whitespace-nowrap items-center">
-            Filtrar por:
-          </label>
+          <form className="flex flex-col"
+            onSubmit={filterForm.handleSubmit(onSubmit)}
+          // onSubmit={async (e) => {
+          //   e.preventDefault();
 
-          <form className="flex"
-            onSubmit={async (e) => {
-              e.preventDefault();
+          //   if (!filterBy || filterValue.trim() === '') return;
+          //   await handleSearch();
 
-              if (!filterBy || filterValue.trim() === '') return;
-              await handleSearch();
+          //   let keyValue = filterBy;
+          //   let keySubvalue = null;
+          //   if (filterBy.includes('.')) {
+          //     const key = filterBy.split('.')[0];
+          //     const subvalue = filterBy.split('.')[1];
+          //     keyValue = key;
+          //     keySubvalue = subvalue;
+          //   }
 
-              let keyValue = filterBy;
-              let keySubvalue = null;
-              if (filterBy.includes('.')) {
-                const key = filterBy.split('.')[0];
-                const subvalue = filterBy.split('.')[1];
-                keyValue = key;
-                keySubvalue = subvalue;
-              }
-
-              setData(data => data.filter(row => {
-                if (keySubvalue) {
-                  return row[keyValue][keySubvalue].toString().toLowerCase().includes(filterValue.toLowerCase());
-                }
-                return row[keyValue].toString().toLowerCase().includes(filterValue.toLowerCase());
-              }));
-            }}
+          //   setData(data => data.filter(row => {
+          //     if (keySubvalue) {
+          //       return row[keyValue][keySubvalue].toString().toLowerCase().includes(filterValue.toLowerCase());
+          //     }
+          //     return row[keyValue].toString().toLowerCase().includes(filterValue.toLowerCase());
+          //   }));
+          // }}
           >
-            <select
-              id="type"
-              className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-1/5 rounded-lg rounded-r-none border border-r-0 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              value={filterBy}
-              onChange={(e: any) => {
-                const value = e.target.value;
-                setFilterBy(value);
-                setFilterValue('');
-              }}
-            >
-              {
-                columns
-                  .filter(column => column.id !== 'actions')
-                  .map(column => (
-                  <option key={column.id} value={column.id}>
-                    {column.name}
-                  </option>
-                ))
-              }
-            </select>
+            <div className="grid grid-cols-2 gap-x-12 gap-y-4 w-full px-14 mt-4">
+              <label>
+                Lote
+                <input
+                  className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder={`Buscar por lote`}
+                  {...filterForm.register('lot')}
+                />
+              </label>
 
-            <input
-              className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg rounded-l-none border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              placeholder={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
-              value={filterValue}
-              onChange={(e: any) => {
-                const value = e.target.value;
-                setFilterValue(value);
-              }}
-            />
+              <label>
+                Estado
+                <select
+                  id="type"
+                  className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  {...filterForm.register('state')}
+                >
+                  {
+                    ['Todos', 'Procesado', 'Rechazado'].map(state => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))
+                  }
+                </select>
+              </label>
 
-            <button
-              type="submit"
-              className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2 ml-4"
-            >
-              Buscar <FaSearch />
-            </button>
+              <label>
+                Desde
+                <input
+                  className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder={`Buscar por lote`}
+                  type="date"
+                  {...filterForm.register('dateStart')}
+                />
+              </label>
 
-            <button
-              type="button"
-              className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2 ml-4"
-              onClick={handleSearch}
-            >
-              Limpiar <MdOutlineCleaningServices />
-            </button>
+              <label>
+                Hasta
+                <input
+                  className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder={`Buscar por lote`}
+                  type="date"
+                  {...filterForm.register('dateEnd')}
+                />
+              </label>
+
+              {/* <input
+                className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg rounded-l-none border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
+                value={filterValue}
+                onChange={(e: any) => {
+                  const value = e.target.value;
+                  setFilterValue(value);
+                }}
+              /> */}
+            </div>
+
+
+
+            <div className="flex mt-8 ml-auto pr-12 mb-4">
+              <button
+                type="submit"
+                className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2 ml-4"
+              >
+                Buscar <FaSearch />
+              </button>
+
+              <button
+                type="button"
+                className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2 ml-4"
+                onClick={() => {
+                  filterForm.reset();
+                  handleSearch();
+                }}
+              >
+                Limpiar <MdOutlineCleaningServices />
+              </button>
+            </div>
           </form>
         </div>
 
