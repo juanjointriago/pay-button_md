@@ -87,7 +87,7 @@ export const DataTransactions = () => {
       selector: (row) => row.debt.titleName,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
+      width: "150px",
     },
     {
       id: "observation",
@@ -119,7 +119,7 @@ export const DataTransactions = () => {
       selector: (row) => row.cardNumber,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
+      width: "170px",
     },
     {
       id: "cardHolderName",
@@ -127,7 +127,7 @@ export const DataTransactions = () => {
       selector: (row) => row.cardHolderName,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
+      width: "140px",
     },
     {
       id: "state",
