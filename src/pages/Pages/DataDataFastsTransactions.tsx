@@ -20,6 +20,7 @@ interface IFilterTransactionForm {
   dateEnd: string;
   state: string;
   type: string;
+  trxId: string;
 }
 
 export const DataDataFastsTransactions = () => {
@@ -36,7 +37,8 @@ export const DataDataFastsTransactions = () => {
       dateStart: '',
       dateEnd: '',
       state: 'Todos',
-      type: 'DB'
+      type: 'DB',
+      trxId: ''
     },
   });
 
@@ -99,7 +101,7 @@ export const DataDataFastsTransactions = () => {
       selector: (row) => row.trxId,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "180px",
+      width: "288px",
     },
     {
       id: "responseText",
@@ -192,7 +194,7 @@ export const DataDataFastsTransactions = () => {
   const onSubmit = async (data: IFilterTransactionForm) => {
     setIsLoadingSearch(true);
     if (data.state === 'Todos') delete data.state;
-    if(data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`
+    if(data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`;
     const filterData = Object.keys(data).reduce((acc, key) => data[key]?.trim() ? { ...acc, [key]: data[key] } : acc, {})
 
     const searchParams = new URLSearchParams(filterData);
@@ -246,7 +248,16 @@ export const DataDataFastsTransactions = () => {
           //   }));
           // }}
           >
-            <div className="grid grid-cols-2 gap-x-12 gap-y-4 w-full px-14 mt-4">
+            <div className="grid grid-cols-3 gap-x-12 gap-y-4 w-full px-14 mt-4">
+              <label>
+                Lote
+                <input
+                  className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder={`Buscar por Id Trx`}
+                  {...filterForm.register('trxId')}
+                />
+              </label>
+              
               <label>
                 Lote
                 <input
