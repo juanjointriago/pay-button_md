@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../../stores/auth/auth.store";
-// import { useDebts } from "../../stores/debts/dbts.store";
 import { TableColumn } from "react-data-table-component";
-import { TransactionInterface } from "../../interfaces/transactions.interface";
+import { IDonePayment } from "../../interfaces/transactions.interface";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import API from "../api/api";
@@ -45,14 +44,14 @@ export const DataTransactions = () => {
   // const [filterBy, setFilterBy] = useState('localCode');
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
 
-  const columns: TableColumn<TransactionInterface>[] = [
+  const columns: TableColumn<IDonePayment>[] = [
     {
       id: 'actions',
       name: 'Acciones',
       button: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
       center: false,
-      cell(row) {
+      cell() {
         return (
           <div className="flex flex-1 min-w-[200px] mx-auto">
             <button
@@ -66,43 +65,83 @@ export const DataTransactions = () => {
       },
     },
     {
-      id: "localCode",
-      name: "Código Local",
-      selector: (row) => row.localCode,
+      id: "transaction.type",
+      name: "Tipo de Transacción",
+      selector: (row) => row.transaction.type,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "250px",
+      width: "150px",
     },
 
     {
-      id: "totalAmount",
-      name: "Total",
-      selector: (row) => row.totalAmount,
+      id: "debt.year",
+      name: "Año de la deuda",
+      selector: (row) => row.debt.year,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "80px",
+    },
+    {
+      id: "debt.titleName",
+      name: "Nombre de la deuda",
+      selector: (row) => row.debt.titleName,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
     {
-      id: "discount",
-      name: "Dsto",
-      selector: (row) => row.discount,
+      id: "observation",
+      name: "Observaciones",
+      selector: (row) => row.observation,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
     {
-      id: "interest",
-      name: "Interés",
-      selector: (row) => row.interest,
+      id: "receiptNumber",
+      name: "Recibo Nro.",
+      selector: (row) => row.receiptNumber,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "amount",
+      name: "Monto",
+      selector: (row) => row.amount,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "cardNumber",
+      name: "Tarjeta",
+      selector: (row) => row.cardNumber,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "cardHolderName",
+      name: "Propietario",
+      selector: (row) => row.cardHolderName,
+      sortable: true,
+      style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
+      width: "100px",
+    },
+    {
+      id: "state",
+      name: "Estado",
+      selector: (row) => row.transaction.state,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "100px",
     },
 
     {
-      id: "createdAt",
-      name: "Fecha de Registro",
-      selector: (row) => row.createdAt as any,
+      id: "transaction.executionDate",
+      name: "Fecha de Ejecución",
+      selector: (row) => row.transaction.executionDate as any,
       sortable: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "250px",

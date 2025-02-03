@@ -14,7 +14,7 @@ import { Modal } from "../../components/shared/Modal";
 import { formatter } from "../../utils/formatter";
 import { useForm } from "react-hook-form";
 
-interface IFilterForm {
+interface IFilterTransactionForm {
   lot: string;
   dateStart: string;
   dateEnd: string;
@@ -24,13 +24,13 @@ interface IFilterForm {
 
 export const DataDataFastsTransactions = () => {
   const [data, setData] = useState([]);
-  const [filterBy, setFilterBy] = useState('state');
+  // const [filterBy, setFilterBy] = useState('state');
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-  const [filterValue, setFilterValue] = useState('');
+  // const [filterValue, setFilterValue] = useState('');
   const detailModal = useDisclosure();
   const [jsonRes, setJsonRes] = useState('');
 
-  const filterForm = useForm<IFilterForm>({
+  const filterForm = useForm<IFilterTransactionForm>({
     defaultValues: {
       lot: '',
       dateStart: '',
@@ -189,7 +189,7 @@ export const DataDataFastsTransactions = () => {
     setIsLoadingSearch(false);
   }
 
-  const onSubmit = async (data: IFilterForm) => {
+  const onSubmit = async (data: IFilterTransactionForm) => {
     setIsLoadingSearch(true);
     if (data.state === 'Todos') delete data.state;
     if(data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`
