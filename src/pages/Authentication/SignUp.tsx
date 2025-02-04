@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
 import { useForm } from 'react-hook-form';
@@ -42,6 +42,7 @@ const signUpSchema = z.object({
 type SignUpForm = z.infer<typeof signUpSchema>;
 
 const SignUp: React.FC = () => {
+  const navigate = useNavigate();
   const form = useForm<SignUpForm>({
     defaultValues: {
       name: '',
@@ -71,12 +72,14 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    Swal.fire({
+    const res = await Swal.fire({
       icon: "success",
       title: "¡Bienvenido!", // 'Oops...',
       text: "Se envió un correo de confirmación", // 'Please try again!',
       confirmButtonColor: "blue",
     });
+
+    if(res.isConfirmed || res.isDismissed) navigate('/auth/signin');
   };
   
   return (
