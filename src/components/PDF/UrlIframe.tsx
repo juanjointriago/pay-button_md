@@ -64,7 +64,7 @@ export const UrlIframe: FC<Props> = ({
             ) : (
               <PDFViewer width={600} height={500}>
                 <Document>
-                  <Page size={"A6"}>
+                  <Page size={"A4"}>
                     <View style={styles.container}>
                       <Image src={Logo}  />
                       <FieldPDF
