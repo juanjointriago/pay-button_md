@@ -31,9 +31,10 @@ interface Props {
   deletable?: boolean;
   deleteAction?: any;
   payable?: boolean;
-  onSearch: any;
+  onSearch?: any;
   onStartPayment?: any;
   showAmount?: boolean;
+  onAdd?: () => void;
 }
 
 const Export = ({ onExport }) => (
@@ -99,6 +100,7 @@ export const DataTableGeneric: FC<Props> = ({
   onSearch,
   onStartPayment,
   showAmount = false,
+  onAdd
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -363,7 +365,10 @@ export const DataTableGeneric: FC<Props> = ({
   const addButton = (
     <button
       ref={addRef}
-      onClick={() => setModalOpen(!modalOpen)}
+      onClick={() => {
+        if(onAdd) return onAdd();
+        setModalOpen(!modalOpen)
+      }}
       className="rounded-md bg-primary px-3 py-2 font-medium text-white hover:bg-opacity-90"
     >
       {addTitle ?? "Nuevo registro"}
@@ -376,7 +381,7 @@ export const DataTableGeneric: FC<Props> = ({
   return (
     <>
       <div className="container mx-auto flex justify-center items-center">
-        {filterField && (
+        {filterField && onSearch && (
           <form
             className="flex items-center w-full gap-4"
             onSubmit={form.handleSubmit(onSearch)}

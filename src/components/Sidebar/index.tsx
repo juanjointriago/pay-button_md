@@ -417,7 +417,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               </NavLink>
                             </li>
                           )}
-                          {  <li>
+                          {/* {  <li>
                             <NavLink
                               to="/home/roles"
                               className={({ isActive }) =>
@@ -427,7 +427,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Roles
                             </NavLink>
-                          </li>}
+                          </li>} */}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

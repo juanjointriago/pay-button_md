@@ -17,6 +17,7 @@ import { DataSetupDevice } from "../pages/Pages/DataSetupDevice";
 import SignUp from "../pages/Authentication/SignUp";
 import { ProfilePage } from "../pages/Pages/ProfilePage";
 import { Logout } from "../pages/Pages/Logout";
+import { CreateOrEditProfilePage } from "../pages/Pages/profiles/CreateOrEditProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -62,9 +63,17 @@ export const router = createBrowserRouter([
             element: <DataProfile />,
           },
           {
-            path: "roles",
-            element: <DataRoles />,
+            path: "profiles/create",
+            element: <CreateOrEditProfilePage />,
           },
+          {
+            path: "profiles/update/:id",
+            element: <CreateOrEditProfilePage />,
+          },
+          // {
+          //   path: "roles",
+          //   element: <DataRoles />,
+          // },
           {
             path: "profile",
             element: <ProfilePage />,

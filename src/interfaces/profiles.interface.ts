@@ -1,41 +1,48 @@
 export interface ResponseProfilesInterface {
-    msg:     string;
-    error:   boolean;
+    msg: string;
+    error: boolean;
     records: number;
-    data:    ProfileInterface[];
+    data: ProfileInterface[];
 }
 export interface ReponseProfileInterface {
-    msg:     string;
-    error:   boolean;
+    msg: string;
+    error: boolean;
     records: number;
-    data:    ProfileInterface | ProfileAddInterface;
+    data: ProfileInterface | ProfileAddInterface;
 }
 
 
 export interface ProfileInterface {
-    id:          number;
-    name:        string;
+    id: number;
+    name: string;
     description: string;
-    active:      number;
-    roles:       RoleProfileInterface[];
+    active: number;
+    entities: EntityInterface[];
 }
 
+export interface EntityInterface {
+    id: number;
+    name: string;
+    description: string;
+    active: number;
+    roles: RoleProfileInterface[];
+}
 
 export interface RoleProfileInterface {
-    id:          number;
-    profileId:   number;
-    rolesId:      number;
-    assignedAt?:  Date;
+    id: number;
+    profileId: number;
+    rolesId: number;
+    assignedAt?: Date;
 }
 
 export interface ProfileAddInterface {
-    name:        string;
+    name: string;
     description: string;
 
 
 }
 
+export type VALID_ROLES = 'ALLOW_READ' | 'ALLOW_UPDATE' | 'ALLOW_CREATE' | 'ALLOW_DELETE' | 'ALLOW_PAYMENT';
 
-
-
+export type VALID_ENTITIES = 'STADISTICS' | 'DEBTS' | 'PARAMETERS' | 'DATAFAST' | 'USERS' | 'PROFILES';
 
