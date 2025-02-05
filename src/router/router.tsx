@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
         element: <DefaultLayout />,
         children: [
           {
-            path: '',
+            path: "",
             element: <DataDashboard />,
           },
           {
@@ -70,9 +70,9 @@ export const router = createBrowserRouter([
             element: <ProfilePage />,
           },
           {
-            path: '*',
-            element: <Navigate to="/" />
-          }
+            path: "*",
+            element: <Navigate to="/" />,
+          },
         ],
       },
       {
@@ -99,5 +99,5 @@ export const router = createBrowserRouter([
   {
     path: "logout",
     element: <Logout />,
-  }
+  },
 ]);
