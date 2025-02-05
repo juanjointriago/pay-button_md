@@ -7,6 +7,7 @@ import { ProfileService } from "../../services/Profile.service";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { AuthService } from "../../services/Auth.service";
+import Swal from "sweetalert2";
 
 export interface ProfileStore {
   profiles: ProfileInterface[];
@@ -75,11 +76,13 @@ const profilesAPI: StateCreator<
     try {
       await ProfileService.deleteProfile(id);
       set({ profiles: get().profiles.filter((p) => p.id !== id) });
+      Swal.fire({ icon: 'success', title: 'Perfil eliminado', text: 'Perfil eliminado' });
     } catch (error) {
       console.log("Error deleting profile data", error);
       if (error.response.status === 401) {
         AuthService.logout();
       }
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al eliminar perfil' });
     }
   },
 });

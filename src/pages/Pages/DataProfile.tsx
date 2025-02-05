@@ -2,10 +2,14 @@ import { TableColumn } from "react-data-table-component";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { ProfileInterface } from "../../interfaces/profiles.interface";
 import { useProfileStore } from "../../stores/profile/profile.store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AddProfileForm } from "../../components/Forms/AddProfileForm";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { ScreenLoader } from "../../components/shared/ScreenLoader";
+import { Modal } from "../../components/shared/Modal";
+import { useDisclosure } from "../../hooks/useDisclosure";
 
 export const DataProfile = () => {
   const getAllProfiles = useProfileStore((state) => state.getProfiles);
@@ -13,6 +17,11 @@ export const DataProfile = () => {
   const profiles = useProfileStore((state) => state.profiles);
   const editProfile = useProfileStore((state) => state.editProfile);
   const deleteProfile = useProfileStore((state) => state.deleteProfile);
+  const deleteIdRef = useRef(null);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteModal = useDisclosure();
+
 
   const navigate = useNavigate();
 
@@ -45,7 +54,10 @@ export const DataProfile = () => {
               <button
                 className="rounded text-rose-400 px-2 py-2 text-lg hover:bg-rose-800/10"
                 key="delete"
-              // onClick={() => deleteProfile(row.id)}
+                onClick={async () => {
+                  deleteModal.onOpen();
+                  deleteIdRef.current = row.id;
+                }}
               >
                 <FiTrash2 />
               </button>
@@ -85,25 +97,68 @@ export const DataProfile = () => {
   ];
 
   return (
-    <div className="container flex flex-col gap-5 md:gap-7 2xl:gap-10">
-      <DataTableGeneric
-        data={profiles.filter((p) => !!p)}
-        columns={columns}
-        addTitle="Agregar Perfil"
-        onAdd={() => {
-          setSelectedProfileById(null);
-          navigate('/home/profiles/create')
-        }}
-        addForm={<AddProfileForm />}
-        editable
-        editAction={editProfile}
-        // editForm={<AddProfileForm />}
-        deletable
-        deleteAction={deleteProfile}
-        // selectableRows={true}
-        filterField="name"
-        title="Perfiles "
-      />
-    </div>
+    <>
+      {
+        <ScreenLoader isLoading={isDeleting} />
+      }
+      <div className="container flex flex-col gap-5 md:gap-7 2xl:gap-10">
+        <DataTableGeneric
+          data={profiles.filter((p) => !!p)}
+          columns={columns}
+          addTitle="Agregar Perfil"
+          onAdd={() => {
+            setSelectedProfileById(null);
+            navigate('/home/profiles/create')
+          }}
+          addForm={<AddProfileForm />}
+          editable
+          editAction={editProfile}
+          // editForm={<AddProfileForm />}
+          deletable
+          deleteAction={deleteProfile}
+          // selectableRows={true}
+          filterField="name"
+          title="Perfiles "
+        />
+      </div>
+
+
+      <Modal
+        open={deleteModal.isOpen}
+        onToggleModal={deleteModal.toggle}
+      >
+        <div className="w-full">
+          <h1 className="text-title-lg font-semibold text-black dark:text-white">
+            Eliminar Perfil
+          </h1>
+
+          <p className="text-title-sm font-medium text-black dark:text-white mb-4">
+            ¿Está seguro de que desea eliminar el perfil?
+          </p>
+
+          <div className="flex justify-between w-full px-12">
+            <button
+              className="rounded-md bg-gray/60 hover:bg-gray px-3 py-2 font-medium text-black/70 hover:bg-opacity-90 flex items-center gap-2"
+              onClick={deleteModal.onClose}
+            >
+              Cancelar
+            </button>
+
+            <button
+              className="rounded-md bg-rose-500 px-3 py-2 font-medium text-white hover:bg-opacity-90 flex items-center gap-2"
+              onClick={async () => {
+                deleteModal.onClose();
+                setIsDeleting(true);
+                await deleteProfile(deleteIdRef.current);
+                setIsDeleting(false);
+              }}
+            >
+              Eliminar
+              <FiTrash2 />
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
