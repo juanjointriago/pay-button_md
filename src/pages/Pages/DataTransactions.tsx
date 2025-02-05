@@ -8,6 +8,7 @@ import API from "../api/api";
 import { to } from "../../utils/to";
 import { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
+import { UrlIframe } from "../../components/PDF/UrlIframe";
 
 export enum SelectorKeys {
   'CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS' = '1',
@@ -51,15 +52,10 @@ export const DataTransactions = () => {
       button: true,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left", width: "200px" },
       center: false,
-      cell() {
+      cell(row) {
         return (
           <div className="flex flex-1 min-w-[200px] mx-auto">
-            <button
-              className="rounded px-4 py-2 font-bold text-rose-800 hover:bg-rose-700/15 flex mx-auto"
-              onClick={() => {
-                //TODO: AQUI VA LA LOGICA DEL PDF
-              }}
-            >Ver PDF</button>
+           <UrlIframe title={`Orden Nro :${row.transaction.order}`} errorMsg="" src={row}/>
           </div>
         );
       },
