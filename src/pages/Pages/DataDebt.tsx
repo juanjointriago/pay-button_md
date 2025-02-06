@@ -14,18 +14,20 @@ import API from "../api/api";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import { usePayment } from "../../hooks/usePayment";
 import { formatter } from "../../utils/formatter";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { isAuthorized } from "../../utils/authorization";
 
 export const DataDebt = () => {
   // const users = useUserStore((state) => state.users);
   // const debts = useDebts((state) => state.debts);
   // const selectedDebt = useDebts((state) => state.selectedDebt);
   const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
-  const auth = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   // const [filterBy, setFilterBy] = useState('localCode');
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
-  const [selectedRows, setSelectedRows] = useState([]);
+  // const [selectedRows, setSelectedRows] = useState([]);
 
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [filterBy, setFilterBy] = useState(SelectorKeys["CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS"]);
@@ -201,12 +203,15 @@ export const DataDebt = () => {
     // console.log(rows);
     setDetailsModalOpen(false);
     const paymentValues = {
-      customerId: auth.id,
+      customerId: user.id,
       debtIds: rows.map(row => row.id)
     }
     
     generateCheckoutId(paymentValues);
   };
+  
+
+  if (!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_READ_DEBTS" })) return <NoAuthorized />;
 
 
   return (
@@ -260,9 +265,7 @@ export const DataDebt = () => {
           data={debts}
           onSearch={handleSearch}
           onStartPayment={(rows) =>{
-            // setDetailsModalOpen(true);
-            // setSelectedRows(rows);
-            
+            if(!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_PAYMENT" })) return Swal.fire("Error", "No tienes permisos para realizar esta acción", "error");
             handlePay(rows);
           }}
           columns={columns}
@@ -275,7 +278,7 @@ export const DataDebt = () => {
           searchTitle={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
           title={
-            auth.profileId !== 2 ? <div
+            user.profile.id !== 2 ? <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",

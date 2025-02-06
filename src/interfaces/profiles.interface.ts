@@ -38,11 +38,5 @@ export interface RoleProfileInterface {
 export interface ProfileAddInterface {
     name: string;
     description: string;
-
-
 }
-
-export type VALID_ROLES = 'ALLOW_READ' | 'ALLOW_UPDATE' | 'ALLOW_CREATE' | 'ALLOW_DELETE' | 'ALLOW_PAYMENT';
-
-export type VALID_ENTITIES = 'STADISTICS' | 'DEBTS' | 'PARAMETERS' | 'DATAFAST' | 'USERS' | 'PROFILES';
 

@@ -13,6 +13,9 @@ import { useDisclosure } from "../../hooks/useDisclosure";
 import { Modal } from "../../components/shared/Modal";
 import { formatter } from "../../utils/formatter";
 import { useForm } from "react-hook-form";
+import { isAuthorized } from "../../utils/authorization";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 interface IFilterTransactionForm {
   lot: string;
@@ -24,6 +27,7 @@ interface IFilterTransactionForm {
 }
 
 export const DataDataFastsTransactions = () => {
+  const user = useAuthStore(state => state.user);
   const [data, setData] = useState([]);
   // const [filterBy, setFilterBy] = useState('state');
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
@@ -213,6 +217,9 @@ export const DataDataFastsTransactions = () => {
     }
     setIsLoadingSearch(false);
   }
+
+
+  if (!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_READ_TRANSACTIONS" })) return <NoAuthorized />;
 
   return (
     <>

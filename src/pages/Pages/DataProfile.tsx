@@ -10,8 +10,12 @@ import { useState } from 'react';
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
 import { Modal } from "../../components/shared/Modal";
 import { useDisclosure } from "../../hooks/useDisclosure";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { isAuthorized } from "../../utils/authorization";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 export const DataProfile = () => {
+  const user = useAuthStore(state => state.user);
   const getAllProfiles = useProfileStore((state) => state.getProfiles);
   const setSelectedProfileById = useProfileStore((state) => state.setSelectedProfileById);
   const profiles = useProfileStore((state) => state.profiles);
@@ -40,27 +44,33 @@ export const DataProfile = () => {
         return (
           <div className="flex flex-1 min-w-[320px] mx-auto">
             <div className="flex gap-2">
-              <button
-                className="rounded text-indigo-500 px-2 py-2 text-lg hover:bg-indigo-800/10"
-                key="edit"
-                onClick={() => {
-                  setSelectedProfileById(row.id);
-                  navigate(`/home/profiles/update/${row.id}`)
-                }}
-              >
-                <FiEdit />
-              </button>
+              {
+                isAuthorized(user, { entity: "PROFILES", role: "ALLOW_UPDATE" }) &&
+                <button
+                  className="rounded text-indigo-500 px-2 py-2 text-lg hover:bg-indigo-800/10"
+                  key="edit"
+                  onClick={() => {
+                    setSelectedProfileById(row.id);
+                    navigate(`/home/profiles/update/${row.id}`)
+                  }}
+                >
+                  <FiEdit />
+                </button>
+              }
 
-              <button
-                className="rounded text-rose-400 px-2 py-2 text-lg hover:bg-rose-800/10"
-                key="delete"
-                onClick={async () => {
-                  deleteModal.onOpen();
-                  deleteIdRef.current = row.id;
-                }}
-              >
-                <FiTrash2 />
-              </button>
+              {
+                isAuthorized(user, { entity: "PROFILES", role: "ALLOW_DELETE" }) &&
+                <button
+                  className="rounded text-rose-400 px-2 py-2 text-lg hover:bg-rose-800/10"
+                  key="delete"
+                  onClick={async () => {
+                    deleteModal.onOpen();
+                    deleteIdRef.current = row.id;
+                  }}
+                >
+                  <FiTrash2 />
+                </button>
+              }
             </div>
           </div>
         );
@@ -96,6 +106,8 @@ export const DataProfile = () => {
     },
   ];
 
+  if (!isAuthorized(user, { entity: "PROFILES", role: "ALLOW_READ" })) return <NoAuthorized />;
+
   return (
     <>
       {
@@ -110,11 +122,11 @@ export const DataProfile = () => {
             setSelectedProfileById(null);
             navigate('/home/profiles/create')
           }}
-          addForm={<AddProfileForm />}
-          editable
+          addForm={isAuthorized(user, { entity: "PROFILES", role: "ALLOW_CREATE" }) ? <AddProfileForm /> : undefined}
+          editable={isAuthorized(user, { entity: "PROFILES", role: "ALLOW_UPDATE" })}
           editAction={editProfile}
           // editForm={<AddProfileForm />}
-          deletable
+          deletable={isAuthorized(user, { entity: "PROFILES", role: "ALLOW_DELETE" })}
           deleteAction={deleteProfile}
           // selectableRows={true}
           filterField="name"

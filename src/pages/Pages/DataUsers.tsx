@@ -5,8 +5,12 @@ import { TableColumn } from "react-data-table-component";
 import { UserInterface } from "../../interfaces/user.interface";
 import { AddUserForm } from "../../components/Forms/AddUserForm";
 import { EditUserForm } from "../../components/Forms/EditUserForm";
+import { isAuthorized } from "../../utils/authorization";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 export const DataUsers: FC = () => {
+  const user = useAuthStore((state) => state.user);
   const getAllUsers = useUserStore((state) => state.getUsers);
   const users = useUserStore((state) => state.users);
   const setSelectedUserById = useUserStore((state) => state.setSelectedUserById);
@@ -14,14 +18,14 @@ export const DataUsers: FC = () => {
   const deleteUser = useUserStore((state) => state.deleteUser);
 
   useEffect(() => {
-    if(users.length === 0){
+    if (users.length === 0) {
       getAllUsers();
       //  window.location.href = window.location.href;
     }
   }, [getAllUsers]);
 
   useEffect(() => {
-    if(users.length === 0 )window.location.reload();
+    if (users.length === 0) window.location.reload();
   }, []);
 
   const columns: TableColumn<UserInterface>[] = [
@@ -46,7 +50,7 @@ export const DataUsers: FC = () => {
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
       width: "250px",
     },
-    
+
     {
       name: "Perfil",
       selector: (row) => (row.profileId === 1 ? "Admin" : "User"),
@@ -76,18 +80,20 @@ export const DataUsers: FC = () => {
       width: "200px",
     },
   ];
-// console.log('💩 Usuarios =>',{users})
+
+  if (!isAuthorized(user, { entity: "USERS", role: "ALLOW_READ" })) return <NoAuthorized />;
+
   return (
     <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
-      { <DataTableGeneric
+      {<DataTableGeneric
         onSearch={null}
-        data={users.filter((user)=>!!user)}
+        data={users.filter((user) => !!user)}
         addTitle="Agregar Usuario"
-        addForm={<AddUserForm />}
-        editable
+        addForm={isAuthorized(user, { entity: "USERS", role: "ALLOW_CREATE" }) ? <AddUserForm /> : undefined}
+        editable={isAuthorized(user, { entity: "USERS", role: "ALLOW_UPDATE" })}
         editForm={<EditUserForm />}
         editAction={setSelectedUserById}
-        deletable
+        deletable={isAuthorized(user, { entity: "USERS", role: "ALLOW_DELETE" })}
         deleteAction={deleteUser}
         columns={columns}
         selectableRows

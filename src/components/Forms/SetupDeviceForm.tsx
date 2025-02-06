@@ -7,6 +7,9 @@ import { to } from "../../utils/to";
 import API from "../../pages/api/api";
 import { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
+import { useAuthStore } from "../../stores/auth/auth.store";
+import { isAuthorized } from "../../utils/authorization";
+import { NoAuthorized } from "../shared/NoAuthorized";
 
 const businessSchema = z.object({
   request_entityId: z.string().trim().min(1, { message: 'Este campo no puede estar vacío' }),
@@ -18,6 +21,7 @@ const businessSchema = z.object({
 type Business = z.infer<typeof businessSchema>;
 
 export const SetupDeviceForm = () => {
+  const user = useAuthStore(state => state.user);
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Business>({
@@ -84,6 +88,8 @@ export const SetupDeviceForm = () => {
   // };
 
   const onSubmit = async(formValues: Business) => {
+    if (!isAuthorized(user, { entity: "DATAFAST", role: "ALLOW_UPDATE" })) return Swal.fire("Error", "No tienes permisos para realizar esta acción", "error");
+
     setIsLoading(true);
     const values = Object.keys(formValues).map((key) => {
       return {

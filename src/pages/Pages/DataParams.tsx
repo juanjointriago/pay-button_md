@@ -5,12 +5,16 @@ import { TableColumn } from "react-data-table-component";
 import { DataTableGeneric } from "../../components/DataTables/DataTableGeneric";
 import { AddParamForm } from "../../components/Forms/AddParamForm";
 import { EditParamForm } from "../../components/Forms/EditParamForm";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { isAuthorized } from "../../utils/authorization";
+import { useAuthStore } from "../../stores/auth/auth.store";
 
 export const DataParams: FC = () => {
   const getAllParams = useParamStore((state) => state.getAndSetParams);
   const params = useParamStore((state) => state.params);
   const setSelectedParamById = useParamStore((state) => state.setSelectedParamById);
-  const deleteParam = useParamStore((state) => state.deleteParam)
+  const deleteParam = useParamStore((state) => state.deleteParam);
+  const user = useAuthStore(state => state.user);
 
 
   useEffect(() => {
@@ -47,16 +51,19 @@ export const DataParams: FC = () => {
       width: "max-content",
     },
   ];
+
+  if (!isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_READ" })) return <NoAuthorized />;
+
   return (
     <div className="container flex flex-col gap-5 md:gap-7 2xl:gap-10">
       <DataTableGeneric
-      onSearch={null}
-        addForm={<AddParamForm />}
+        onSearch={null}
+        addForm={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_CREATE" }) ? <AddParamForm /> : undefined}
         addTitle="Crear Parametro"
-        editable
+        editable={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_UPDATE" })}
         editForm={<EditParamForm />}
         editAction={setSelectedParamById}
-        deletable
+        deletable={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_DELETE" })}
         deleteAction={deleteParam}
         data={params}
         columns={columns}

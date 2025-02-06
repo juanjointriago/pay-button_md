@@ -9,6 +9,8 @@ import { to } from "../../utils/to";
 import { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
 import { UrlIframe } from "../../components/PDF/UrlIframe";
+import { NoAuthorized } from "../../components/shared/NoAuthorized";
+import { isAuthorized } from "../../utils/authorization";
 
 export enum SelectorKeys {
   'CONSULTA DEUDA PREDIAL URBANO Y RUSTICOS' = '1',
@@ -36,7 +38,7 @@ export const DataTransactions = () => {
   const [debts, setDebts] = useState([]);
   // const debts = useDebts((state) => state.debts);
   // const setSelectedDebtById = useDebts((state) => state.setSelectedDebtById);
-  const auth = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
   // const [filteredData, setFilteredData] = useState(auth.profileId === 2 ? debts.filter((debt) => debt.customerId === auth.id).filter((debt) => debt.actionLiquidationType === 1) : debts);
 
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
@@ -207,12 +209,14 @@ export const DataTransactions = () => {
     setIsLoadingSearch(false);
   }
 
+  if (!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_READ_PAYMENTS" })) return <NoAuthorized />;
+
   return (
     <>
       <ScreenLoader isLoading={isLoadingSearch} />
 
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
-        {auth.profileId !== 2 && <div className="flex flex-row gap-5 items-center">
+        {user.profile.id !== 2 && <div className="flex flex-row gap-5 items-center">
           <label className="text-gray-900 block text-sm font-medium dark:text-white whitespace-nowrap items-center">
             Filtrar por Usuario
           </label>
@@ -283,7 +287,7 @@ export const DataTransactions = () => {
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."
           onSearch={handleSearch}
           title={
-            auth.profileId !== 2 ? <div
+            user.profile.id !== 2 ? <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
