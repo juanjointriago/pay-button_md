@@ -198,7 +198,7 @@ export const DataDataFastsTransactions = () => {
   const onSubmit = async (data: IFilterTransactionForm) => {
     setIsLoadingSearch(true);
     if (data.state === 'Todos') delete data.state;
-    if(data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`;
+    if (data.dateEnd) data.dateEnd = `${data.dateEnd} 23:59:59`;
     const filterData = Object.keys(data).reduce((acc, key) => data[key]?.trim() ? { ...acc, [key]: data[key] } : acc, {})
 
     const searchParams = new URLSearchParams(filterData);
@@ -257,14 +257,14 @@ export const DataDataFastsTransactions = () => {
           >
             <div className="grid grid-cols-3 gap-x-12 gap-y-4 w-full px-14 mt-4">
               <label>
-                Lote
+                Id Trx
                 <input
                   className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder={`Buscar por Id Trx`}
                   {...filterForm.register('trxId')}
                 />
               </label>
-              
+
               <label>
                 Lote
                 <input
@@ -368,7 +368,6 @@ export const DataDataFastsTransactions = () => {
       <Modal
         open={detailModal.isOpen}
         onToggleModal={detailModal.toggle}
-        closeOnBlur={false}
       >
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">JSON de Respuesta</h3>
 

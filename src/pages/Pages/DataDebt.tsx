@@ -164,37 +164,37 @@ export const DataDebt = () => {
   const handleSearch = async (formValues) => {
     setIsLoadingSearch(true);
     // if (auth.profileId === 1) {
-      const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
-        if (formValues[key]) {
-          acc[key] = formValues[key];
-        }
-        return acc;
-      }, {});
-
-      // const { actionLiquidationType, ...rest } = dataQuery;
-
-      const params = new URLSearchParams(dataQuery);
-      const url = `debt?${params.toString()}`;
-
-      const [error, response] = await to<AxiosResponse<any>>(API.get(url, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }));
-      if (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error", // 'Oops...',
-          text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
-          confirmButtonColor: "blue",
-        });
-      } else {
-        setDebts(response.data.data);
+    const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
+      if (formValues[key]) {
+        acc[key] = formValues[key];
       }
+      return acc;
+    }, {});
+
+    // const { actionLiquidationType, ...rest } = dataQuery;
+
+    const params = new URLSearchParams(dataQuery);
+    const url = `debt?${params.toString()}`;
+
+    const [error, response] = await to<AxiosResponse<any>>(API.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }));
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error", // 'Oops...',
+        text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+        confirmButtonColor: "blue",
+      });
+    } else {
+      setDebts(response.data.data);
+    }
     // } else {
     //   const searchValue = formValues['codigoCatastral'];
 
-      // TODO: CALL API SERVICE FOR CLIENT
+    // TODO: CALL API SERVICE FOR CLIENT
     // }
     setIsLoadingSearch(false);
   }
@@ -206,10 +206,10 @@ export const DataDebt = () => {
       customerId: user.id,
       debtIds: rows.map(row => row.id)
     }
-    
+
     generateCheckoutId(paymentValues);
   };
-  
+
 
   if (!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_READ_DEBTS" })) return <NoAuthorized />;
 
@@ -219,53 +219,37 @@ export const DataDebt = () => {
       <ScreenLoader isLoading={isLoadingSearch || isLoadingCheckout} />
 
       <div className="flex flex-col gap-5 md:gap-7 2xl:gap-10">
-        {<div className="flex flex-row gap-5 items-center">
-          <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white whitespace-nowrap">
-            Filtrar por Usuario
-          </label>
+        {
+          <div className="flex flex-row gap-5 items-center">
+            <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white whitespace-nowrap">
+              Filtrar por Usuario
+            </label>
 
-          <select
-            id="type"
-            className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            onChange={(e: any) => {
-              // console.log("setFilteredData", e.target.value);
-              // const userFilteredData = debts.filter((debt) => debt.customerId === Number(e.target.value.trim()))
-              // console.log("userFilteredData", userFilteredData.length);
-              // setFilteredData(userFilteredData);
-              const value = e.target.value;
-              setFilterBy(value);
-            }}
-          >
-            {
-              selectOptions.map(column => (
-                <option key={column.id} value={column.id}>
-                  {column.name}
-                </option>
-              ))
-            }
-          </select>
-
-          {/* <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white">
-          Filtrar por Fecha
-        </label> */}
-          {/* <DatePickerOne/> */}
-          {/* <button
-            onClick={() => {
-              console.log("Limpiando Registros");
-              setFilteredData(debts)
-            }}
-            className="rounded bg-blue-950 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          >
-            <FaTrash />
-          </button> */}
-        </div>}
+            <select
+              id="type"
+              className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              onChange={(e: any) => {
+                const value = e.target.value;
+                setFilterBy(value);
+              }}
+            >
+              {
+                selectOptions.map(column => (
+                  <option key={column.id} value={column.id}>
+                    {column.name}
+                  </option>
+                ))
+              }
+            </select>
+          </div>
+        }
 
         <DataTableGeneric
           showAmount
           data={debts}
           onSearch={handleSearch}
-          onStartPayment={(rows) =>{
-            if(!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_PAYMENT" })) return Swal.fire("Error", "No tienes permisos para realizar esta acción", "error");
+          onStartPayment={(rows) => {
+            if (!isAuthorized(user, { entity: "DEBTS", role: "ALLOW_PAYMENT" })) return Swal.fire("Error", "No tienes permisos para realizar esta acción", "error");
             handlePay(rows);
           }}
           columns={columns}
@@ -273,7 +257,7 @@ export const DataDebt = () => {
           viewDetails
           viewAction={setSelectedDebtById}
           viewForm={<ViewDebtForm />}
-          filterField={ filterBy}
+          filterField={filterBy}
           viewTitle="Realizar Pago"
           searchTitle={`Buscar por ${columns.find(c => c.id === filterBy)?.name}`}
           fieldPlaceHolder="Ej. 1.4.9.9.3.3.3."

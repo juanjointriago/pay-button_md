@@ -12,6 +12,7 @@ import { isValidCI } from '../../utils/isValidCI';
 import { FaRegAddressCard } from 'react-icons/fa';
 import { AiOutlinePhone } from 'react-icons/ai';
 import { LuMapPin } from 'react-icons/lu';
+import { AxiosError } from 'axios';
 
 
 const signUpSchema = z.object({
@@ -63,10 +64,16 @@ const SignUp: React.FC = () => {
   const onSubmit = async (data: SignUpForm) => {
     const [error] = await to(API.post('/auth/signup', data));
     if (error) {
+      let text = 'Error al tratar de registrarte';
+      if(error instanceof AxiosError){
+        const errorMsg = error.response?.data?.msg ?? text;
+        text = errorMsg;
+      }
+
       Swal.fire({
         icon: "error",
         title: "Error", // 'Oops...',
-        text: "Error al tratar de registrarte", // 'Please try again!',
+        text, // 'Please try again!',
         confirmButtonColor: "blue",
       });
       return;
@@ -85,7 +92,6 @@ const SignUp: React.FC = () => {
   return (
     <>
       {/* <Breadcrumb pageName="Sign Up" /> */}
-
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2 order-1">
@@ -99,7 +105,7 @@ const SignUp: React.FC = () => {
           </div>
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-r-2">
-            <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
+            <div className="w-full px-10 py-8">
               {/* <span className="mb-1.5 block font-medium">Start for free</span> */}
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Regístrate

@@ -19,7 +19,7 @@ export const EditUserForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<UserInterface>({} as UserInterface);
   const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   // const [roleId, setRoleId] = useState(0);
   const [profileId, setProfileId] = useState<number>(0);
@@ -27,6 +27,7 @@ export const EditUserForm: FC = () => {
   useEffect(() => {
     getUsers();
     getProfiles();
+    setProfileId(selectedUser.profileId);
     // getRoles();
   }, [selectedUser]);
 
@@ -51,7 +52,7 @@ export const EditUserForm: FC = () => {
   const handleEditUser = async () => {
     if (
       username === "" ||
-      password === "" ||
+      // password === "" ||
       email === "" ||
       // roleId === 0 ||
       profileId === 0
@@ -63,7 +64,7 @@ export const EditUserForm: FC = () => {
     const updatedUser = {
         ...user,
         username,
-        password,
+        // password,
         email,
         // roleId,
         profileId,
@@ -74,7 +75,7 @@ export const EditUserForm: FC = () => {
 
     setErrorMessage(`Usuario ${user.username} actualizado`);
     setUserName("");
-    setPassword("");
+    // setPassword("");
     setEmail("");
     // setRoleId(0);
     setProfileId(0);
@@ -118,7 +119,7 @@ export const EditUserForm: FC = () => {
                 />
               </div>
             </div>
-            <div className="mb-4 flex flex-row justify-between">
+            {/* <div className="mb-4 flex flex-row justify-between">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Contraseña
               </label>
@@ -132,7 +133,7 @@ export const EditUserForm: FC = () => {
                   className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
-            </div>
+            </div> */}
             <div className="mb-4 flex flex-row justify-between">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Email

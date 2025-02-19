@@ -21,7 +21,7 @@ export const AuthLayout = () => {
   return (
     <div className="bg-gray-100 flex h-screen items-center justify-center">
         <Suspense fallback={<Loader />}>
-      <div className="sm:20 lg:w-1/1 w-full p-8 md:p-52 lg:p-36">
+      <div className="sm:20 w-full p-8 md:p-20">
         <Outlet />
       </div>
         </Suspense>
