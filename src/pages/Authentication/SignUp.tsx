@@ -56,7 +56,7 @@ const SignUp: React.FC = () => {
       postCode: '',
       street1: '',
       confirmPassword: '',
-      profileId: 2,
+      profileId: 2, // TODO: pelarena debe quemar esto y crear como cliente
     },
     resolver: zodResolver(signUpSchema),
   });
