@@ -18,6 +18,7 @@ import SignUp from "../pages/Authentication/SignUp";
 import { ProfilePage } from "../pages/Pages/ProfilePage";
 import { Logout } from "../pages/Pages/Logout";
 import { CreateOrEditProfilePage } from "../pages/Pages/profiles/CreateOrEditProfilePage";
+import { VerifyAccount } from "../pages/Authentication/VerifyAccount";
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ export const router = createBrowserRouter([
           {
             path: "signup",
             element: <SignUp />,
+          },
+          {
+            path: "verify/:verifyToken",
+            element: <VerifyAccount />,
           },
           {
             path: "reset-password",
