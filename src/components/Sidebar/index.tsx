@@ -33,6 +33,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const user = useAuthStore((state) => state.user);
 
+  console.log("user", user);
+
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
@@ -47,7 +49,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, []);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -57,7 +59,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
@@ -95,6 +97,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
               {user?.profile.id === 2 ? "Opciones" : "MENU"}
+              {/* {user?.profileId === 2 ? "Opciones" : "MENU"} */}
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">

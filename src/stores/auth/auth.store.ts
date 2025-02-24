@@ -25,7 +25,7 @@ export interface AuthState {
 export const storeAPI: StateCreator<
   AuthState,
   [["zustand/devtools", never], ["zustand/immer", never]]
-> = (set) => ({
+> = (set, get) => ({
   status: "checking",
   user: undefined,
   token: null,
@@ -68,7 +68,17 @@ export const storeAPI: StateCreator<
   checkAuthStatus: async () => {
     const [error, response] = await to(AuthService.checkAuthStatus());
     if (error) return set({ status: "unauthorized" });
-    set({ status: (response as any).msg });
+
+    // console.log({ response: (response as any).data.user });
+    const oldUser = get().user;
+    // console.log({ oldUser });
+
+    // debugger;
+    set({ status: (response as any).msg, user: { ...oldUser, ...(response as any).data.user } });
+
+    // set({ status: (response as any).msg, user: { ...oldUser, ...(response as any).data.user } });
+
+    // set(oldState => ({ ...oldState, status: (response as any).msg, user: { ...oldState.user, ...(response as any).data.user } }));
     // return response.msg === "Authenticated" ? "authorized" : "unauthorized";
     // try {
     //   const { data } = await AuthService.checkAuthStatus();

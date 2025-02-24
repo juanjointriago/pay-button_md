@@ -25,7 +25,7 @@ const signUpSchema = z.object({
   confirmPassword: z.string().trim().optional(),
 })
   .refine((data) => {
-    if(data.password?.trim() === '' && data.confirmPassword?.trim() === '') return true;
+    if (data.password?.trim() === '' && data.confirmPassword?.trim() === '') return true;
     return data.password === data.confirmPassword;
   }, {
     message: 'Las contraseñas no coinciden',
@@ -62,7 +62,7 @@ export const ProfilePage = () => {
       return { ...acc, [key]: data[key] };
     }, {});
 
-    const [error] =await to(API.put(`users/${user.id}`, data));
+    const [error] = await to(API.put(`users/${user.id}`, data));
 
     if (error) {
       Swal.fire({
@@ -73,6 +73,7 @@ export const ProfilePage = () => {
       });
       return;
     }
+    
 
     Swal.fire({
       icon: "success",
