@@ -12,6 +12,7 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { Modal } from "../../components/shared/Modal";
 import { useDisclosure } from "../../hooks/useDisclosure";
 import Swal from "sweetalert2";
+import { ScreenLoader } from "../../components/shared/ScreenLoader";
 
 export const DataUsers: FC = () => {
   const user = useAuthStore((state) => state.user);
@@ -22,6 +23,7 @@ export const DataUsers: FC = () => {
   const deleteUser = useUserStore((state) => state.deleteUser);
   const editUserModal = useDisclosure();
   const [filterBy, setFilterBy] = useState("username");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [dataUsers, setDataUsers] = useState<UserInterface[]>(users);
 
@@ -84,7 +86,11 @@ export const DataUsers: FC = () => {
                       confirmButtonText: "Si, adelante!",
                       cancelButtonText: "No, cancelar!",
                     });
-                    if (confirmed.isConfirmed) deleteUser(row.id);
+                    if (confirmed.isConfirmed) {
+                      setIsLoading(true);
+                      await deleteUser(row.id);
+                      setIsLoading(false);
+                    }
                   }}
                 >
                   <FiTrash2 />
@@ -161,6 +167,8 @@ export const DataUsers: FC = () => {
         {/* <label className="text-gray-900 mb-2 block text-sm font-medium dark:text-white whitespace-nowrap">
           Filtrar por Usuario
         </label> */}
+
+        <ScreenLoader isLoading={isLoading} />
 
         <select
           id="type"

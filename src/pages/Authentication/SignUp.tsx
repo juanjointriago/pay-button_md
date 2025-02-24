@@ -56,7 +56,7 @@ const SignUp: React.FC = () => {
       postCode: '',
       street1: '',
       confirmPassword: '',
-      // profileId: 2,
+      // profileId: 1,
     },
     resolver: zodResolver(signUpSchema),
   });

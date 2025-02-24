@@ -7,6 +7,7 @@ import { UserService } from "../../services/User.service";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { AuthService } from "../../services/Auth.service";
+import Swal from "sweetalert2";
 
 export interface UserStore {
   users: UserInterface[];
@@ -80,8 +81,19 @@ const usersAPI: StateCreator<
     try {
       await UserService.deleteUser(id);
       set({ users: get().users.filter((u) => u.id !== id) });
+      Swal.fire({
+        icon: "success",
+        title: "¡Usuario eliminado correctamente!", // 'Oops...',
+        confirmButtonColor: "blue",
+      });
     } catch (error) {
       console.error("Error deleting user data", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error", // 'Oops...',
+        text: "Error al tratar de eliminar el usuario", // 'Debes seleccionar una sola fila',
+        confirmButtonColor: "blue",
+      });
       if (error.response.status === 401) {
         AuthService.logout();
       }

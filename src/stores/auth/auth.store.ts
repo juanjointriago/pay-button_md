@@ -81,9 +81,6 @@ export const storeAPI: StateCreator<
     //   console.log("❌Error en checkAuthStatus", error);
     //   return "unauthorized";
     // }
-
-    console.log({ response });
-
   },
   logoutUser: () => {
     set({
