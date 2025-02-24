@@ -158,36 +158,36 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === "#" || pathname.includes("tables")
-                }
-              >
+              <SidebarLinkGroup activeCondition={pathname === "#" || pathname.includes("tables")}>
                 {(handleClick, open) => {
                   return (
                     <Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/" || pathname.includes("tables")) &&
-                          "bg-graydark dark:bg-meta-4"
-                          }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <FaCashRegister />
-                        {user?.profile.id === 2
-                          ? "Consulta de impuestos"
-                          : "Impuestos"}
-                        {open ? (
-                          <FaArrowAltCircleRight className="absolute right-4" />
-                        ) : (
-                          <FaArrowCircleDown className="absolute right-4" />
-                        )}
-                      </NavLink>
+                      {
+                        (isAuthorized(user, { entity: 'DEBTS', role: 'ALLOW_READ_PAYMENTS' }) ||
+                        isAuthorized(user, { entity: 'DEBTS', role: 'ALLOW_READ_DEBTS' })) &&
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/" || pathname.includes("tables")) &&
+                            "bg-graydark dark:bg-meta-4"
+                            }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FaCashRegister />
+                          {user?.profile.id === 2
+                            ? "Consulta de impuestos"
+                            : "Impuestos"}
+                          {open ? (
+                            <FaArrowAltCircleRight className="absolute right-4" />
+                          ) : (
+                            <FaArrowCircleDown className="absolute right-4" />
+                          )}
+                        </NavLink>
+                      }
 
                       <div
                         className={`translate transform overflow-hidden ${!open && "hidden"
@@ -260,26 +260,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   {(handleClick, open) => {
                     return (
                       <Fragment>
-                        <NavLink
-                          to="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/ui" || pathname.includes("ui")) &&
-                            "bg-graydark dark:bg-meta-4"
-                            }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            sidebarExpanded
-                              ? handleClick()
-                              : setSidebarExpanded(true);
-                          }}
-                        >
-                          <FaWrench />
-                          Configuraciones
-                          {open ? (
-                            <FaArrowAltCircleRight className="absolute right-4" />
-                          ) : (
-                            <FaArrowCircleDown className="absolute right-4" />
-                          )}
-                        </NavLink>
+                        {
+                          (isAuthorized(user, { entity: 'PARAMETERS', role: 'ALLOW_READ' })) &&
+                          <NavLink
+                            to="#"
+                            className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/ui" || pathname.includes("ui")) &&
+                              "bg-graydark dark:bg-meta-4"
+                              }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              sidebarExpanded
+                                ? handleClick()
+                                : setSidebarExpanded(true);
+                            }}
+                          >
+                            <FaWrench />
+                            Configuraciones
+                            {open ? (
+                              <FaArrowAltCircleRight className="absolute right-4" />
+                            ) : (
+                              <FaArrowCircleDown className="absolute right-4" />
+                            )}
+                          </NavLink>
+                        }
 
                         {/* <!-- Dropdown Menu Start --> */}
                         {
@@ -310,6 +313,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
               {/* <!-- Menu Item Ui Elements --> */}
+
+
 
               {/* Menu Item de DataFast */}
               {(
@@ -368,33 +373,39 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }}
                 </SidebarLinkGroup>
               )}
+
+
+              
               {/* <!-- Menu Item Auth Pages --> */}
               <SidebarLinkGroup activeCondition={pathname === "/auth" || pathname.includes("auth")}>
                 {(handleClick, open) => {
                   return (
                     <Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/auth" || pathname.includes("auth")) &&
-                          "bg-graydark dark:bg-meta-4"
-                          }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <FaUserFriends />
-                        {user?.profile.id === 2
-                          ? "Mis Datos"
-                          : "Gestion de Usuarios"}
-                        {open ? (
-                          <FaArrowAltCircleRight className="absolute right-4" />
-                        ) : (
-                          <FaArrowCircleDown className="absolute right-4" />
-                        )}
-                      </NavLink>
+
+                      {
+                        (isAuthorized(user, { entity: 'USERS', role: 'ALLOW_READ' }) ||
+                        isAuthorized(user, { entity: 'PROFILES', role: 'ALLOW_READ' })) &&
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/auth" || pathname.includes("auth")) &&
+                            "bg-graydark dark:bg-meta-4"
+                            }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FaUserFriends />
+                          Gestion de Usuarios
+                          {open ? (
+                            <FaArrowAltCircleRight className="absolute right-4" />
+                          ) : (
+                            <FaArrowCircleDown className="absolute right-4" />
+                          )}
+                        </NavLink>
+                      }
 
                       {/* <!-- Dropdown Menu Start --> */}
                       <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>

@@ -170,25 +170,27 @@ export const DataTransactions = () => {
     // }
   ];
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const url = `/payment?userId=${user.id}`;
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoadingSearch(true);
+      const url = `/payment?userId=${user.id}`;
 
-  //     const [error, response] = await to<AxiosResponse<any>>(API.get(url));
-  //     if (error) {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Error", // 'Oops...',
-  //         text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
-  //         confirmButtonColor: "blue",
-  //       });
-  //     } else {
-  //       setDebts(response.data.data);
-  //     }
-  //   }
+      const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error", // 'Oops...',
+          text: "Error al tratar de consultar",
+          confirmButtonColor: "blue",
+        });
+      } else {
+        setDebts(response.data.data);
+      }
+      setIsLoadingSearch(false);
+    }
 
-  //   getData();
-  // }, [])
+    getData();
+  }, [])
 
 
   const handleSearch = async (formValues) => {
