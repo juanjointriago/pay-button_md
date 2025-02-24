@@ -207,7 +207,7 @@ export const DataUsers: FC = () => {
       <Modal open={editUserModal.isOpen} onToggleModal={editUserModal.toggle}>
         <div className="p-8">
           <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
-            Editar Usuario
+            Editar Perfil
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
 

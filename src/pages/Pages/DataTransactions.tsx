@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "../../stores/auth/auth.store";
 import { TableColumn } from "react-data-table-component";
 import { IDonePayment } from "../../interfaces/transactions.interface";
@@ -57,7 +57,7 @@ export const DataTransactions = () => {
       cell(row) {
         return (
           <div className="flex flex-1 min-w-[200px] mx-auto">
-           <UrlIframe title={`Orden Nro :${row.transaction.order}`} errorMsg="" src={row}/>
+            <UrlIframe title={`Orden Nro :${row.transaction.order}`} errorMsg="" src={row} />
           </div>
         );
       },
@@ -170,37 +170,54 @@ export const DataTransactions = () => {
     // }
   ];
 
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const url = `/payment?userId=${user.id}`;
+
+  //     const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+  //     if (error) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Error", // 'Oops...',
+  //         text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+  //         confirmButtonColor: "blue",
+  //       });
+  //     } else {
+  //       setDebts(response.data.data);
+  //     }
+  //   }
+
+  //   getData();
+  // }, [])
+
+
   const handleSearch = async (formValues) => {
     setIsLoadingSearch(true);
     // if (auth.profileId === 1) {
-      const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
-        if (formValues[key]) {
-          acc[key] = formValues[key];
-        }
-        return acc;
-      }, {});
-
-      // const { actionLiquidationType, ...rest } = dataQuery;
-
-      const params = new URLSearchParams(dataQuery);
-      const url = `/payment?userId=${user.id}&${params.toString()}`;
-
-      const [error, response] = await to<AxiosResponse<any>>(API.get(url));
-      if (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error", // 'Oops...',
-          text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
-          confirmButtonColor: "blue",
-        });
-      } else {
-        setDebts(response.data.data);
-        // setDebts(response.data.data.map(item => ({
-        //   ...item,
-        //   ...item.debt,
-        //   ...item.payment
-        // })));
+    const dataQuery: any = Object.keys(formValues).reduce((acc, key) => {
+      if (formValues[key]) {
+        acc[key] = formValues[key];
       }
+      return acc;
+    }, {});
+
+    // const { actionLiquidationType, ...rest } = dataQuery;
+
+    const params = new URLSearchParams(dataQuery);
+    params.append('userId', user.id.toString());
+    const url = `/payment?${params.toString()}`;
+
+    const [error, response] = await to<AxiosResponse<any>>(API.get(url));
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error", // 'Oops...',
+        text: "Error al tratar de consultar", // 'Debes seleccionar una sola fila',
+        confirmButtonColor: "blue",
+      });
+    } else {
+      setDebts(response.data.data);
+    }
     // } else {
     //   // const searchValue = formValues['codigoCatastral'];
 

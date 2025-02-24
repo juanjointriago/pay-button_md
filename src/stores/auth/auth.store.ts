@@ -36,7 +36,8 @@ export const storeAPI: StateCreator<
     const [error, response] = await to(AuthService.login({ username, password }));
 
     if (error) {
-      set({ errorMsg: 'Error en login', showLoginModal: true });
+      const msg = (error as any)?.response?.data?.msg ?? "Error en login";
+      set({ errorMsg: msg, showLoginModal: true });
       return;
     }
 
@@ -80,6 +81,9 @@ export const storeAPI: StateCreator<
     //   console.log("❌Error en checkAuthStatus", error);
     //   return "unauthorized";
     // }
+
+    console.log({ response });
+
   },
   logoutUser: () => {
     set({

@@ -27,7 +27,7 @@ const signUpSchema = z.object({
   password: z.string().min(6, { message: 'La contraseña es demasiado corta' }),
   postCode: z.string().min(2, { message: 'El código postal es demasiado corto' }),
   confirmPassword: z.string().min(6, { message: 'La contraseña es demasiado corta' }),
-  profileId: z.number(),
+  // profileId: z.number(),
 })
   .refine((data) => {
     return isValidCI(data.username);
@@ -56,7 +56,7 @@ const SignUp: React.FC = () => {
       postCode: '',
       street1: '',
       confirmPassword: '',
-      profileId: 2, // TODO: pelarena debe quemar esto y crear como cliente
+      // profileId: 2,
     },
     resolver: zodResolver(signUpSchema),
   });

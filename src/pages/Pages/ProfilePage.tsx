@@ -23,7 +23,6 @@ const signUpSchema = z.object({
   password: z.string().trim().optional(),
   postCode: z.string().trim().optional(),
   confirmPassword: z.string().trim().optional(),
-  profileId: z.number(),
 })
   .refine((data) => {
     if(data.password?.trim() === '' && data.confirmPassword?.trim() === '') return true;
@@ -44,7 +43,6 @@ export const ProfilePage = () => {
       postCode: '',
       address: '',
       confirmPassword: '',
-      profileId: 2,
     },
     resolver: zodResolver(signUpSchema),
   });
@@ -62,7 +60,7 @@ export const ProfilePage = () => {
     data = Object.keys(data).reduce((acc, key) => {
       if (typeof data[key] === 'string' ? !Boolean(data[key].trim()) : !Boolean(data[key])) return acc;
       return { ...acc, [key]: data[key] };
-    }, {});    
+    }, {});
 
     const [error] =await to(API.put(`users/${user.id}`, data));
 
