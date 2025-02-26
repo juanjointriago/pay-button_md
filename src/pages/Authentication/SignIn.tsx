@@ -2,27 +2,42 @@ import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 import Loader from "../../common/Loader";
 import { useAuthStore } from "../../stores/auth/auth.store";
 import { FaIdCard, FaLock } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const LoginSchema = z.object({
+  username: z.string().min(3, "El nombre de usuario debe tener al menos 3 caracteres"),
+  password: z.string().min(4, "La contraseña debe tener al menos 4 caracteres"),
+});
+
+type LoginData = z.infer<typeof LoginSchema>;
 
 const SignIn: FC = () => {
   const signin = useAuthStore((state) => state.signInUser);
   // const showLoginModal = useAuthStore((state) => state.showLoginModal);
   // const errorMsg = useAuthStore((state) => state.errorMsg);
-  // const setErrorMsg = useAuthStore((state) => state.setErrorMsg);
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async () => {
-    setIsLoading(true);
-    if (!userName && !password) {
-      Swal.fire("Error", "Por favor ingrese su usuario y contraseña", "error");
-    }
+  const form = useForm<LoginData>({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+    resolver: zodResolver(LoginSchema),
+  });
 
-    await signin({ username: userName, password });
+  const login = async (formValues: LoginData) => {
+    setIsLoading(true);
+    // if (!userName && !password) {
+    //   Swal.fire("Error", "Por favor ingrese su usuario y contraseña", "error");
+    // }
+
+    await signin({ username: formValues.username, password: formValues.password });
 
     // if (!errorMsg) {
     //   setIsLoading(false);
@@ -77,10 +92,7 @@ const SignIn: FC = () => {
                   Inicie Sesión
                 </h2>
                 <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    await login();
-                  }}
+                  onSubmit={form.handleSubmit(login)}
                 >
                   <div className="mb-4">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
@@ -88,29 +100,47 @@ const SignIn: FC = () => {
                     </label>
                     <div className="relative">
                       <input
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
+                        // value={userName}
+                        // onChange={(e) => setUserName(e.target.value)}
                         type="text"
                         placeholder="Ej. 1002003004"
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        {...form.register("username")}
                       />
+                      {
+                        form.formState.errors.username && (
+                          <span className="text-rose-500">
+                            {form.formState.errors.username.message}
+                          </span>
+                        )
+                      }
                       <span className="absolute right-4 top-4">
                         <FaIdCard size={22} />
                       </span>
                     </div>
                   </div>
+
+
                   <div className="mb-6">
                     <label className="mb-2.5 block font-medium text-black dark:text-white">
                       Ingrese su Contraseña
                     </label>
                     <div className="relative">
                       <input
-                        value={password}
+                        // value={password}
                         type="password"
-                        onChange={(e) => setPassword(e.target.value)}
+                        // onChange={(e) => setPassword(e.target.value)}
                         placeholder="Contraseña"
                         className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        {...form.register("password")}
                       />
+                      {
+                        form.formState.errors.password && (
+                          <span className="text-rose-500">
+                            {form.formState.errors.password.message}
+                          </span>
+                        )
+                      }
                       <span className="absolute right-4 top-4">
                         <FaLock size={22} />
                       </span>
@@ -118,7 +148,7 @@ const SignIn: FC = () => {
                   </div>
                   <div className="mb-5">
                     <input
-                      onClick={login}
+                      // onClick={login}
                       type="submit"
                       value="Continuar ➡️"
                       className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
