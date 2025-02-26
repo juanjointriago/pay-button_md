@@ -4,9 +4,10 @@ interface ModalProps {
   open: boolean;
   closeOnBlur?: boolean;
   onToggleModal: (isOpen: boolean) => void;
+  maxW?: string;
 }
 
-export const Modal = ({ onToggleModal, open, children, closeOnBlur = true }: ModalProps) => {
+export const Modal = ({ onToggleModal, open, children, closeOnBlur = true, maxW = 'max-w-142.5' }: ModalProps) => {
   return (
     <div>
       {
@@ -16,7 +17,7 @@ export const Modal = ({ onToggleModal, open, children, closeOnBlur = true }: Mod
         >
           <div
             onFocus={() => onToggleModal(true)}
-            className="w-full max-w-142.5 rounded-lg bg-white px-2 py-4 text-center dark:bg-boxdark"
+            className={`w-full ${maxW} rounded-lg bg-white px-2 py-4 text-center dark:bg-boxdark`}
           >
             {children}
           </div>

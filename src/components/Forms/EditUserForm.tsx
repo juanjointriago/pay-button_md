@@ -20,7 +20,7 @@ export const EditUserForm: FC = () => {
   const [user, setUser] = useState<UserInterface>({} as UserInterface);
   // const [username, setUserName] = useState("");
   // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   // const [roleId, setRoleId] = useState(0);
   const [profileId, setProfileId] = useState<number>(0);
 
@@ -37,7 +37,7 @@ export const EditUserForm: FC = () => {
     setUser({ ...selectedUser });
     // setUserName(selectedUser.username);
     // setPassword(selectedUser.password);
-    // setEmail(selectedUser.email);
+    setEmail(selectedUser.email);
   }, [selectedUser]);
   // console.log("User STATE", user);
 
@@ -53,7 +53,7 @@ export const EditUserForm: FC = () => {
     if (
       // username === "" ||
       // // password === "" ||
-      // email === "" ||
+      email === "" ||
       // roleId === 0 ||
       !profileId
     ) {
@@ -74,12 +74,12 @@ export const EditUserForm: FC = () => {
     // }
     console.log("updatedUser", { profileId });
 
-    await editUser(user.id, { profileId } as any);
+    await editUser(user.id, { profileId, email } as any);
 
     setErrorMessage(`Usuario ${user.username} actualizado`);
     // setUserName("");
     // setPassword("");
-    // setEmail("");
+    setEmail("");
     // setRoleId(0);
     setProfileId(0);
 
@@ -137,11 +137,11 @@ export const EditUserForm: FC = () => {
                 />
               </div>
             </div> */}
-            {/* <div className="mb-4 flex flex-row justify-between">
+            <div className="mb-4 flex flex-row items-center gap-x-10">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Email
               </label>
-              <div className="relative">
+              <div className="relative flex-1">
                 <input
                   name="email"
                   value={email}
@@ -151,8 +151,10 @@ export const EditUserForm: FC = () => {
                   className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
-            </div> */}
-            <div className="mb-4 flex flex-row justify-between">
+            </div>
+
+            
+            <div className="mb-4 flex flex-row gap-x-12">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 Perfil
               </label>
@@ -165,7 +167,7 @@ export const EditUserForm: FC = () => {
                     Seleccione el perfil que desea asignar
                   </label>
 
-                  <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-row gap-x-8 flex-wrap gap-y-4">
                     {profiles.map((option) => (
                       <div key={option.id}>
                         <label className="relative flex cursor-pointer select-none items-center gap-2 text-sm font-medium text-black dark:text-white">

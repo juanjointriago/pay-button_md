@@ -13,6 +13,8 @@ import { Modal } from "../../components/shared/Modal";
 import { useDisclosure } from "../../hooks/useDisclosure";
 import Swal from "sweetalert2";
 import { ScreenLoader } from "../../components/shared/ScreenLoader";
+import { MdLockReset } from "react-icons/md";
+import { UpdatePasswordForm } from "../../components/Forms/UpdatePasswordForm";
 
 export const DataUsers: FC = () => {
   const user = useAuthStore((state) => state.user);
@@ -24,6 +26,7 @@ export const DataUsers: FC = () => {
   const editUserModal = useDisclosure();
   const [filterBy, setFilterBy] = useState("username");
   const [isLoading, setIsLoading] = useState(false);
+  const updatePasswordModal = useDisclosure();
 
   const [dataUsers, setDataUsers] = useState<UserInterface[]>(users);
 
@@ -49,11 +52,24 @@ export const DataUsers: FC = () => {
       name: "Acciones",
       selector: (row) => row.id,
       style: { paddingLeft: "10px", paddingRight: "10px", textAlign: "left" },
-      width: "100px",
+      width: "120px",
       cell(row) {
         return (
           <div className="flex flex-1 min-w-[320px] mx-auto">
-            <div className="flex gap-2">
+            <div className="flex">
+              {
+                <button
+                  className="rounded text-purple-400 px-2 py-2 text-xl hover:bg-rose-800/10"
+                  key="delete"
+                  onClick={async () => {
+                    setSelectedUserById(row.id);
+                    updatePasswordModal.onOpen();
+                  }}
+                >
+                  <MdLockReset />
+                </button>
+              }
+
               {
                 isAuthorized(user, { entity: "PROFILES", role: "ALLOW_UPDATE" }) &&
                 <button
@@ -187,13 +203,13 @@ export const DataUsers: FC = () => {
           }
         </select>
 
-        <input 
+        <input
           className="bg-gray-50 border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 block w-full rounded-lg border p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500 rounded-l-none border-l-0"
           placeholder={`Buscar por ${columns.find(c => c.id == filterBy)?.name}`}
           onChange={(e: any) => {
             const value = e.target.value;
 
-            if(value === '') return setDataUsers(users);
+            if (value === '') return setDataUsers(users);
             const newUsers = users.filter((user) => user[filterBy].toLowerCase().includes(value.toLowerCase()));
             setDataUsers(newUsers);
           }}
@@ -212,7 +228,7 @@ export const DataUsers: FC = () => {
         />
       }
 
-      <Modal open={editUserModal.isOpen} onToggleModal={editUserModal.toggle}>
+      <Modal open={editUserModal.isOpen} onToggleModal={editUserModal.toggle} maxW="max-w-2xl">
         <div className="p-8">
           <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
             Editar Perfil
@@ -223,6 +239,25 @@ export const DataUsers: FC = () => {
 
           <button
             onClick={() => editUserModal.onClose()}
+            className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+          >
+            Cancelar
+          </button>
+        </div>
+      </Modal>
+
+
+      <Modal open={updatePasswordModal.isOpen} onToggleModal={updatePasswordModal.toggle} maxW="max-w-2xl">
+        <div className="p-8">
+          <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
+            Actualizar Contraseña
+          </h3>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+
+          <UpdatePasswordForm onSubmit={updatePasswordModal.onClose} />
+
+          <button
+            onClick={() => updatePasswordModal.onClose()}
             className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
           >
             Cancelar

@@ -33,8 +33,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const user = useAuthStore((state) => state.user);
 
-  console.log("user", user);
-
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
