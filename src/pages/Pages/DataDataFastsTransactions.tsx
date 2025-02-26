@@ -350,6 +350,7 @@ export const DataDataFastsTransactions = () => {
         <DataTableGeneric
           data={data}
           columns={columns}
+          allowCsvExport={isAuthorized(user, { entity: "DEBTS", role: "ALLOW_EXPORT_CSV_TRANSACTIONS" })}
           // selectableRows
           viewDetails
           // viewAction={setSelectedDebtById}

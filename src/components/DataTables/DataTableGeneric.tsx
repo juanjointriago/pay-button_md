@@ -35,6 +35,7 @@ interface Props {
   onStartPayment?: any;
   showAmount?: boolean;
   onAdd?: () => void;
+  allowCsvExport?: boolean;
 }
 
 const Export = ({ onExport }) => (
@@ -100,6 +101,7 @@ export const DataTableGeneric: FC<Props> = ({
   onSearch,
   onStartPayment,
   showAmount = false,
+  allowCsvExport = false,
   onAdd
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -470,7 +472,7 @@ export const DataTableGeneric: FC<Props> = ({
         )}
       </div>
       <DataTable
-        actions={[exportMemo, addForm && addButton]}
+        actions={[allowCsvExport && exportMemo, addForm && addButton]}
         key={addTitle}
         keyField="id"
         contextActions={contextActions}

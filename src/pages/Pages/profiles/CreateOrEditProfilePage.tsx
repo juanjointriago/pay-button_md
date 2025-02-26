@@ -150,7 +150,8 @@ export const CreateOrEditProfilePage = () => {
         </div>
         {/* Divider */}
         <div className="w-full border-t-[1px] border-t-slate-400 mt-1 mb-4" />
-
+        
+        
         <p
           className="text-title-sm font-bold text-black dark:text-white mb-4"
         >Permisos</p>
@@ -243,7 +244,7 @@ const CheckBoxGroup = ({ feature, onChange }: CheckBoxGroupProps) => {
       </label>
 
 
-      <div className="flex gap-x-4 pl-8">
+      <div className="flex gap-x-8 pl-8 flex-wrap gap-y-2">
         {
           childrenRoles.map(action => (
             <label className="flex gap-2 cursor-pointer max-w-fit items-center mt-2" key={action.id}>

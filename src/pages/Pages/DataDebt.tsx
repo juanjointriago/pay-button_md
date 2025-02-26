@@ -246,6 +246,7 @@ export const DataDebt = () => {
 
         <DataTableGeneric
           showAmount
+          allowCsvExport={isAuthorized(user, { entity: "DEBTS", role: "ALLOW_EXPORT_CSV_DEBTS" })}
           data={debts}
           onSearch={handleSearch}
           onStartPayment={(rows) => {

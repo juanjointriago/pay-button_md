@@ -120,6 +120,7 @@ export const DataParams: FC = () => {
 
       <DataTableGeneric
         onSearch={null}
+        allowCsvExport={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_EXPORT_CSV" })}
         addForm={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_CREATE" }) ? <AddParamForm /> : undefined}
         addTitle="Crear Parametro"
         // editable={isAuthorized(user, { entity: "PARAMETERS", role: "ALLOW_UPDATE" })}

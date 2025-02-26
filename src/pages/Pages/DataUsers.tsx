@@ -216,17 +216,16 @@ export const DataUsers: FC = () => {
         />
       </div>
 
-      {
-        <DataTableGeneric
-          onSearch={null}
-          data={dataUsers.filter((user) => !!user)}
-          addTitle="Agregar Usuario"
-          addForm={isAuthorized(user, { entity: "USERS", role: "ALLOW_CREATE" }) ? <AddUserForm /> : undefined}
-          columns={columns}
-          filterField="username"
-          title="Usuarios"
-        />
-      }
+      <DataTableGeneric
+        onSearch={null}
+        allowCsvExport={isAuthorized(user, { entity: "USERS", role: "ALLOW_EXPORT_CSV" })}
+        data={dataUsers.filter((user) => !!user)}
+        addTitle="Agregar Usuario"
+        addForm={isAuthorized(user, { entity: "USERS", role: "ALLOW_CREATE" }) ? <AddUserForm /> : undefined}
+        columns={columns}
+        filterField="username"
+        title="Usuarios"
+      />
 
       <Modal open={editUserModal.isOpen} onToggleModal={editUserModal.toggle} maxW="max-w-2xl">
         <div className="p-8">

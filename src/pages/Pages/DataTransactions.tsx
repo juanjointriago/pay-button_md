@@ -293,6 +293,7 @@ export const DataTransactions = () => {
         </div>}
 
         <DataTableGeneric
+          allowCsvExport={isAuthorized(user, { entity: "DEBTS", role: "ALLOW_EXPORT_CSV_PAYMENTS" })}
           data={debts}
           columns={columns}
           // selectableRows
