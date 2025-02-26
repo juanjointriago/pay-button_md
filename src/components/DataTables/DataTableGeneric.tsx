@@ -289,7 +289,7 @@ export const DataTableGeneric: FC<Props> = ({
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, []);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -299,7 +299,7 @@ export const DataTableGeneric: FC<Props> = ({
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, []);
 
   // const [records, setRecords] = useState([...data]);
 
@@ -319,6 +319,7 @@ export const DataTableGeneric: FC<Props> = ({
 
     const columnDelimiter = ",";
     const lineDelimiter = "\n";
+    
     const keys = Object.keys(data[0]);
 
     result = "";
@@ -328,6 +329,7 @@ export const DataTableGeneric: FC<Props> = ({
     array.forEach((item) => {
       let ctr = 0;
       keys.forEach((key) => {
+        if(!key) return;
         if (ctr > 0) result += columnDelimiter;
 
         result += item[key];
@@ -359,7 +361,7 @@ export const DataTableGeneric: FC<Props> = ({
 
   const exportMemo = useMemo(
     () => <Export key={`exportbtn_`} onExport={() => downloadCSV(data)} />,
-    []
+    [data]
   );
 
   const addButton = (

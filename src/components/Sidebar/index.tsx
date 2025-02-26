@@ -207,7 +207,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   (isActive && "!text-white")
                                 }
                               >
-                                {user?.profile.id === 2
+                                {user?.profile.id === 1
                                   ? "Por pagar"
                                   : "Por cobrar"}
                               </NavLink>
