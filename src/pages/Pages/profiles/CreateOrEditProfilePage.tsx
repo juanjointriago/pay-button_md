@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
+  description: z.string().min(1, 'La descripción es obligatoria'),
   features: z.array(z.object({
     id: z.number(),
     name: z.string().min(3),
@@ -46,6 +47,7 @@ export const CreateOrEditProfilePage = () => {
   const form = useForm<FormValues>({
     defaultValues: {
       name: selectedProfile?.name || '',
+      description: selectedProfile?.description || '',
     },
     resolver: zodResolver(schema),
   });
@@ -95,7 +97,7 @@ export const CreateOrEditProfilePage = () => {
     }, []);
 
     if (!!selectedProfile) {
-      const [error] = await to(API.put(`profiles/${selectedProfile.id}`, { roleIds, name: data.name }));
+      const [error] = await to(API.put(`profiles/${selectedProfile.id}`, { roleIds, name: data.name, description: data.description }));
       if (error) return Swal.fire({ icon: 'error', title: 'Error', text: 'Error al actualizar el perfil' });
       const res = await Swal.fire({ icon: 'success', title: 'Perfil actualizado', text: 'Perfil actualizado correctamente' });
       if (res.dismiss || res.isConfirmed) navigate('/home/profiles');
@@ -117,19 +119,35 @@ export const CreateOrEditProfilePage = () => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <label>
-          Nombre del perfil:
-          <input type="text" placeholder="Ej. Admin" className="w-full h-10 p-2 rounded-md dark:border-white focus:outline-none focus:border-black dark:focus:border-white my-2"
-            {...form.register('name')}
-          />
-          {
-            form.formState.errors.name && form.formState.touchedFields.name
-              ? <p className="text-red-500 text-xs italic">
-                {form.formState.errors.name.message}
-              </p>
-              : null
-          }
-        </label>
+        <div className="flex justify-between gap-x-12">
+          <label className="flex-1">
+            Nombre del perfil:
+            <input type="text" placeholder="Ej. Admin" className="w-full h-10 p-2 rounded-md dark:border-white focus:outline-none focus:border-black dark:focus:border-white my-2"
+              {...form.register('name')}
+            />
+            {
+              form.formState.errors.name && form.formState.touchedFields.name
+                ? <p className="text-rose-500 text-xs italic">
+                  {form.formState.errors.name.message}
+                </p>
+                : null
+            }
+          </label>
+
+          <label className="flex-1">
+            Descripción del perfil:
+            <input type="text" placeholder="Ej. Admin" className="w-full h-10 p-2 rounded-md dark:border-white focus:outline-none focus:border-black dark:focus:border-white my-2"
+              {...form.register('description')}
+            />
+            {
+              form.formState.errors.name && form.formState.touchedFields.name
+                ? <p className="text-rose-500 text-xs italic">
+                  {form.formState.errors.description.message}
+                </p>
+                : null
+            }
+          </label>
+        </div>
         {/* Divider */}
         <div className="w-full border-t-[1px] border-t-slate-400 mt-1 mb-4" />
 
