@@ -11,7 +11,7 @@ export const AuthLayout = () => {
     checkAuthStatus();
   }, []);
 
-  if(authStatus === 'checking') return <></>;
+  if(authStatus === 'checking') return <Loader />;
   
 
   if (authStatus === "authorized") {
