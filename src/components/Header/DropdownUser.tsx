@@ -56,7 +56,7 @@ const DropdownUser = () => {
                 {user?.username ?? ""}
               </span>
               <span className="block text-xs">
-                {user?.profileId === 1 ? "Administrador" : "User"}
+                {user?.profile.description}
               </span>
             </span>
 

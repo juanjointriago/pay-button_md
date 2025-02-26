@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoDark from "../../images/logo/logo-m-duran.jpg";
 import Logo from "../../images/logo/logo-m-duran.jpg";
@@ -9,8 +9,8 @@ import { FaIdCard, FaLock } from "react-icons/fa";
 
 const SignIn: FC = () => {
   const signin = useAuthStore((state) => state.signInUser);
-  const showLoginModal = useAuthStore((state) => state.showLoginModal);
-  const errorMsg = useAuthStore((state) => state.errorMsg);
+  // const showLoginModal = useAuthStore((state) => state.showLoginModal);
+  // const errorMsg = useAuthStore((state) => state.errorMsg);
   // const setErrorMsg = useAuthStore((state) => state.setErrorMsg);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -41,17 +41,17 @@ const SignIn: FC = () => {
   };
 
 
-  useEffect(() => {
-    if (!errorMsg || !showLoginModal) return;
+  // useEffect(() => {
+  //   if (!errorMsg || !showLoginModal) return;
 
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: errorMsg,
-      confirmButtonColor: "blue",
-      confirmButtonText: "Aceptar",
-    });
-  }, [errorMsg]);
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Error",
+  //     text: errorMsg,
+  //     confirmButtonColor: "blue",
+  //     confirmButtonText: "Aceptar",
+  //   });
+  // }, [errorMsg]);
 
   return (
     <div style={{ padding: "50px" }}>
